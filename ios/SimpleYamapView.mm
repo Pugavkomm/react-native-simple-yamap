@@ -1,3 +1,7 @@
+//
+// SimpleYamapView.mm
+//
+
 #import "SimpleYamapView.h"
 
 #import <react/renderer/components/SimpleYamapViewSpec/ComponentDescriptors.h>
@@ -7,14 +11,59 @@
 
 #import "RCTFabricComponentsPlugins.h"
 
+#import <YandexMapsMobile/YMKMapView.h>
+#import <YandexMapsMobile/YMKMapKit.h>
+
+#import "SimpleYamap-Swift.h"
+#import <jsi/jsi.h>
+
 using namespace facebook::react;
+using namespace facebook::jsi;
+
+static NSObject* convertJsiValueToNSObject(Runtime& runtime,
+                                           const facebook::jsi::Value& value) {
+  if (value.isUndefined() || value.isNull()) {
+    return [NSNull null];
+  }
+  if (value.isBool()) {
+    return @(value.getBool());
+  }
+  if (value.isNumber()) {
+    return @(value.getNumber());
+  }
+  if (value.isString()) {
+    return [NSString stringWithUTF8String:value.getString(runtime).utf8(runtime).c_str()];
+  }
+  if (value.isObject()) {
+    auto obj = value.getObject(runtime);
+    if (obj.isArray(runtime)) {
+      auto arr = obj.getArray(runtime);
+      NSMutableArray* nsArr = [NSMutableArray new];
+      for (size_t i = 0; i < arr.size(runtime); ++i) {
+        [nsArr addObject:convertJsiValueToNSObject(runtime, arr.getValueAtIndex(runtime, i))];
+      }
+      return nsArr;
+    } else {
+      NSMutableDictionary* nsDict = [NSMutableDictionary new];
+      auto propNames = obj.getPropertyNames(runtime);
+      for (size_t i = 0; i < propNames.size(runtime); ++i) {
+        auto propName = propNames.getValueAtIndex(runtime, i).getString(runtime);
+        auto propValue = obj.getProperty(runtime, propName);
+        NSString* key = [NSString stringWithUTF8String:propName.utf8(runtime).c_str()];
+        nsDict[key] = convertJsiValueToNSObject(runtime, propValue);
+      }
+      return nsDict;
+    }
+  }
+  return [NSNull null];
+}
 
 @interface SimpleYamapView () <RCTSimpleYamapViewViewProtocol>
 
 @end
 
 @implementation SimpleYamapView {
-    UIView * _view;
+    RNYMapView * _view;
 }
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -27,10 +76,12 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const SimpleYamapViewProps>();
     _props = defaultProps;
+   
 
-    _view = [[UIView alloc] init];
+    _view = [[RNYMapView alloc] init];
 
-    self.contentView = _view;
+    self.contentView = (UIView *)_view;
+
   }
 
   return self;
@@ -38,34 +89,68 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    const auto &oldViewProps = *std::static_pointer_cast<SimpleYamapViewProps const>(_props);
-    const auto &newViewProps = *std::static_pointer_cast<SimpleYamapViewProps const>(props);
-
-    if (oldViewProps.color != newViewProps.color) {
-        NSString * colorToConvert = [[NSString alloc] initWithUTF8String: newViewProps.color.c_str()];
-        [_view setBackgroundColor:[self hexStringToColor:colorToConvert]];
+  const auto &oldViewProps = *std::static_pointer_cast<SimpleYamapViewProps const>(_props);
+  const auto &newViewProps = *std::static_pointer_cast<SimpleYamapViewProps const>(props);
+   
+  // Position
+  double lon = newViewProps.cameraPosition.lon;
+  double lat = newViewProps.cameraPosition.lat;
+  
+  // Camera
+  int zoom = newViewProps.cameraPosition.zoom;
+  float tilt = newViewProps.cameraPosition.tilt;
+  float azimuth = newViewProps.cameraPosition.azimuth;
+  
+  float duration = newViewProps.cameraPosition.duration; // Animation duration
+  
+  if(lon != oldViewProps.cameraPosition.lon || lat!=oldViewProps.cameraPosition.lat || zoom != oldViewProps.cameraPosition.zoom || azimuth != oldViewProps.cameraPosition.azimuth || tilt != oldViewProps.cameraPosition.tilt){
+    zoom = MAX(1.0, zoom);
+    duration = MAX(0.0, duration);
+    [_view moveMapWithLon:lon lat:lat zoom:zoom duration:duration tilt: tilt azimuth: azimuth];
+  }
+  
+  if (newViewProps.nightMode != oldViewProps.nightMode) {
+    if (newViewProps.nightMode){
+      [_view enableNightMode];
+    } else {
+      [_view disableNightMode];
     }
+  }
+  
+  // Polygons
 
-    [super updateProps:props oldProps:oldProps];
+  NSMutableArray *polygons = [NSMutableArray new];
+  
+  
+  NSLog(@"Number of polygos %lu", static_cast<unsigned long>(polygons.count));
+  for (const auto &polygon : newViewProps.polygons) {
+    NSMutableDictionary *polygonDict = [NSMutableDictionary new];
+    polygonDict[@"id"] = [NSString stringWithUTF8String:polygon.id.c_str()];
+    polygonDict[@"strokeColor"] = @(polygon.strokeColor);
+    polygonDict[@"strokeWidth"] = @(polygon.strokeWidth);
+    polygonDict[@"fillColor"] = @(polygon.fillColor);
+    
+    // Poly points
+    NSMutableArray *points = [NSMutableArray new];
+    for (const auto &point : polygon.points) {
+      NSMutableDictionary  *pointDict = [NSMutableDictionary new];
+      pointDict[@"lat"] = @(point.lat);
+      pointDict[@"lon"] = @(point.lon);
+      [points addObject:pointDict];
+    }
+    polygonDict[@"points"] = points;
+    [polygons addObject:polygonDict];
+  }
+  NSLog(@"Number of polygos %lu", static_cast<unsigned long>(polygons.count));
+  [_view setPolygons:polygons];
+
+    
+  [super updateProps:props oldProps:oldProps];
 }
 
 Class<RCTComponentViewProtocol> SimpleYamapViewCls(void)
 {
     return SimpleYamapView.class;
-}
-
-- hexStringToColor:(NSString *)stringToConvert
-{
-    NSString *noHashString = [stringToConvert stringByReplacingOccurrencesOfString:@"#" withString:@""];
-    NSScanner *stringScanner = [NSScanner scannerWithString:noHashString];
-
-    unsigned hex;
-    if (![stringScanner scanHexInt:&hex]) return nil;
-    int r = (hex >> 16) & 0xFF;
-    int g = (hex >> 8) & 0xFF;
-    int b = (hex) & 0xFF;
-
-    return [UIColor colorWithRed:r / 255.0f green:g / 255.0f blue:b / 255.0f alpha:1.0f];
 }
 
 @end

@@ -1,3 +1,7 @@
+//
+// SimpleYamapView.h
+//
+
 #import <React/RCTViewComponentView.h>
 #import <UIKit/UIKit.h>
 
