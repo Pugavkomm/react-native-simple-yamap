@@ -146,35 +146,6 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
       [_view disableNightMode];
     }
   }
-  
-    
-  // Polygons
-
-  NSMutableArray *polygons = [NSMutableArray new];
-  
-  
-  NSLog(@"Number of polygos %lu", static_cast<unsigned long>(polygons.count));
-  for (const auto &polygon : newViewProps.polygons) {
-    NSMutableDictionary *polygonDict = [NSMutableDictionary new];
-    polygonDict[@"id"] = [NSString stringWithUTF8String:polygon.id.c_str()];
-    polygonDict[@"strokeColor"] = @(polygon.strokeColor);
-    polygonDict[@"strokeWidth"] = @(polygon.strokeWidth);
-    polygonDict[@"fillColor"] = @(polygon.fillColor);
-    
-    // Poly points
-    NSMutableArray *points = [NSMutableArray new];
-    for (const auto &point : polygon.points) {
-      NSMutableDictionary  *pointDict = [NSMutableDictionary new];
-      pointDict[@"lat"] = @(point.lat);
-      pointDict[@"lon"] = @(point.lon);
-      [points addObject:pointDict];
-    }
-    polygonDict[@"points"] = points;
-    [polygons addObject:polygonDict];
-  }
-  NSLog(@"Number of polygos %lu", static_cast<unsigned long>(polygons.count));
-  [_view setPolygons:polygons];
-
     
   [super updateProps:props oldProps:oldProps];
 }

@@ -4,25 +4,19 @@ package com.simpleyamap
 
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReadableMap
-import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.module.annotations.ReactModule
-import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.ViewManagerDelegate
-import com.facebook.react.uimanager.annotations.ReactProp
-import com.facebook.react.viewmanagers.SimpleYamapViewManagerInterface
 import com.facebook.react.viewmanagers.SimpleYamapViewManagerDelegate
+import com.facebook.react.viewmanagers.SimpleYamapViewManagerInterface
 
 @ReactModule(name = SimpleYamapViewManager.NAME)
-class SimpleYamapViewManager : SimpleViewManager<SimpleYamapView>(),
+class SimpleYamapViewManager : ViewGroupManager<SimpleYamapView>(),
   SimpleYamapViewManagerInterface<SimpleYamapView>,
   LifecycleEventListener {
-  private val mDelegate: ViewManagerDelegate<SimpleYamapView>
+  private val mDelegate: ViewManagerDelegate<SimpleYamapView> = SimpleYamapViewManagerDelegate(this)
   private var viewInstance: SimpleYamapView? = null
-
-  init {
-    mDelegate = SimpleYamapViewManagerDelegate(this)
-  }
 
   override fun getDelegate(): ViewManagerDelegate<SimpleYamapView>? {
     return mDelegate
@@ -62,9 +56,6 @@ class SimpleYamapViewManager : SimpleViewManager<SimpleYamapView>(),
     }
   }
 
-  override fun setPolygons(view: SimpleYamapView, value: ReadableArray?){
-    view.setPolygons(value)
-  }
 
   // Lifecycle
   override fun onHostResume() {
