@@ -150,14 +150,15 @@
   },
   "codegenConfig": {
     "name": "SimpleYamapViewSpec",
-    "type": "all",
+    "type": "components",
     "jsSrcsDir": "src",
     "android": {
       "javaPackageName": "com.simpleyamap"
     },
     "ios": {
       "componentProvider": {
-        "SimpleYamapView": "SimpleYamapView"
+        "SimpleYamapView": "SimpleYamapView",
+        "SimpleYamapPolygonView": "SimpleYamapPolygonView"
       }
     }
   },

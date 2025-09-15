@@ -10,10 +10,13 @@ class SimpleYamapViewPackage : ReactPackage {
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
     val viewManagers: MutableList<ViewManager<*, *>> = ArrayList()
     viewManagers.add(SimpleYamapViewManager())
+    viewManagers.add(SimpleYamapPolygonViewManager())
     return viewManagers
   }
 
+  @Deprecated("Migrate to [BaseReactPackage] and implement [getModule] instead.")
   override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
     return emptyList()
   }
+
 }
