@@ -93,6 +93,11 @@ android {
             keyPassword 'android'
         }
     }
+  sourceSets {
+    main {
+      kotlin.srcDirs += 'src/main/java'
+    }
+  }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
@@ -110,8 +115,9 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+    implementation 'com.yandex.android:maps.mobile:4.19.0-full'
 
-    if (hermesEnabled.toBoolean()) {
+  if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
