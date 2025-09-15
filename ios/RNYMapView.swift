@@ -9,19 +9,11 @@
 import UIKit
 import YandexMapsMobile
 
-func UIColorFromARGB(_ argb: UInt32) -> UIColor {
-    let alpha = CGFloat((argb >> 24) & 0xFF) / 255.0
-    let red = CGFloat((argb >> 16) & 0xFF) / 255.0
-    let green = CGFloat((argb >> 8) & 0xFF) / 255.0
-    let blue = CGFloat(argb & 0xFF) / 255.0
-    return UIColor(red: red, green: green, blue: blue, alpha: alpha)
-}
-
 
 @objc(RNYMapView)
 public class RNYMapView: YMKMapView {
   private lazy var mapObjects = self.mapWindow.map.mapObjects
-  private var drawPolygons = [String: YMKPolygonMapObject]()
+  private var propPolygons = [String: YMKPolygonMapObject]()
 
   override public init(frame: CGRect, scaleFactor: Float, vulkanPreferred: Bool, lifecycleProvider: YRTLifecycleProvider!) {
       super.init(frame: frame, scaleFactor: scaleFactor, vulkanPreferred: vulkanPreferred, lifecycleProvider: lifecycleProvider)
@@ -65,14 +57,14 @@ public class RNYMapView: YMKMapView {
     let newPolygonsDict = Dictionary(uniqueKeysWithValues: polygons.map { ($0["id"] as! String, $0) })
     
     let newPolygonsIds = Set(newPolygonsDict.keys)
-    let currentPolygonsIds = Set(drawPolygons.keys)
+    let currentPolygonsIds = Set(propPolygons.keys)
     
     // Remove polygons
     let idsToRemove = currentPolygonsIds.subtracting(newPolygonsIds)
     for id in idsToRemove {
-      if let polygonObj = drawPolygons[id] {
+      if let polygonObj = propPolygons[id] {
         mapObjects.remove(with: polygonObj)
-        drawPolygons.removeValue(forKey: id)
+        propPolygons.removeValue(forKey: id)
       }
     }
     
@@ -93,14 +85,16 @@ public class RNYMapView: YMKMapView {
         innerRings: []
       )
       
-      if let existingPolygon = drawPolygons[id] {
+      if let existingPolygon = propPolygons[id] {
           existingPolygon.geometry = polyGeom
           if let colorValue = polygonData["fillColor"], let colorNumber = colorValue as? NSNumber {
-              existingPolygon.fillColor = UIColorFromARGB(colorNumber.uint32Value)
+            existingPolygon.fillColor = UIColorFromARGB(colorNumber.int64Value)
           }
 
           if let colorValue = polygonData["strokeColor"], let colorNumber = colorValue as? NSNumber {
-              existingPolygon.strokeColor = UIColorFromARGB(colorNumber.uint32Value)
+            existingPolygon.strokeColor = UIColorFromARGB(
+              colorNumber.int64Value
+            )
           }
 
           if let strokeWidth = polygonData["strokeWidth"] as? Float {
@@ -111,20 +105,40 @@ public class RNYMapView: YMKMapView {
           let newPolyObj = mapObjects.addPolygon(with: polyGeom)
 
           if let colorValue = polygonData["fillColor"], let colorNumber = colorValue as? NSNumber {
-              newPolyObj.fillColor = UIColorFromARGB(colorNumber.uint32Value)
+            newPolyObj.fillColor = UIColorFromARGB(colorNumber.int64Value)
           } else {
               newPolyObj.fillColor = .clear           }
 
           if let colorValue = polygonData["strokeColor"], let colorNumber = colorValue as? NSNumber {
-              newPolyObj.strokeColor = UIColorFromARGB(colorNumber.uint32Value)
+            newPolyObj.strokeColor = UIColorFromARGB(colorNumber.int64Value)
           } else {
               newPolyObj.strokeColor = .black
           }
 
           newPolyObj.strokeWidth = (polygonData["strokeWidth"] as? Float) ?? 1.0
         
-        drawPolygons[id] = newPolyObj
+        propPolygons[id] = newPolyObj
       }
+    }
+  }
+  
+  // Objects control
+  public func getMapObjects() -> YMKMapObjectCollection {
+    return self.mapObjects
+  }
+  
+  // Polygons
+  // Add polygon
+  @objc public func addPolygonChild(_ polygonView: RNYMapPolygon) {
+    polygonView.parentMapView = self // TODO: Check performance
+    polygonView.updatePolygon() // Draw yourself
+  }
+  
+  // Remove polygon
+  @objc public func removePolygonChild(_ polygonView: RNYMapPolygon) {
+    if let mapObject = polygonView.mapObject {
+      mapObjects.remove(with: mapObject)
+      polygonView.mapObject = nil
     }
   }
   

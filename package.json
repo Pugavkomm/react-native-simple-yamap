@@ -1,5 +1,4 @@
 {
-  "name": "react-native-simple-yamap",
   "version": "0.1.0",
   "description": "Yandex simple maps for react native",
   "main": "./lib/module/index.js",
@@ -150,14 +149,15 @@
   },
   "codegenConfig": {
     "name": "SimpleYamapViewSpec",
-    "type": "all",
+    "type": "components",
     "jsSrcsDir": "src",
     "android": {
       "javaPackageName": "com.simpleyamap"
     },
     "ios": {
       "componentProvider": {
-        "SimpleYamapView": "SimpleYamapView"
+        "SimpleYamapView": "SimpleYamapView",
+        "SimpleYamapPolygonView": "SimpleYamapPolygonView"
       }
     }
   },

@@ -13,6 +13,7 @@
 
 #import <YandexMapsMobile/YMKMapView.h>
 #import <YandexMapsMobile/YMKMapKit.h>
+#import "SimpleYamapPolygonView.h"
 
 #import "SimpleYamap-Swift.h"
 #import <jsi/jsi.h>
@@ -86,6 +87,35 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
 
   return self;
 }
+- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView
+                          index:(NSInteger)index
+{
+    NSLog(@"Child component type: %@", NSStringFromClass([childComponentView class]));
+
+    if ([childComponentView isKindOfClass:[SimpleYamapPolygonView class]]) {
+        SimpleYamapPolygonView *polygonView = (SimpleYamapPolygonView *)childComponentView;
+        RNYMapPolygon *polygon = [polygonView getView];
+        
+        [_view addPolygonChild:polygon];
+
+        return;
+    }
+
+    [super mountChildComponentView:childComponentView index:index];
+}
+
+- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+    if ([childComponentView isKindOfClass:[SimpleYamapPolygonView class]]) {
+        SimpleYamapPolygonView *polygonView = (SimpleYamapPolygonView *)childComponentView;
+        RNYMapPolygon *polygon = [polygonView getView];
+        [_view removePolygonChild:polygon];
+        return;
+    }
+
+    [super unmountChildComponentView:childComponentView index:index];
+}
+
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
@@ -117,6 +147,7 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
     }
   }
   
+    
   // Polygons
 
   NSMutableArray *polygons = [NSMutableArray new];

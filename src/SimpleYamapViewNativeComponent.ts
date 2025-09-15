@@ -27,7 +27,7 @@ export type CameraPosition = Readonly<{
   tilt?: Float;
 }>;
 
-interface NativeProps extends ViewProps {
+export interface NativeProps extends ViewProps {
   nightMode?: boolean;
   cameraPosition?: CameraPosition;
   polygons?: Readonly<Polygon[]>;
