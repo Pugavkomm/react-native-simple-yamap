@@ -3,7 +3,7 @@ import SimpleYamapMarkerViewNativeComponent, {
   type ImageSource,
   type NativeProps,
   type YamapMarkerRef,
-} from '../SimpleYamapMarkerViewNativeComponent';
+} from '../native-components/SimpleYamapMarkerViewNativeComponent';
 import type { Point } from 'react-native-simple-yamap';
 import { Image, type ImageSourcePropType } from 'react-native';
 import { forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
