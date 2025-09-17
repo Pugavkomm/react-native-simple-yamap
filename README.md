@@ -84,6 +84,10 @@ import {
         />
 ```
 
+## Dependencies
+
+- [MapKit SDK 4.22.0 (September 11 2025)](https://yandex.com/maps-api/docs/mapkit/versions.html)
+
 ## Contributing
 
 - [Development workflow](CONTRIBUTING.md#development-workflow)
