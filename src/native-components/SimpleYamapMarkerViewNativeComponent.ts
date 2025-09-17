@@ -5,6 +5,7 @@ import {
   type ViewProps,
 } from 'react-native';
 import type {
+  BubblingEventHandler,
   Double,
   Float,
 } from 'react-native/Libraries/Types/CodegenTypesNamespace';
@@ -36,10 +37,12 @@ export interface NativeProps extends ViewProps {
   iconRotated?: boolean;
   iconAnchor?: IconAnchor;
   zIndexV?: Double;
+  onTap?: BubblingEventHandler<Readonly<{}>> | null;
 }
 
 export interface YamapMarkerRef {
   animatedMove(point: Point, durationInSeconds: number): void;
+
   animatedRotate(angle: number, durationInSeconds: number): void;
 }
 

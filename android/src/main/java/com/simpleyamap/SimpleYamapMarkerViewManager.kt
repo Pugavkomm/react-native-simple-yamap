@@ -84,7 +84,7 @@ class SimpleYamapMarkerViewManager : SimpleViewManager<SimpleYamapMarkerView>(),
     args: ReadableArray?
   ) {
     super.receiveCommand(view, commandId, args)
-    when(commandId){
+    when (commandId) {
       "animatedMove" -> {
         // 0 - lon
         // 1 - lat
@@ -96,6 +96,7 @@ class SimpleYamapMarkerViewManager : SimpleViewManager<SimpleYamapMarkerView>(),
           view.animatedMove(lon, lat, duration)
         }
       }
+
       "animatedRotate" -> {
         // 0 angle
         // 1 - duration
@@ -125,5 +126,13 @@ class SimpleYamapMarkerViewManager : SimpleViewManager<SimpleYamapMarkerView>(),
     durationInSeconds: Float
   ) {
     TODO("Not yet implemented")
+  }
+
+  override fun getExportedCustomBubblingEventTypeConstants(): Map<String, Any> {
+    return mapOf(
+      "tap" to mapOf(
+        "phasedRegistrationNames" to mapOf("bubbled" to "onTap")
+      ),
+    )
   }
 }

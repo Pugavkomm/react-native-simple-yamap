@@ -7,14 +7,12 @@
 
 import YandexMapsMobile
 
-
 @objc(RNYMapMarker)
-public class RNYMapMarker: UIView {
+public class RNYMapMarker: UIView, YMKMapObjectTapListener {
   private let FRAMES_PER_SECOND = 60.0 // Number of frames for marker animations
   var mapObject: YMKPlacemarkMapObject?
   @objc public weak var parentMapView: RNYMapView?
-  
-  
+  @objc public var onTap: (() -> Void)? // On press (tap)
   @objc public var id: NSString = ""
   @objc public var point: NSDictionary = [:] {
     didSet {updateMarker()}
@@ -162,6 +160,7 @@ public class RNYMapMarker: UIView {
       return existingObject
     } else {
       let newPlacemark = mapObjects.addPlacemark()
+      newPlacemark.addTapListener(with: self)
       self.mapObject = newPlacemark
       return newPlacemark
     }
@@ -229,6 +228,15 @@ public class RNYMapMarker: UIView {
     self.mapObject = marker
     updateIcon(marker: marker)
     
+  }
+  
+  // Actions (events)
+  public func onMapObjectTap(
+    with mapObject: YMKMapObject,
+    point: YMKPoint
+  ) -> Bool {
+    self.onTap?()
+    return true;
   }
 }
 

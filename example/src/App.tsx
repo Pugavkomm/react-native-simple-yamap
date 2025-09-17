@@ -336,6 +336,9 @@ export function App() {
           ref={rotatableMarkerRef}
           iconRotated
           iconAnchor={{ x: 0.5, y: 0.8 }}
+          onPress={() => {
+            console.info('Press on marker');
+          }}
         />
         {/* Note: Anchor not working on android */}
         <SimpleYamap.Marker
@@ -416,11 +419,5 @@ const styles = StyleSheet.create({
   },
   subBrandText: {
     fontSize: 10,
-  },
-
-  hiddenGeneratorContainer: {
-    position: 'absolute',
-    top: -9999, // Убираем блок далеко за пределы экрана
-    opacity: 0, // Делаем его полностью прозрачным
   },
 });

@@ -109,7 +109,8 @@ Made with [create-react-native-library](https://github.com/callstack/react-nativ
 - [ ] Polyline
 - [ ] Style text
 - [ ] Clusters
-- [ ] Lite version, functionality from high has not been used yet
+- [x] ~~Lite version, functionality from high has not been used yet~~
 - [ ] Testing
 - [ ] Map interactions
 - [ ] Default marker icon
+- [ ] Fix android auto scale icons
