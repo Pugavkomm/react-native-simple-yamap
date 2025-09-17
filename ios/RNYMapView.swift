@@ -74,6 +74,21 @@ public class RNYMapView: YMKMapView {
     }
   }
   
+  // Markers
+  // Add marker to map
+  @objc public func addMarkerChild(_ markerView: RNYMapMarker) {
+    markerView.parentMapView = self
+    markerView.updateMarker() // Draw yourself
+  }
+  
+  // Remove marker from map
+  @objc public func removeMarkerChild(_ markerView: RNYMapMarker) {
+    if let mapObject = markerView.mapObject {
+      mapObjects.remove(with: mapObject)
+      markerView.mapObject = nil
+    }
+  }
+  
   private func setupMap() {
       
 

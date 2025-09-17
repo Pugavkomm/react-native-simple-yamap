@@ -35,3 +35,16 @@ MIT
 ---
 
 Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
+
+
+## TODO
+
+- [ ] Marker is visible prop
+- [ ] zIndex for polygons
+- [ ] Polyline
+- [ ] Style text
+- [ ] Clusters
+- [ ] Lite version, functionality from high has not been used yet
+- [ ] Testing
+- [ ] Map interactions
+- [ ] Default marker icon
