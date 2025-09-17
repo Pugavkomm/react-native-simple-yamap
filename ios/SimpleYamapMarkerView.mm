@@ -4,9 +4,6 @@
 //
 //  Created by Mechislav Pugavko on 15/09/2025.
 //
-
-#import "SimpleYamapMarkerView.h"
-
 #import <react/renderer/components/SimpleYamapViewSpec/ComponentDescriptors.h>
 #import <react/renderer/components/SimpleYamapViewSpec/EventEmitters.h>
 #import <react/renderer/components/SimpleYamapViewSpec/Props.h>
@@ -14,6 +11,8 @@
 
 #import "RCTFabricComponentsPlugins.h"
 #import <YandexMapsMobile/YMKMapView.h>
+#import <YandexMapsMobile/YMKMapObjectTapListener.h>
+#import "SimpleYamapMarkerView.h"
 #import "SimpleYamap-Swift.h"
 
 using namespace facebook::react;
@@ -34,13 +33,25 @@ using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    if (self = [super initWithFrame:frame]) {
-        static const auto defaultProps = std::make_shared<const SimpleYamapMarkerViewProps>();
-        _props = defaultProps;
-        _view = [[RNYMapMarker alloc] init];
-        self.contentView = _view;
-    }
-    return self;
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const SimpleYamapMarkerViewProps>();
+    _props = defaultProps;
+    _view = [[RNYMapMarker alloc] init];
+    self.contentView = _view;
+    
+    // onTap callback
+    __weak SimpleYamapMarkerView *weakSelf = self;
+    _view.onTap = ^{
+      SimpleYamapMarkerView *strongSelf = weakSelf;
+      if (!strongSelf) {
+        return;
+      }
+      if (strongSelf->_eventEmitter) {
+        strongSelf.eventEmitter.onTap({});
+      }
+    };
+  }
+  return self;
 }
 
 
@@ -63,11 +74,11 @@ using namespace facebook::react;
     _view.text = objectiveCString;
   }
   
-    CGFloat clampedX = fmax(0.0, fmin(1.0, newViewProps.iconAnchor.x));
-    CGFloat clampedY = fmax(0.0, fmin(1.0, newViewProps.iconAnchor.y));
-    CGPoint clampedAnchor = CGPointMake(clampedX, clampedY);
-    _view.iconAnchor = [NSValue valueWithCGPoint:clampedAnchor];
-    
+  CGFloat clampedX = fmax(0.0, fmin(1.0, newViewProps.iconAnchor.x));
+  CGFloat clampedY = fmax(0.0, fmin(1.0, newViewProps.iconAnchor.y));
+  CGPoint clampedAnchor = CGPointMake(clampedX, clampedY);
+  _view.iconAnchor = [NSValue valueWithCGPoint:clampedAnchor];
+  
   
   if (oldViewProps.iconRotated != newViewProps.iconRotated) {
     _view.iconRotated = newViewProps.iconRotated;
@@ -100,7 +111,7 @@ using namespace facebook::react;
     // if (args.count == 2 && [args[0] isKindOfClass:[NSDictionary class]] && [args[1] isKindOfClass:[NSNumber class]]) {
     //   [_view animatedMoveWithPointDict:args[0] duration:[args[1] floatValue]];
     // }
-
+    
     // AFTER:
     // 0 - lon
     // 1 - lat
@@ -112,7 +123,7 @@ using namespace facebook::react;
       pointDict[@"lat"] = args[1];
       
       [_view animatedMoveWithPointDict:pointDict duration:[args[2] floatValue]];
-
+      
     } else {
       RCTLogError(@"Invalid arguments for command 'animatedMove'. Expected lon, lat, duration.");
     }
@@ -128,8 +139,14 @@ using namespace facebook::react;
   [super handleCommand:commandName args:args];
 }
 
+// Event emitter convenience method
+- (const SimpleYamapMarkerViewEventEmitter &)eventEmitter
+{
+  return static_cast<const SimpleYamapMarkerViewEventEmitter &>(*_eventEmitter);
+}
+
 - (RNYMapMarker *)getView {
-    return _view;
+  return _view;
 }
 
 @end

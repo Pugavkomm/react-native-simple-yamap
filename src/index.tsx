@@ -1,8 +1,8 @@
 // index.ts
 
-import type { NativeProps as MapViewProps } from './SimpleYamapViewNativeComponent';
-import BaseMapView from './SimpleYamapViewNativeComponent';
-import type { NativeProps as PolygonProps } from './SimpleYamapPolygonViewNativeComponent';
+import type { NativeProps as MapViewProps } from './native-components/SimpleYamapViewNativeComponent';
+import BaseMapView from './native-components/SimpleYamapViewNativeComponent';
+import type { NativeProps as PolygonProps } from './native-components/SimpleYamapPolygonViewNativeComponent';
 
 import {
   type MarkerText,
@@ -13,7 +13,7 @@ import {
   SimpleYamapView,
 } from './components';
 
-import type { YamapMarkerRef } from './SimpleYamapMarkerViewNativeComponent';
+import type { YamapMarkerRef } from './native-components/SimpleYamapMarkerViewNativeComponent';
 
 export type { Point, CameraPosition } from './interfaices';
 export type { PolygonProps };

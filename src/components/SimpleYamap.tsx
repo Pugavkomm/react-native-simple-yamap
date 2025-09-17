@@ -1,4 +1,4 @@
-import SimpleYamapViewNativeComponent from '../SimpleYamapViewNativeComponent';
+import SimpleYamapViewNativeComponent from '../native-components/SimpleYamapViewNativeComponent';
 import type { ReactNode } from 'react';
 import type { CameraPosition } from '../interfaices';
 import type { StyleProp, ViewStyle } from 'react-native';

@@ -1,4 +1,4 @@
-import SimpleYamapPolygonViewNativeComponent from '../SimpleYamapPolygonViewNativeComponent';
+import SimpleYamapPolygonViewNativeComponent from '../native-components/SimpleYamapPolygonViewNativeComponent';
 import React from 'react';
 import type { Point } from '../interfaices';
 

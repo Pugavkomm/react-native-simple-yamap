@@ -8,7 +8,14 @@ import android.graphics.BitmapFactory
 import android.graphics.PointF
 import android.view.View
 import androidx.core.net.toUri
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.ReactContext
+import com.facebook.react.bridge.WritableMap
+import com.facebook.react.uimanager.UIManagerHelper
+import com.facebook.react.uimanager.events.Event
 import com.yandex.mapkit.map.IconStyle
+import com.yandex.mapkit.map.MapObject
+import com.yandex.mapkit.map.MapObjectTapListener
 import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.mapkit.map.RotationType
 import com.yandex.runtime.image.ImageProvider
@@ -20,10 +27,11 @@ import java.net.URL
 import com.yandex.mapkit.geometry.Point as YandexPoint
 
 
-class SimpleYamapMarkerView(context: Context) : View(context) {
+class SimpleYamapMarkerView(context: Context) : View(context), MapObjectTapListener {
   var mapObject: PlacemarkMapObject? = null
   private var parentMapView: SimpleYamapView? = null
 
+  private var handled = true
 
   //Props
   var markerId: String? = null
@@ -106,6 +114,7 @@ class SimpleYamapMarkerView(context: Context) : View(context) {
     if (mapObject == null) {
       mapObject = mapObjects.addPlacemark().apply {
         geometry = currentPoint
+        addTapListener(this@SimpleYamapMarkerView)
       }
     } else {
       mapObject?.geometry = currentPoint
@@ -226,6 +235,23 @@ class SimpleYamapMarkerView(context: Context) : View(context) {
     valueAnimator.start()
   }
 
+
+  override fun onMapObjectTap(mapObject: MapObject, point: YandexPoint): Boolean {
+    val reactContext = context as ReactContext
+    val eventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(reactContext, id)
+    eventDispatcher?.dispatchEvent(
+      MarkerPressEvent(UIManagerHelper.getSurfaceId(this), id, Arguments.createMap())
+    )
+    return handled
+  }
+
 }
 
-
+internal class MarkerPressEvent(
+  surfaceId: Int,
+  viewTag: Int,
+  private val eventData: WritableMap,
+) : Event<MarkerPressEvent>(surfaceId, viewTag) {
+  override fun getEventName(): String = "topTap"
+  override fun getEventData(): WritableMap = eventData
+}

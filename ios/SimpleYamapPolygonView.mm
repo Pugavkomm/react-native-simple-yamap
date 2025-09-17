@@ -13,6 +13,7 @@
 #import <react/renderer/components/SimpleYamapViewSpec/RCTComponentViewHelpers.h>
 
 #import "RCTFabricComponentsPlugins.h"
+#import <YandexMapsMobile/YMKMapObjectTapListener.h>
 #import <YandexMapsMobile/YMKMapView.h>
 #import "SimpleYamap-Swift.h"
 

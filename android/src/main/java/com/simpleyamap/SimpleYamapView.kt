@@ -26,7 +26,6 @@ class SimpleYamapView(context: Context) : MapView(context) {
       azimuth,
       tilt
     )
-    // Yandex Maps SDK для Android требует, чтобы длительность анимации была > 0
     if (duration > 0) {
       mapWindow.map.move(
         cameraPosition,
