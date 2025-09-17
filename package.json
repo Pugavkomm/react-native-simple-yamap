@@ -158,7 +158,8 @@
     "ios": {
       "componentProvider": {
         "SimpleYamapView": "SimpleYamapView",
-        "SimpleYamapPolygonView": "SimpleYamapPolygonView"
+        "SimpleYamapPolygonView": "SimpleYamapPolygonView",
+        "SimpleYamapMarkerView": "SimpleYamapMarkerView"
       }
     }
   },

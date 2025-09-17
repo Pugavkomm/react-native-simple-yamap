@@ -6,10 +6,16 @@ import {
   Text,
   View,
 } from 'react-native';
-
-import React, { useEffect, useState } from 'react';
-import { SimpleYamap } from 'react-native-simple-yamap';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  type Point,
+  SimpleYamap,
+  type YamapMarkerRef,
+} from 'react-native-simple-yamap';
 import type { SimplePolygonProps } from '../../src/components';
+import { MarkerIcon, MarkerIcon2, MarkerWithDirection } from './images';
+
+const MARKER_SPEED = 20;
 
 const safeProcessColor = (color: string): number | undefined => {
   const processed = processColor(color);
@@ -26,10 +32,11 @@ const initialPolygons: SimplePolygonProps[] = [
       { lat: 10, lon: 20 },
       { lat: 10, lon: 100 },
       { lat: 50, lon: 100 },
+      { lat: 10, lon: 10 },
       { lat: 50, lon: 20 },
     ],
     fillColor: safeProcessColor('rgba(100, 100, 250, 0.1)'),
-    strokeColor: safeProcessColor('rgba(0, 0, 100, 1)'),
+    strokeColor: safeProcessColor('rgba(0, 0, 100, 0.1)'),
     strokeWidth: 1.0,
   },
   {
@@ -39,7 +46,7 @@ const initialPolygons: SimplePolygonProps[] = [
       { lat: 60, lon: 100 },
       { lat: 100, lon: 100 },
     ],
-    fillColor: safeProcessColor('rgba(100, 0, 0, 1)'),
+    fillColor: safeProcessColor('rgba(100, 0, 0, 0.3)'),
     strokeColor: safeProcessColor('rgba(50, 0, 0, 1)'),
     strokeWidth: 2.0,
   },
@@ -118,14 +125,71 @@ const ButtonBlock: React.FC<ButtonBlockProps> = (props) => {
   );
 };
 
-export default function App() {
+export function App() {
   const [lon, setLon] = useState<number>(37.62);
   const [lat, setLat] = useState<number>(55.75);
   const [zoom, setZoom] = useState<number>(3);
   const [nightMode, setNightMode] = useState<boolean>(false);
-  const [tilt, setTilt] = useState<number>(10);
+  const [tilt, setTilt] = useState<number>(100);
   const [azimuth, setAzimuth] = useState<number>(0);
   const [polygons, setPolygons] = useState<SimplePolygonProps[]>([]);
+  const [movableMarkerPosition, setMovableMarkerPosition] = useState<Point>({
+    lat: 30,
+    lon: 70,
+  });
+  const moveMarkerTimerIdRef = useRef<NodeJS.Timeout | null>(null);
+  const angleTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [angle, setAngle] = useState<number>(200);
+  const animatedMarkerRef = useRef<YamapMarkerRef | null>(null);
+  const rotatableMarkerRef = useRef<YamapMarkerRef | null>(null);
+
+  // Smooth shift animated marker
+  useEffect(() => {
+    animatedMarkerRef.current?.animatedMove(movableMarkerPosition, 0.5);
+  }, [movableMarkerPosition]);
+
+  // Smooth rotate
+  useEffect(() => {
+    rotatableMarkerRef.current?.animatedRotate(angle, 1);
+    animatedMarkerRef.current?.animatedRotate(angle, 0.5);
+  }, [angle]);
+
+  const changeRotation = useCallback(() => {
+    const randomAngle = Math.random() * 360;
+    setAngle(randomAngle);
+    angleTimerRef.current = setTimeout(() => changeRotation(), 1100);
+  }, []);
+
+  const changeMarkerPosition = useCallback(() => {
+    setMovableMarkerPosition((prev) => {
+      const direction = Math.random() > 0.8 ? 1 : -1;
+      return {
+        lon: (prev.lon + 2 * direction) % 100,
+        lat: (prev.lat + MARKER_SPEED * direction) % 50,
+      };
+    });
+    moveMarkerTimerIdRef.current = setTimeout(
+      () => changeMarkerPosition(),
+      1100
+    );
+  }, []);
+
+  // Run rotation
+  useEffect(() => {
+    changeRotation();
+    return () => {
+      angleTimerRef.current && clearTimeout(angleTimerRef.current);
+    };
+  }, [changeRotation]);
+
+  // Run movable
+  useEffect(() => {
+    changeMarkerPosition();
+    return () => {
+      moveMarkerTimerIdRef.current &&
+        clearTimeout(moveMarkerTimerIdRef.current);
+    };
+  }, [changeMarkerPosition]);
 
   useEffect(() => {
     //@ts-ignore
@@ -242,6 +306,48 @@ export default function App() {
             points={poly.points}
           />
         ))}
+        <SimpleYamap.Marker
+          id={'marker-4'}
+          point={{ lon: 74, lat: 40 }}
+          text={{ text: 'Only text marker' }}
+        />
+        <SimpleYamap.Marker
+          id={'marker-z-index-20'}
+          point={{ lon: 50, lat: 40 }}
+          text={{ text: 'zIndex=20' }}
+          zIndex={20}
+          iconScale={5}
+          icon={MarkerIcon}
+        />
+        <SimpleYamap.Marker
+          id={'marker-z-index-10'}
+          point={{ lon: 58, lat: 38 }}
+          text={{ text: 'zIndex=10' }}
+          zIndex={10}
+          iconScale={5}
+          icon={MarkerIcon2}
+        />
+        <SimpleYamap.Marker
+          id={'marker-4'}
+          point={{ lon: 80, lat: 30 }}
+          text={{ text: 'Rotated marker' }}
+          icon={MarkerWithDirection}
+          iconScale={2}
+          ref={rotatableMarkerRef}
+          iconRotated
+          iconAnchor={{ x: 0.5, y: 0.8 }}
+        />
+        {/* Note: Anchor not working on android */}
+        <SimpleYamap.Marker
+          id={'marker-with-animation'}
+          point={{ lon: 55, lat: 52 }}
+          ref={animatedMarkerRef}
+          text={{ text: 'Animated marker' }}
+          icon={MarkerWithDirection}
+          iconScale={3}
+          iconRotated
+          iconAnchor={{ x: 0.5, y: 1.0 }}
+        />
       </SimpleYamap>
     </View>
   );
@@ -310,5 +416,11 @@ const styles = StyleSheet.create({
   },
   subBrandText: {
     fontSize: 10,
+  },
+
+  hiddenGeneratorContainer: {
+    position: 'absolute',
+    top: -9999, // Убираем блок далеко за пределы экрана
+    opacity: 0, // Делаем его полностью прозрачным
   },
 });

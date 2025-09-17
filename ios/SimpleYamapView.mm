@@ -14,6 +14,7 @@
 #import <YandexMapsMobile/YMKMapView.h>
 #import <YandexMapsMobile/YMKMapKit.h>
 #import "SimpleYamapPolygonView.h"
+#import "SimpleYamapMarkerView.h"
 
 #import "SimpleYamap-Swift.h"
 #import <jsi/jsi.h>
@@ -90,30 +91,38 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView
                           index:(NSInteger)index
 {
-    NSLog(@"Child component type: %@", NSStringFromClass([childComponentView class]));
-
-    if ([childComponentView isKindOfClass:[SimpleYamapPolygonView class]]) {
-        SimpleYamapPolygonView *polygonView = (SimpleYamapPolygonView *)childComponentView;
-        RNYMapPolygon *polygon = [polygonView getView];
-        
-        [_view addPolygonChild:polygon];
-
-        return;
-    }
-
-    [super mountChildComponentView:childComponentView index:index];
+  if ([childComponentView isKindOfClass:[SimpleYamapPolygonView class]]) {
+    SimpleYamapPolygonView *polygonView = (SimpleYamapPolygonView *)childComponentView;
+    RNYMapPolygon *polygon = [polygonView getView];
+    
+    [_view addPolygonChild:polygon];
+    
+    return;
+  } else if ([childComponentView isKindOfClass:[SimpleYamapMarkerView class]]) {
+    SimpleYamapMarkerView *markerView = (SimpleYamapMarkerView *)childComponentView;
+    RNYMapMarker *marker = [markerView getView];
+    [_view addMarkerChild:marker];
+    return;
+  }
+  
+  [super mountChildComponentView:childComponentView index:index];
 }
 
 - (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-    if ([childComponentView isKindOfClass:[SimpleYamapPolygonView class]]) {
-        SimpleYamapPolygonView *polygonView = (SimpleYamapPolygonView *)childComponentView;
-        RNYMapPolygon *polygon = [polygonView getView];
-        [_view removePolygonChild:polygon];
-        return;
-    }
-
-    [super unmountChildComponentView:childComponentView index:index];
+  if ([childComponentView isKindOfClass:[SimpleYamapPolygonView class]]) {
+    SimpleYamapPolygonView *polygonView = (SimpleYamapPolygonView *)childComponentView;
+    RNYMapPolygon *polygon = [polygonView getView];
+    [_view removePolygonChild:polygon];
+    return;
+  } else if ([childComponentView isKindOfClass:[SimpleYamapMarkerView class]]) {
+    SimpleYamapMarkerView *markerView = (SimpleYamapMarkerView *)childComponentView;
+    RNYMapMarker *marker = [markerView getView];
+    [_view removeMarkerChild:marker];
+    return;
+  }
+  
+  [super unmountChildComponentView:childComponentView index:index];
 }
 
 
@@ -121,7 +130,7 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
 {
   const auto &oldViewProps = *std::static_pointer_cast<SimpleYamapViewProps const>(_props);
   const auto &newViewProps = *std::static_pointer_cast<SimpleYamapViewProps const>(props);
-   
+  
   // Position
   double lon = newViewProps.cameraPosition.lon;
   double lat = newViewProps.cameraPosition.lat;
@@ -146,7 +155,7 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
       [_view disableNightMode];
     }
   }
-    
+  
   [super updateProps:props oldProps:oldProps];
 }
 

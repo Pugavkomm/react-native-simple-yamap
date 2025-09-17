@@ -30,7 +30,6 @@ public class RNYMapPolygon: UIView {
   @objc public weak var parentMapView: RNYMapView?
   
   override public func didMoveToSuperview() {
-    print("Move to super view polygon");
     super.didMoveToSuperview()
     if let mapView = self.superview as? RNYMapView {
       self.parentMapView = mapView
@@ -56,6 +55,7 @@ public class RNYMapPolygon: UIView {
       self.mapObject = nil
     }
 
+  // TODO: Refactor. No recreate, just update if exists polygon on Map already
     guard points.count >= 3 else {return}
     let yandexPoints = points.map { pointDict -> YMKPoint in
       let lat = pointDict["lat"] as! Double

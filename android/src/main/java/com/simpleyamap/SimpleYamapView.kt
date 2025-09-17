@@ -57,6 +57,17 @@ class SimpleYamapView(context: Context) : MapView(context) {
     }
   }
 
+  fun addMarkerChild(markerView: SimpleYamapMarkerView) {
+    markerView.updateMarker()
+  }
+
+  fun removeMarkerChild(markerView: SimpleYamapMarkerView) {
+    markerView.mapObject?.let {
+      mapObjects.remove(it)
+      markerView.mapObject = null
+    }
+  }
+
   fun onHostResume() {
     MapKitFactory.getInstance().onStart()
     this.onStart()

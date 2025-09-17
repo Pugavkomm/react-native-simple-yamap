@@ -4,13 +4,23 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.uimanager.annotations.ReactProp
+import com.facebook.react.viewmanagers.SimpleYamapPolygonViewManagerDelegate
 import com.facebook.react.viewmanagers.SimpleYamapPolygonViewManagerInterface
 import com.yandex.mapkit.geometry.Point as YandexPoint
 
 @ReactModule(name = SimpleYamapPolygonViewManager.NAME)
 class SimpleYamapPolygonViewManager : SimpleViewManager<SimpleYamapPolygonView>(),
   SimpleYamapPolygonViewManagerInterface<SimpleYamapPolygonView> {
+
+  private val mDelegate: ViewManagerDelegate<SimpleYamapPolygonView> =
+    SimpleYamapPolygonViewManagerDelegate(this)
+
+  override fun getDelegate(): ViewManagerDelegate<SimpleYamapPolygonView> {
+    return mDelegate
+  }
+
   companion object {
     const val NAME = "SimpleYamapPolygonView"
   }
@@ -21,6 +31,12 @@ class SimpleYamapPolygonViewManager : SimpleViewManager<SimpleYamapPolygonView>(
 
   override fun createViewInstance(reactContext: ThemedReactContext): SimpleYamapPolygonView {
     return SimpleYamapPolygonView(reactContext)
+  }
+
+  // For future (reserved)
+  @ReactProp(name = "id")
+  override fun setId(view: SimpleYamapPolygonView?, value: String?) {
+    view?.polygonId = value
   }
 
   @ReactProp(name = "points")
@@ -36,11 +52,6 @@ class SimpleYamapPolygonViewManager : SimpleViewManager<SimpleYamapPolygonView>(
       }
     }
     view.points = yandexPoints
-  }
-
-  @ReactProp(name = "id")
-  override fun setId(view: SimpleYamapPolygonView?, value: String?) {
-    view?.polygonId = value
   }
 
 
