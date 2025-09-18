@@ -90,7 +90,7 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
     
     _view.onCameraPositionChange = ^(NSDictionary *payload) {
       SimpleYamapView *strongSelf = weakSelf;
-      if (!strongSelf ) {
+      if (!strongSelf ||  !strongSelf->_eventEmitter ) {
         return;
       }
       
@@ -119,6 +119,7 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
       event.azimuth = [payload[@"azimuth"] floatValue];
       event.reason = [[payload[@"reason"] description] UTF8String];
       event.finished = [payload[@"finished"] boolValue];
+      
       strongSelf.eventEmitter.onCameraPositionChangeEnd(event);
     };
   }
