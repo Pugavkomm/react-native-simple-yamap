@@ -5,6 +5,7 @@
 //  Created by Mechislav Pugavko on 15/09/2025.
 //
 #import <YandexMapsMobile/YMKMapObjectTapListener.h>
+#import <YandexMapsMobile/YMKMapCameraListener.h>
 #import <React/RCTViewComponentView.h>
 #import <UIKit/UIKit.h>
 

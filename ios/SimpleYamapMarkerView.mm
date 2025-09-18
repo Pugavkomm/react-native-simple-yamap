@@ -29,8 +29,6 @@ using namespace facebook::react;
   return concreteComponentDescriptorProvider<SimpleYamapMarkerViewComponentDescriptor>();
 }
 
-
-
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
@@ -101,7 +99,7 @@ using namespace facebook::react;
   [super updateProps:props oldProps:oldProps];
 }
 
-// Handlers
+// Handlers TODO: refactor
 - (void)handleCommand:(NSString const *)commandName args:(NSArray const *)args
 {
   if ([commandName isEqualToString:@"animatedMove"]) {

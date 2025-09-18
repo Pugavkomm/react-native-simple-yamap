@@ -78,6 +78,7 @@ class SimpleYamapMarkerViewManager : SimpleViewManager<SimpleYamapMarkerView>(),
   }
 
   // Handelrs
+  // TODO: Refactor to new approach
   override fun receiveCommand(
     view: SimpleYamapMarkerView,
     commandId: String?,

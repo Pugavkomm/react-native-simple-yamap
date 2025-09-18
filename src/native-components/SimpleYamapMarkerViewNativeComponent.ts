@@ -40,12 +40,6 @@ export interface NativeProps extends ViewProps {
   onTap?: BubblingEventHandler<Readonly<{}>> | null;
 }
 
-export interface YamapMarkerRef {
-  animatedMove(point: Point, durationInSeconds: number): void;
-
-  animatedRotate(angle: number, durationInSeconds: number): void;
-}
-
 export interface NativeCommands {
   animatedMove: (
     viewRef: React.ElementRef<HostComponent<NativeProps>>,

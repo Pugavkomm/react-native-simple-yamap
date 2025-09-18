@@ -2,7 +2,6 @@ import SimpleYamapMarkerViewNativeComponent, {
   Commands,
   type ImageSource,
   type NativeProps,
-  type YamapMarkerRef,
 } from '../native-components/SimpleYamapMarkerViewNativeComponent';
 import type { Point } from 'react-native-simple-yamap';
 import { Image, type ImageSourcePropType } from 'react-native';
@@ -29,6 +28,10 @@ export interface SimpleMarkerProps {
   onPress?: () => void;
 }
 
+export interface YamapMarkerRef {
+  animatedMove(point: Point, durationInSeconds: number): void;
+  animatedRotate(angle: number, durationInSeconds: number): void;
+}
 const SimpleMarkerRender: React.ForwardRefRenderFunction<
   YamapMarkerRef,
   SimpleMarkerProps
@@ -37,6 +40,7 @@ const SimpleMarkerRender: React.ForwardRefRenderFunction<
     useRef<React.ComponentRef<typeof SimpleYamapMarkerViewNativeComponent>>(
       null
     );
+
   const nativeIcon = useMemo((): ImageSource | undefined => {
     if (!props.icon) {
       return undefined;
