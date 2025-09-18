@@ -8,14 +8,18 @@ import {
 } from 'react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  type CameraPosition,
   type Point,
   SimpleYamap,
   type YamapMarkerRef,
+  type YamapRef,
 } from 'react-native-simple-yamap';
 import type { SimplePolygonProps } from '../../src/components';
 import { MarkerIcon, MarkerIcon2, MarkerWithDirection } from './images';
+import iconScaleService from './services/iconScaleService';
 
 const MARKER_SPEED = 20;
+const CAMERA_SPEED = 10;
 
 const safeProcessColor = (color: string): number | undefined => {
   const processed = processColor(color);
@@ -23,6 +27,14 @@ const safeProcessColor = (color: string): number | undefined => {
     return processed;
   }
   return undefined;
+};
+
+const initialCameraPosition: CameraPosition = {
+  point: { lon: 37.62, lat: 55.75 },
+  zoom: 3,
+  tilt: 100,
+  azimuth: 0,
+  duration: 1,
 };
 
 const initialPolygons: SimplePolygonProps[] = [
@@ -65,14 +77,15 @@ interface ButtonBlockProps {
   tiltDown?: () => void;
   azimuthIncrease?: () => void;
   azimuthDecrease?: () => void;
+  setCenter?: () => void;
 }
 
 interface TextInfoBlockProps {
-  lon: number;
-  lat: number;
-  zoom: number;
-  tilt: number;
-  azimuth: number;
+  lon?: number;
+  lat?: number;
+  zoom?: number;
+  tilt?: number;
+  azimuth?: number;
 }
 
 interface TextInfoProps {
@@ -121,18 +134,17 @@ const ButtonBlock: React.FC<ButtonBlockProps> = (props) => {
         <Button title={'+'} onPress={props.azimuthIncrease} />
         <Button title={'-'} onPress={props.azimuthDecrease} />
       </View>
+      <Button title={'37.62, 55.75'} onPress={props.setCenter} />
     </View>
   );
 };
 
 export function App() {
-  const [lon, setLon] = useState<number>(37.62);
-  const [lat, setLat] = useState<number>(55.75);
-  const [zoom, setZoom] = useState<number>(3);
   const [nightMode, setNightMode] = useState<boolean>(false);
-  const [tilt, setTilt] = useState<number>(100);
-  const [azimuth, setAzimuth] = useState<number>(0);
   const [polygons, setPolygons] = useState<SimplePolygonProps[]>([]);
+  const [currentCenter, setCurrentCenter] = useState<CameraPosition>(
+    initialCameraPosition
+  );
   const [movableMarkerPosition, setMovableMarkerPosition] = useState<Point>({
     lat: 30,
     lon: 70,
@@ -142,6 +154,7 @@ export function App() {
   const [angle, setAngle] = useState<number>(200);
   const animatedMarkerRef = useRef<YamapMarkerRef | null>(null);
   const rotatableMarkerRef = useRef<YamapMarkerRef | null>(null);
+  const mapRef = useRef<YamapRef | null>(null);
 
   // Smooth shift animated marker
   useEffect(() => {
@@ -208,34 +221,71 @@ export function App() {
   }, []);
 
   const left = () => {
-    setLon((prev) => prev - 1);
+    mapRef.current?.setCenter({
+      ...currentCenter,
+      point: {
+        ...currentCenter.point,
+        lon: currentCenter.point.lon - CAMERA_SPEED,
+      },
+    });
   };
 
   const right = () => {
-    setLon((prev) => prev + 1);
+    mapRef.current?.setCenter({
+      ...currentCenter,
+      point: {
+        ...currentCenter.point,
+        lon: currentCenter.point.lon + CAMERA_SPEED,
+      },
+    });
   };
 
   const up = () => {
-    setLat((prev) => prev + 1);
+    mapRef.current?.setCenter({
+      ...currentCenter,
+      point: {
+        ...currentCenter.point,
+        lat: currentCenter.point.lat + CAMERA_SPEED,
+      },
+    });
   };
 
   const down = () => {
-    setLat((prev) => prev - 1);
+    mapRef.current?.setCenter({
+      ...currentCenter,
+      point: {
+        ...currentCenter.point,
+        lat: currentCenter.point.lat - CAMERA_SPEED,
+      },
+    });
   };
 
   const zoomIn = () => {
-    setZoom((prev) => prev + 1);
+    mapRef.current?.setCenter({
+      ...currentCenter,
+      zoom: currentCenter.zoom + 1,
+    });
   };
 
   const zoomOut = () => {
-    setZoom((prev) => prev - 1);
+    mapRef.current?.setCenter({
+      ...currentCenter,
+
+      zoom: currentCenter.zoom - 1,
+    });
   };
 
   const azimuthDecrease = () => {
-    setAzimuth((prev) => prev - 10);
+    mapRef.current?.setCenter({
+      ...currentCenter,
+      azimuth: currentCenter.azimuth! - 10,
+    });
   };
   const azimuthIncrease = () => {
-    setAzimuth((prev) => prev + 10);
+    mapRef.current?.setCenter({
+      ...currentCenter,
+      azimuth: currentCenter.azimuth! + 10,
+    });
   };
 
   const getRandomBetween = (a: number, b: number): number => {
@@ -243,17 +293,29 @@ export function App() {
   };
 
   const tiltUp = () => {
-    setTilt((prev) => prev + 10);
+    mapRef.current?.setCenter({
+      ...currentCenter,
+      azimuth: currentCenter.tilt! + 1,
+    });
   };
   const tiltDown = () => {
-    setTilt((prev) => prev - 10);
+    mapRef.current?.setCenter({
+      ...currentCenter,
+      azimuth: currentCenter.tilt! - 1,
+    });
   };
   const setRandomPosition = () => {
     const latV = getRandomBetween(10, 100);
     const lonV = getRandomBetween(10, 150);
 
-    setLon(lonV);
-    setLat(latV);
+    mapRef.current?.setCenter({
+      ...currentCenter,
+      point: { lon: lonV, lat: latV },
+    });
+  };
+
+  const setCenter = () => {
+    mapRef.current?.setCenter(initialCameraPosition);
   };
 
   return (
@@ -274,32 +336,44 @@ export function App() {
         tiltUp={tiltUp}
         azimuthDecrease={azimuthDecrease}
         azimuthIncrease={azimuthIncrease}
+        setCenter={setCenter}
       />
       <TextInfoBlock
-        lon={lon}
-        lat={lat}
-        zoom={zoom}
-        tilt={tilt}
-        azimuth={azimuth}
+        lon={currentCenter?.point.lon}
+        lat={currentCenter?.point.lat}
+        zoom={currentCenter?.zoom}
+        tilt={currentCenter?.tilt}
+        azimuth={currentCenter?.azimuth}
       />
 
       <SimpleYamap
+        onCameraPositionChange={(e) => {
+          setCurrentCenter({
+            point: e.point,
+            azimuth: e.azimuth,
+            zoom: e.zoom,
+            tilt: e.tilt,
+            duration: initialCameraPosition.duration,
+          });
+          console.info(
+            `Camera position changing: (${e.point.lat}, ${e.point.lon})`
+          );
+        }}
+        onCameraPositionChangeEnd={(e) => {
+          // setCurrentCameraPosition(e);
+          console.info(
+            `End camera position changing: (${e.point.lat}, ${e.point.lon})`
+          );
+        }}
+        ref={mapRef}
         style={styles.box}
         nightMode={nightMode}
-        cameraPosition={{
-          point: {
-            lon: lon,
-            lat: lat,
-          },
-          duration: 0.5,
-          tilt: tilt,
-          azimuth: azimuth,
-          zoom: zoom,
-        }}
+        cameraPosition={initialCameraPosition}
       >
         {polygons.map((poly, index) => (
           <SimpleYamap.Polygon
             id={`poly-${index}`}
+            key={`poly-${index}`}
             strokeColor={poly.strokeColor}
             strokeWidth={poly.strokeWidth}
             fillColor={poly.fillColor}
@@ -310,13 +384,14 @@ export function App() {
           id={'marker-4'}
           point={{ lon: 74, lat: 40 }}
           text={{ text: 'Only text marker' }}
+          iconScale={iconScaleService(1)}
         />
         <SimpleYamap.Marker
           id={'marker-z-index-20'}
           point={{ lon: 50, lat: 40 }}
           text={{ text: 'zIndex=20' }}
           zIndex={20}
-          iconScale={5}
+          iconScale={iconScaleService(5)}
           icon={MarkerIcon}
         />
         <SimpleYamap.Marker
@@ -324,7 +399,7 @@ export function App() {
           point={{ lon: 58, lat: 38 }}
           text={{ text: 'zIndex=10' }}
           zIndex={10}
-          iconScale={5}
+          iconScale={iconScaleService(5)}
           icon={MarkerIcon2}
         />
         <SimpleYamap.Marker
@@ -332,7 +407,7 @@ export function App() {
           point={{ lon: 80, lat: 30 }}
           text={{ text: 'Rotated marker' }}
           icon={MarkerWithDirection}
-          iconScale={2}
+          iconScale={iconScaleService(2)}
           ref={rotatableMarkerRef}
           iconRotated
           iconAnchor={{ x: 0.5, y: 0.8 }}
@@ -347,7 +422,7 @@ export function App() {
           ref={animatedMarkerRef}
           text={{ text: 'Animated marker' }}
           icon={MarkerWithDirection}
-          iconScale={3}
+          iconScale={iconScaleService(3)}
           iconRotated
           iconAnchor={{ x: 0.5, y: 1.0 }}
         />

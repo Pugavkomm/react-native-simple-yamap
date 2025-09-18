@@ -56,6 +56,18 @@ class SimpleYamapViewManager : ViewGroupManager<SimpleYamapView>(),
     }
   }
 
+  override fun setCenter(
+    view: SimpleYamapView?,
+    lon: Double,
+    lat: Double,
+    zoom: Float,
+    duration: Float,
+    azimuth: Float,
+    tilt: Float
+  ) {
+    view?.moveMap(lon, lat, zoom, duration, tilt, azimuth)
+  }
+
 
   // Lifecycle
   override fun onHostResume() {
@@ -69,6 +81,18 @@ class SimpleYamapViewManager : ViewGroupManager<SimpleYamapView>(),
   override fun onHostDestroy() {
     viewInstance?.onHostDestroy()
   }
+
+  override fun getExportedCustomBubblingEventTypeConstants(): Map<String, Any> {
+    return mapOf(
+      "cameraPositionChange" to mapOf(
+        "phasedRegistrationNames" to mapOf("bubbled" to "onCameraPositionChange")
+      ),
+      "cameraPositionChangeEnd" to mapOf(
+        "phasedRegistrationNames" to mapOf("bubbled" to "onCameraPositionChangeEnd")
+      ),
+    )
+  }
+
 
   companion object {
     const val NAME = "SimpleYamapView"

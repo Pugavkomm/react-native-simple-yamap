@@ -7,28 +7,31 @@ import type { NativeProps as PolygonProps } from './native-components/SimpleYama
 import {
   type MarkerText,
   SimpleMarker,
-  type SimpleMarkerProps,
   SimplePolygon,
-  type SimpleYamapProps,
   SimpleYamapView,
 } from './components';
 
-import type { YamapMarkerRef } from './native-components/SimpleYamapMarkerViewNativeComponent';
+import type { YamapMarkerRef } from './components/SimpleMarker';
+import type { CameraPositionEvent, YamapRef } from './components/SimpleYamap';
+import type { CameraPosition, Point } from './interfaices';
 
-export type { Point, CameraPosition } from './interfaices';
-export type { PolygonProps };
-export type { MapViewProps };
-export type { MarkerText };
-export type { YamapMarkerRef };
-
-const SimpleYamap: React.FC<SimpleYamapProps> & {
-  Polygon: typeof SimplePolygon;
-  Marker: React.ForwardRefExoticComponent<
-    SimpleMarkerProps & React.RefAttributes<YamapMarkerRef>
-  >;
-} = (props) => {
-  return <SimpleYamapView {...props} />;
+export type {
+  PolygonProps,
+  MapViewProps,
+  MarkerText,
+  YamapMarkerRef,
+  YamapRef,
+  Point,
+  CameraPosition,
+  CameraPositionEvent,
 };
+
+type YamapComposition = typeof SimpleYamapView & {
+  Marker: typeof SimpleMarker;
+  Polygon: typeof SimplePolygon;
+};
+
+const SimpleYamap = SimpleYamapView as YamapComposition;
 
 SimpleYamap.Polygon = SimplePolygon;
 SimpleYamap.Marker = SimpleMarker;

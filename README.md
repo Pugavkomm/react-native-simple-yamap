@@ -106,11 +106,20 @@ Made with [create-react-native-library](https://github.com/callstack/react-nativ
 
 - [ ] Marker is visible prop
 - [ ] zIndex for polygons
+- [ ] Polygon interactions
 - [ ] Polyline
 - [ ] Style text
 - [ ] Clusters
 - [x] ~~Lite version, functionality from high has not been used yet~~
 - [ ] Testing
 - [ ] Map interactions
+  - [x] ~~Set center~~
+  - [x] ~~onCameraPositionChange~~
+  - [x] ~~onCameraPositionChangeEnd~~
+  - [ ] getCurrentCameraPosition
 - [ ] Default marker icon
 - [ ] Fix android auto scale icons
+- [ ] Refactor native code from old examples
+- [ ] Find routes
+- [ ] Lite or full version sdk switcher
+- [ ] Full documentation

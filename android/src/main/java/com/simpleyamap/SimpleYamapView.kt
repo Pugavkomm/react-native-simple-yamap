@@ -3,19 +3,73 @@
 package com.simpleyamap
 
 import android.content.Context
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.ReactContext
+import com.facebook.react.bridge.WritableMap
+import com.facebook.react.uimanager.UIManagerHelper
+import com.facebook.react.uimanager.events.Event
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
+import com.yandex.mapkit.map.CameraListener
 import com.yandex.mapkit.map.CameraPosition
+import com.yandex.mapkit.map.CameraUpdateReason
+import com.yandex.mapkit.map.Map
 import com.yandex.mapkit.map.MapObjectCollection
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.mapkit.geometry.Point as YandexPoint
 
-class SimpleYamapView(context: Context) : MapView(context) {
+class SimpleYamapView(context: Context) : MapView(context), CameraListener {
   private val mapObjects: MapObjectCollection = mapWindow.map.mapObjects
 
   init {
+    mapWindow.map.addCameraListener(this)
     mapWindow.map.move(
       CameraPosition(YandexPoint(55.751244, 37.618423), 10.0f, 0.0f, 0.0f)
+    )
+  }
+
+  override fun onCameraPositionChanged(
+    map: Map,
+    cameraPosition: CameraPosition,
+    cameraUpdateReason: CameraUpdateReason,
+    finished: Boolean
+  ) {
+    sendCameraPositionEvent(
+      "topCameraPositionChange",
+      cameraPosition,
+      cameraUpdateReason.toString(),
+      true
+    )
+    if (finished) {
+      sendCameraPositionEvent(
+        "topCameraPositionChange",
+        cameraPosition,
+        cameraUpdateReason.toString(),
+        false
+      )
+    }
+  }
+
+  private fun sendCameraPositionEvent(
+    eventName: String,
+    position: CameraPosition,
+    reason: String,
+    finished: Boolean
+  ) {
+    val evData = Arguments.createMap().apply {
+      putDouble("lon", position.target.longitude)
+      putDouble("lat", position.target.latitude)
+      putDouble("zoom", position.zoom.toDouble())
+      putDouble("azimuth", position.azimuth.toDouble())
+      putDouble("tilt", position.tilt.toDouble())
+      putString("reason", reason)
+      putBoolean("finished", finished)
+    }
+
+    val reactContext = context as ReactContext
+    val eventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(reactContext, id)
+    eventDispatcher?.dispatchEvent(
+      CameraPositionEvent(UIManagerHelper.getSurfaceId(this), id, eventName, evData)
     )
   }
 
@@ -41,6 +95,7 @@ class SimpleYamapView(context: Context) : MapView(context) {
     mapWindow.map.isNightModeEnabled = enabled
   }
 
+
   fun getMapObjects(): MapObjectCollection {
     return this.mapObjects
   }
@@ -49,7 +104,7 @@ class SimpleYamapView(context: Context) : MapView(context) {
     polygonView.updatePolygon()
   }
 
-  fun removePolygonChild(polygonView: SimpleYamapPolygonView){
+  fun removePolygonChild(polygonView: SimpleYamapPolygonView) {
     polygonView.mapObject?.let {
       mapObjects.remove(it)
       polygonView.mapObject = null
@@ -80,4 +135,15 @@ class SimpleYamapView(context: Context) : MapView(context) {
   fun onHostDestroy() {
   }
 
+}
+
+
+internal class CameraPositionEvent(
+  surfaceId: Int,
+  viewTag: Int,
+  private val _eventName: String,
+  private val eventData: WritableMap
+) : Event<CameraPositionEvent>(surfaceId, viewTag) {
+  override fun getEventName(): String = _eventName
+  override fun getEventData(): WritableMap = eventData
 }

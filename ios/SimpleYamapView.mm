@@ -2,26 +2,26 @@
 // SimpleYamapView.mm
 //
 
-#import "SimpleYamapView.h"
 
+#import <YandexMapsMobile/YMKMapCameraListener.h>
 #import <react/renderer/components/SimpleYamapViewSpec/ComponentDescriptors.h>
 #import <react/renderer/components/SimpleYamapViewSpec/EventEmitters.h>
 #import <react/renderer/components/SimpleYamapViewSpec/Props.h>
 #import <react/renderer/components/SimpleYamapViewSpec/RCTComponentViewHelpers.h>
-
 #import "RCTFabricComponentsPlugins.h"
-
 #import <YandexMapsMobile/YMKMapView.h>
 #import <YandexMapsMobile/YMKMapKit.h>
 #import "SimpleYamapPolygonView.h"
+#import "SimpleYamapView.h"
 #import "SimpleYamapMarkerView.h"
-
 #import "SimpleYamap-Swift.h"
+#import <folly/dynamic.h>
 #import <jsi/jsi.h>
 
 using namespace facebook::react;
 using namespace facebook::jsi;
 
+// HELPLER JSI -> NSOBJECT
 static NSObject* convertJsiValueToNSObject(Runtime& runtime,
                                            const facebook::jsi::Value& value) {
   if (value.isUndefined() || value.isNull()) {
@@ -64,13 +64,15 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
 
 @end
 
+// MAP VIEW
 @implementation SimpleYamapView {
-    RNYMapView * _view;
+  RNYMapView * _view;
+  std::shared_ptr<const SimpleYamapViewEventEmitter> eventEmitter;
 }
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
-    return concreteComponentDescriptorProvider<SimpleYamapViewComponentDescriptor>();
+  return concreteComponentDescriptorProvider<SimpleYamapViewComponentDescriptor>();
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -78,14 +80,49 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const SimpleYamapViewProps>();
     _props = defaultProps;
-   
-
+    
+    
     _view = [[RNYMapView alloc] init];
-
+    
     self.contentView = (UIView *)_view;
-
+    
+    __weak SimpleYamapView *weakSelf = self;
+    
+    _view.onCameraPositionChange = ^(NSDictionary *payload) {
+      SimpleYamapView *strongSelf = weakSelf;
+      if (!strongSelf ) {
+        return;
+      }
+      
+      auto event = SimpleYamapViewEventEmitter::OnCameraPositionChange{};
+      event.lon = [payload[@"lon"] doubleValue];
+      event.lat = [payload[@"lat"] doubleValue];
+      event.zoom = [payload[@"zoom"] floatValue];
+      event.tilt = [payload[@"tilt"] floatValue];
+      event.azimuth = [payload[@"azimuth"] floatValue];
+      event.reason = [[payload[@"reason"] description] UTF8String];
+      event.finished = [payload[@"finished"] boolValue];
+      strongSelf.eventEmitter.onCameraPositionChange(event);
+    };
+    
+    _view.onCameraPositionChangeEnd = ^(NSDictionary *payload) {
+      SimpleYamapView *strongSelf = weakSelf;
+      if (!strongSelf || !strongSelf->_eventEmitter) {
+        return;
+      }
+      
+      auto event = SimpleYamapViewEventEmitter::OnCameraPositionChangeEnd{};
+      event.lon = [payload[@"lon"] doubleValue];
+      event.lat = [payload[@"lat"] doubleValue];
+      event.zoom = [payload[@"zoom"] floatValue];
+      event.tilt = [payload[@"tilt"] floatValue];
+      event.azimuth = [payload[@"azimuth"] floatValue];
+      event.reason = [[payload[@"reason"] description] UTF8String];
+      event.finished = [payload[@"finished"] boolValue];
+      strongSelf.eventEmitter.onCameraPositionChangeEnd(event);
+    };
   }
-
+  
   return self;
 }
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView
@@ -158,10 +195,25 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
   
   [super updateProps:props oldProps:oldProps];
 }
+- (void)handleCommand:(const NSString *)commandName args:(const NSArray *)args
+{
+  RCTSimpleYamapViewHandleCommand(self, commandName, args);
+}
+
+- (void)setCenter:(double)lon lat:(double)lat zoom:(float)zoom duration:(float)duration azimuth:(float)azimuth tilt:(float)tilt{
+  [_view moveMapWithLon:lon lat:lat zoom:zoom duration:duration tilt:tilt azimuth:azimuth];
+}
+
+// Event emitter convenience method
+- (const SimpleYamapViewEventEmitter &)eventEmitter
+{
+  return static_cast<const SimpleYamapViewEventEmitter &>(*_eventEmitter);
+}
+
 
 Class<RCTComponentViewProtocol> SimpleYamapViewCls(void)
 {
-    return SimpleYamapView.class;
+  return SimpleYamapView.class;
 }
 
 @end

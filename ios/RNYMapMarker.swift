@@ -210,15 +210,11 @@ public class RNYMapMarker: UIView, YMKMapObjectTapListener {
   public func updateMarker() {
     guard let mapView = parentMapView else {return}
     let mapObjects = mapView.getMapObjects()
-    
-    
     let marker = getOrCreateMapObject(mapObjects: mapObjects)
-    
     let markerGeom = YMKPoint(
       latitude: self.point["lat"] as! Double,
       longitude: self.point["lon"] as! Double
     )
-    
     marker.geometry = markerGeom
     if (!self.text.isEmpty){
       marker.setTextWithText(self.text)
@@ -227,7 +223,6 @@ public class RNYMapMarker: UIView, YMKMapObjectTapListener {
     }
     self.mapObject = marker
     updateIcon(marker: marker)
-    
   }
   
   // Actions (events)
