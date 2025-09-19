@@ -1,26 +1,40 @@
 // index.ts
 
-import type { NativeProps as MapViewProps } from './SimpleYamapViewNativeComponent';
-import BaseMapView from './SimpleYamapViewNativeComponent';
-import type { NativeProps as PolygonProps } from './SimpleYamapPolygonViewNativeComponent';
-import PolygonView from './SimpleYamapPolygonViewNativeComponent';
+import type { NativeProps as MapViewProps } from './native-components/SimpleYamapViewNativeComponent';
+import BaseMapView from './native-components/SimpleYamapViewNativeComponent';
+import type { NativeProps as PolygonProps } from './native-components/SimpleYamapPolygonViewNativeComponent';
+
 import {
+  type MarkerText,
+  SimpleMarker,
   SimplePolygon,
-  type SimpleYamapProps,
   SimpleYamapView,
 } from './components';
-export type { Point, CameraPosition } from './interfaices';
 
-export type { PolygonProps };
-export type { MapViewProps };
+import type { YamapMarkerRef } from './components/SimpleMarker';
+import type { CameraPositionEvent, YamapRef } from './components/SimpleYamap';
+import type { CameraPosition, Point } from './interfaices';
 
-const SimpleYamap: React.FC<SimpleYamapProps> & {
-  Polygon: typeof SimplePolygon;
-} = (props) => {
-  return <SimpleYamapView {...props} />;
+export type {
+  PolygonProps,
+  MapViewProps,
+  MarkerText,
+  YamapMarkerRef,
+  YamapRef,
+  Point,
+  CameraPosition,
+  CameraPositionEvent,
 };
 
-SimpleYamap.Polygon = PolygonView;
+type YamapComposition = typeof SimpleYamapView & {
+  Marker: typeof SimpleMarker;
+  Polygon: typeof SimplePolygon;
+};
 
-export { BaseMapView, SimplePolygon, SimpleYamap };
+const SimpleYamap = SimpleYamapView as YamapComposition;
+
+SimpleYamap.Polygon = SimplePolygon;
+SimpleYamap.Marker = SimpleMarker;
+
+export { BaseMapView, SimplePolygon, SimpleYamap, SimpleMarker };
 export default SimpleYamap;

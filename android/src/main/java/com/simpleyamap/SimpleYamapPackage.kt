@@ -11,6 +11,7 @@ class SimpleYamapViewPackage : ReactPackage {
     val viewManagers: MutableList<ViewManager<*, *>> = ArrayList()
     viewManagers.add(SimpleYamapViewManager())
     viewManagers.add(SimpleYamapPolygonViewManager())
+    viewManagers.add(SimpleYamapMarkerViewManager())
     return viewManagers
   }
 

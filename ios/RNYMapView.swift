@@ -1,6 +1,6 @@
 //
 //  YamapSimple.swift
-//  
+//
 //
 //  Created by Mechislav Pugavko on 13/09/2025.
 //
@@ -10,41 +10,53 @@ import UIKit
 import YandexMapsMobile
 
 
+public typealias CameraPositionCallback = (NSDictionary) -> Void
+
+
 @objc(RNYMapView)
-public class RNYMapView: YMKMapView {
+public class RNYMapView: YMKMapView, YMKMapCameraListener{
+  
+  // Events
+  @objc public var onCameraPositionChange: CameraPositionCallback?
+  @objc public var onCameraPositionChangeEnd: CameraPositionCallback?
+  
+  
+
   private lazy var mapObjects = self.mapWindow.map.mapObjects
   private var propPolygons = [String: YMKPolygonMapObject]()
-
+  
   override public init(frame: CGRect, scaleFactor: Float, vulkanPreferred: Bool, lifecycleProvider: YRTLifecycleProvider!) {
-      super.init(frame: frame, scaleFactor: scaleFactor, vulkanPreferred: vulkanPreferred, lifecycleProvider: lifecycleProvider)
-      setupMap()
-    }
+    super.init(frame: frame, scaleFactor: scaleFactor, vulkanPreferred: vulkanPreferred, lifecycleProvider: lifecycleProvider)
+    setupMap()
+  }
   
   override public init(frame: CGRect, vulkanPreferred: Bool) {
-      super.init(frame: frame, vulkanPreferred: vulkanPreferred)
-      setupMap()
-    }
-
-    override public init(frame: CGRect) {
+    super.init(frame: frame, vulkanPreferred: vulkanPreferred)
+    setupMap()
+  }
+  
+  override public init(frame: CGRect) {
     super.init(frame: frame)
-      setupMap()
-      }
+    setupMap()
+  }
   
   
+  // Set center
   @objc public func moveMap(lon: Double, lat: Double, zoom: Float, duration: Float, tilt: Float, azimuth: Float) {
     let cameraPosition = YMKCameraPosition(
-                target: YMKPoint(latitude: lat, longitude: lon),
-                zoom:zoom,
-                azimuth: azimuth,
-                tilt: tilt
-            )
+      target: YMKPoint(latitude: lat, longitude: lon),
+      zoom:zoom,
+      azimuth: azimuth,
+      tilt: tilt
+    )
     
     self.mapWindow.map.move(
       with: cameraPosition,
       animation: YMKAnimation(type: .smooth, duration:duration)
-      )
+    )
   }
   
+  // Night mode control
   @objc public func enableNightMode() {
     self.mapWindow.map.isNightModeEnabled = true
   }
@@ -74,20 +86,57 @@ public class RNYMapView: YMKMapView {
     }
   }
   
-  private func setupMap() {
-      
-
-      self.mapWindow.map.move(
-          with: YMKCameraPosition(
-              target: YMKPoint(latitude: 55.751244, longitude: 37.618423),
-              zoom: 100,
-              azimuth: 0,
-              tilt: 0
-          )
-      )
+  // Markers
+  // Add marker to map
+  @objc public func addMarkerChild(_ markerView: RNYMapMarker) {
+    markerView.parentMapView = self
+    markerView.updateMarker() // Draw yourself
+  }
+  
+  // Remove marker from map
+  @objc public func removeMarkerChild(_ markerView: RNYMapMarker) {
+    if let mapObject = markerView.mapObject {
+      mapObjects.remove(with: mapObject)
+      markerView.mapObject = nil
     }
+  }
+  
+  private func setupMap() {
+    self.mapWindow.map.addCameraListener(with: self)
+    self.mapWindow.map.move(
+      with: YMKCameraPosition(
+        target: YMKPoint(latitude: 55.751244, longitude: 37.618423),
+        zoom: 100,
+        azimuth: 0,
+        tilt: 0
+      )
+    )
+  }
+  
+  public func onCameraPositionChanged(
+     with map: YMKMap,
+     cameraPosition: YMKCameraPosition,
+     cameraUpdateReason: YMKCameraUpdateReason,
+     finished: Bool
+   ) {
+     let payload: [String: Any] = [
+       "lon": cameraPosition.target.longitude,
+       "lat": cameraPosition.target.latitude,
+       "zoom": cameraPosition.zoom,
+       "tilt": cameraPosition.tilt,
+       "azimuth": cameraPosition.azimuth,
+       "reason": cameraUpdateReason == .gestures ? "GESTURES" : "APPLICATION",
+       "finished": finished
+     ]
+     
+     self.onCameraPositionChange?(payload as NSDictionary)
+     
+     if (finished) {
+       self.onCameraPositionChangeEnd?(payload as NSDictionary)
+     }
+   }
   
   required init?(coder: NSCoder) {
-      fatalError("init(coder:) has not been implemented")
-    }
+    fatalError("init(coder:) has not been implemented")
+  }
 }

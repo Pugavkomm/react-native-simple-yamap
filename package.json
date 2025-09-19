@@ -1,6 +1,6 @@
 {
   "name": "react-native-simple-yamap",
-  "version": "0.1.0",
+  "version": "0.0.1-rc.3",
   "description": "Yandex simple maps for react native",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
@@ -43,7 +43,12 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "map",
+    "maps",
+    "yandex",
+    "YandexMapsMobile",
+    "MapKit"
   ],
   "repository": {
     "type": "git",
@@ -158,7 +163,8 @@
     "ios": {
       "componentProvider": {
         "SimpleYamapView": "SimpleYamapView",
-        "SimpleYamapPolygonView": "SimpleYamapPolygonView"
+        "SimpleYamapPolygonView": "SimpleYamapPolygonView",
+        "SimpleYamapMarkerView": "SimpleYamapMarkerView"
       }
     }
   },

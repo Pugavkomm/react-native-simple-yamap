@@ -13,6 +13,8 @@
 #import <react/renderer/components/SimpleYamapViewSpec/RCTComponentViewHelpers.h>
 
 #import "RCTFabricComponentsPlugins.h"
+#import <YandexMapsMobile/YMKMapObjectTapListener.h>
+#import <YandexMapsMobile/YMKMapCameraListener.h>
 #import <YandexMapsMobile/YMKMapView.h>
 #import "SimpleYamap-Swift.h"
 
@@ -41,6 +43,7 @@ using namespace facebook::react;
     return self;
 }
 
+// Refactor props to new approach
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
   const auto &oldViewProps = *std::static_pointer_cast<SimpleYamapPolygonViewProps const>(_props);
