@@ -203,7 +203,9 @@ class SimpleYamapMarkerView(context: Context) : View(context), MapObjectTapListe
     valueAnimator.addUpdateListener { animation ->
       val progress = animation.animatedValue as Float
       val currentAngle = startAngle + (deltaAngle * progress)
-      marker.direction = currentAngle
+      if (marker.isValid) {
+        marker.direction = currentAngle
+      }
     }
     valueAnimator.start()
   }
