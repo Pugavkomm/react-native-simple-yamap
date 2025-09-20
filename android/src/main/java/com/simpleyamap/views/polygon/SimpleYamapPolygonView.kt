@@ -1,9 +1,10 @@
-package com.simpleyamap
+package com.simpleyamap.views.polygon
 
 
 import android.content.Context
 import android.graphics.Color
 import android.view.View
+import com.simpleyamap.views.map.SimpleYamapView
 import com.yandex.mapkit.geometry.LinearRing
 import com.yandex.mapkit.map.PolygonMapObject
 import com.yandex.mapkit.geometry.Point as YandexPoint
