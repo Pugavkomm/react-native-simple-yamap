@@ -10,6 +10,137 @@ npm install react-native-simple-yamap
 
 ## Usage
 
+### IOS Configuration
+
+For ios you need update `AppDelegate.swift`. Add the follow lines:
+
+```swift
+import YandexMapsMobile
+YMKMapKit.setApiKey("Your key")
+YMKMapKit.setLocale("Your lan")
+YMKMapKit.sharedInstance()
+
+```
+
+Full example (note: '+' indicates that new lines)
+
+```
+import UIKit
+import React
+import React_RCTAppDelegate
+import ReactAppDependencyProvider
++import YandexMapsMobile
+
+
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
+  var window: UIWindow?
+
+  var reactNativeDelegate: ReactNativeDelegate?
+  var reactNativeFactory: RCTReactNativeFactory?
+
+  func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+  ) -> Bool {
+    let delegate = ReactNativeDelegate()
+    let factory = RCTReactNativeFactory(delegate: delegate)
+    delegate.dependencyProvider = RCTAppDependencyProvider()
+
+    reactNativeDelegate = delegate
+    reactNativeFactory = factory
+
+    window = UIWindow(frame: UIScreen.main.bounds)
+
+    factory.startReactNative(
+      withModuleName: "SimpleYamapExample",
+      in: window,
+      launchOptions: launchOptions
+    )
+
+    +YMKMapKit.setApiKey("Your key")
+    +YMKMapKit.setLocale("ru_RU")
+    +YMKMapKit.sharedInstance()
+
+
+
+    return true
+  }
+}
+
+class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
+  override func sourceURL(for bridge: RCTBridge) -> URL? {
+    self.bundleURL()
+  }
+
+  override func bundleURL() -> URL? {
+#if DEBUG
+    RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+#else
+    Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+#endif
+  }
+}
+
+```
+
+### Android configuration
+
+For android you need update `MainApplication.kt`. Add the follow lines:
+
+```
+import com.yandex.mapkit.MapKitFactory
+
+ override fun onCreate() {
+    super.onCreate()
+    MapKitFactory.setApiKey("YOU_KEY")
+    MapKitFactory.setLocale("YOU_LANG")
+    loadReactNative(this)
+
+  }
+```
+
+Full example (note: '+' indicates that new lines )
+
+
+```
+import com.facebook.react.ReactNativeHost
+import com.facebook.react.ReactPackage
+import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
+import com.facebook.react.defaults.DefaultReactNativeHost
++import com.yandex.mapkit.MapKitFactory
+
+class MainApplication : Application(), ReactApplication {
+
+  override val reactNativeHost: ReactNativeHost =
+      object : DefaultReactNativeHost(this) {
+        override fun getPackages(): List<ReactPackage> =
+            PackageList(this).packages.apply {
+              // Packages that cannot be autolinked yet can be added manually here, for example:
+              // add(MyReactNativePackage())
+            }
+
+        override fun getJSMainModuleName(): String = "index"
+
+        override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
+
+        override val isNewArchEnabled: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
+        override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
+      }
+
+  override val reactHost: ReactHost
+    get() = getDefaultReactHost(applicationContext, reactNativeHost)
+
+  override fun onCreate() {
+    super.onCreate()
++    MapKitFactory.setApiKey("Your key")
++    MapKitFactory.setLocale("ru_RU")
+    loadReactNative(this)
+
+  }
+}
+```
+
 ```tsx
 import {
   type Point,
