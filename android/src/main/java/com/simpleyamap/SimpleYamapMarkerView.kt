@@ -129,20 +129,21 @@ class SimpleYamapMarkerView(context: Context) : View(context), MapObjectTapListe
       CoroutineScope(Dispatchers.IO).launch {
         val imageProvider = iconSource?.let { createImageProviderFromUri(it) }
         withContext(Dispatchers.Main) {
-          imageProvider?.let { marker.setIcon(it) }
-          if (imageProvider != null) {
-            val iconStyle = IconStyle()
-            iconStyle.scale = iconScale.toFloat()
-            iconStyle.anchor = iconAnchor
-            iconStyle.zIndex = zIndexValue
-            if (iconRotated) {
-              iconStyle.rotationType = RotationType.ROTATE
-            } else {
-              iconStyle.rotationType = RotationType.NO_ROTATION
+          if (marker.isValid) {
+            imageProvider?.let { marker.setIcon(it) }
+            if (imageProvider != null) {
+              val iconStyle = IconStyle()
+              iconStyle.scale = iconScale.toFloat()
+              iconStyle.anchor = iconAnchor
+              iconStyle.zIndex = zIndexValue
+              if (iconRotated) {
+                iconStyle.rotationType = RotationType.ROTATE
+              } else {
+                iconStyle.rotationType = RotationType.NO_ROTATION
+              }
+              marker.setIconStyle(iconStyle)
             }
-            marker.setIconStyle(iconStyle)
           }
-
         }
       }
     }
