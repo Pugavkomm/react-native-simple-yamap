@@ -1,5 +1,11 @@
-import MarkerIcon from './marker.png';
-import MarkerIcon2 from './marker2.png';
-import MarkerWithDirection from './MarkerWithDirection.png';
+import MarkerYellow from './markerYellow.png';
+import MarkerYellowDirection from './markerYellowDirection.png';
+import MarkerGreen from './markerGreen.png';
+import MarkerGreenDirection from './markerGreenDirection.png';
 
-export { MarkerIcon, MarkerIcon2, MarkerWithDirection };
+export {
+  MarkerGreen,
+  MarkerGreenDirection,
+  MarkerYellow,
+  MarkerYellowDirection,
+};

@@ -15,7 +15,12 @@ import {
   type YamapRef,
 } from 'react-native-simple-yamap';
 import { type SimplePolygonProps } from '../../src/components';
-import { MarkerIcon, MarkerIcon2, MarkerWithDirection } from './images';
+import {
+  MarkerGreen,
+  MarkerYellowDirection,
+  MarkerGreenDirection,
+  MarkerYellow,
+} from './images';
 import iconScaleService from './services/iconScaleService';
 
 const MARKER_SPEED = 20;
@@ -47,7 +52,7 @@ const initialPolygons: SimplePolygonProps[] = [
       { lat: 10, lon: 10 },
       { lat: 50, lon: 20 },
     ],
-    fillColor: safeProcessColor('rgba(100, 100, 250, 0.1)'),
+    fillColor: safeProcessColor('rgba(100, 100, 250, 0.2)'),
     strokeColor: safeProcessColor('rgba(0, 0, 100, 0.1)'),
     strokeWidth: 1.0,
   },
@@ -145,14 +150,14 @@ const MarkerComponent: React.FC = () => {
       <SimpleYamap.Marker
         id={'inside container'}
         point={{ lon: 50, lat: 10 }}
-        icon={MarkerWithDirection}
-        iconScale={10}
+        icon={MarkerGreen}
+        iconScale={iconScaleService(0.2)}
       />
       <SimpleYamap.Marker
         id={'inside container'}
         point={{ lon: 60, lat: 10 }}
-        icon={MarkerWithDirection}
-        iconScale={10}
+        icon={MarkerGreenDirection}
+        iconScale={iconScaleService(0.2)}
       />
     </>
   );
@@ -411,23 +416,23 @@ export function App() {
           point={{ lon: 50, lat: 40 }}
           text={{ text: 'zIndex=20' }}
           zIndex={20}
-          iconScale={iconScaleService(5)}
-          icon={MarkerIcon}
+          iconScale={iconScaleService(2)}
+          icon={MarkerGreen}
         />
         <SimpleYamap.Marker
           id={'marker-z-index-10'}
           point={{ lon: 58, lat: 38 }}
           text={{ text: 'zIndex=10' }}
           zIndex={10}
-          iconScale={iconScaleService(5)}
-          icon={MarkerIcon2}
+          iconScale={iconScaleService(2)}
+          icon={MarkerYellow}
         />
         <SimpleYamap.Marker
           id={'marker-4'}
           point={{ lon: 80, lat: 30 }}
           text={{ text: 'Rotated marker' }}
-          icon={MarkerWithDirection}
-          iconScale={iconScaleService(2)}
+          icon={MarkerYellowDirection}
+          iconScale={iconScaleService(1)}
           ref={rotatableMarkerRef}
           iconRotated
           iconAnchor={{ x: 0.5, y: 0.8 }}
@@ -440,8 +445,8 @@ export function App() {
           point={{ lon: 55, lat: 52 }}
           ref={animatedMarkerRef}
           text={{ text: 'Animated marker' }}
-          icon={MarkerWithDirection}
-          iconScale={iconScaleService(3)}
+          icon={MarkerGreenDirection}
+          iconScale={iconScaleService(1)}
           iconRotated
           iconAnchor={{ x: 0.5, y: 1.0 }}
         />
