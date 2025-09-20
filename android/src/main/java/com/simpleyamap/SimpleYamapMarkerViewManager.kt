@@ -1,12 +1,13 @@
 package com.simpleyamap
 
 import android.graphics.PointF
-import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.uimanager.annotations.ReactProp
+import com.facebook.react.viewmanagers.SimpleYamapMarkerViewManagerDelegate
 import com.facebook.react.viewmanagers.SimpleYamapMarkerViewManagerInterface
 import kotlin.math.max
 import kotlin.math.min
@@ -15,6 +16,14 @@ import com.yandex.mapkit.geometry.Point as YandexPoint
 @ReactModule(name = SimpleYamapMarkerViewManager.NAME)
 class SimpleYamapMarkerViewManager : SimpleViewManager<SimpleYamapMarkerView>(),
   SimpleYamapMarkerViewManagerInterface<SimpleYamapMarkerView> {
+
+  private val mDelegate: ViewManagerDelegate<SimpleYamapMarkerView> =
+    SimpleYamapMarkerViewManagerDelegate(this)
+
+  override fun getDelegate(): ViewManagerDelegate<SimpleYamapMarkerView>? {
+    return mDelegate
+  }
+
   companion object {
     const val NAME = "SimpleYamapMarkerView"
   }
@@ -77,41 +86,6 @@ class SimpleYamapMarkerViewManager : SimpleViewManager<SimpleYamapMarkerView>(),
     view.zIndexValue = zIndexV.toFloat()
   }
 
-  // Handelrs
-  // TODO: Refactor to new approach
-  override fun receiveCommand(
-    view: SimpleYamapMarkerView,
-    commandId: String?,
-    args: ReadableArray?
-  ) {
-    super.receiveCommand(view, commandId, args)
-    when (commandId) {
-      "animatedMove" -> {
-        // 0 - lon
-        // 1 - lat
-        // 2 - duration
-        if (args != null && args.size() == 3) {
-          val lon = args.getDouble(0)
-          val lat = args.getDouble(1)
-          val duration = args.getDouble(2)
-          view.animatedMove(lon, lat, duration)
-        }
-      }
-
-      "animatedRotate" -> {
-        // 0 angle
-        // 1 - duration
-
-        if (args != null && args.size() == 2) {
-          val angle = args.getDouble(0).toFloat()
-          val duration = args.getDouble(1).toFloat()
-          view.animatedRotate(angle, duration)
-        }
-      }
-    }
-  }
-
-  // Implement animated move
   override fun animatedMove(
     view: SimpleYamapMarkerView,
     lon: Double,
@@ -122,11 +96,11 @@ class SimpleYamapMarkerViewManager : SimpleViewManager<SimpleYamapMarkerView>(),
   }
 
   override fun animatedRotate(
-    view: SimpleYamapMarkerView?,
+    view: SimpleYamapMarkerView,
     angle: Float,
     durationInSeconds: Float
   ) {
-    TODO("Not yet implemented")
+    view.animatedRotate(angle, durationInSeconds)
   }
 
   override fun getExportedCustomBubblingEventTypeConstants(): Map<String, Any> {
