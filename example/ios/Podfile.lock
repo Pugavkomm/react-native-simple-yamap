@@ -2340,7 +2340,7 @@ PODS:
     - React-perflogger (= 0.81.1)
     - React-utils (= 0.81.1)
     - SocketRocket
-  - SimpleYamap (0.0.1-rc2):
+  - SimpleYamap (0.0.1-rc.5):
     - boost
     - DoubleConversion
     - fast_float
@@ -2676,7 +2676,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 3eb9096cb139eb433965693bbe541d96eb3d3ec9
   ReactCodegen: 4d203eddf6f977caa324640a20f92e70408d648b
   ReactCommon: ce5d4226dfaf9d5dacbef57b4528819e39d3a120
-  SimpleYamap: 32528e80c42405a0a48f1527776700c7a3d279cd
+  SimpleYamap: 41db3e4d5eab138fead2796e5ff6a1658b64fe15
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   YandexMapsMobile: c73844c6096bbb240d1491adc511c2ef4a88d88d
   Yoga: 11c9686a21e2cd82a094a723649d9f4507200fb0

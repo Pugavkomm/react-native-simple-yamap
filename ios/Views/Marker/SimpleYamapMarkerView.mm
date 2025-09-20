@@ -99,43 +99,26 @@ using namespace facebook::react;
   [super updateProps:props oldProps:oldProps];
 }
 
-// Handlers TODO: refactor
-- (void)handleCommand:(NSString const *)commandName args:(NSArray const *)args
+
+-(void)handleCommand:(const NSString *)commandName args:(const NSArray *)args
 {
-  if ([commandName isEqualToString:@"animatedMove"]) {
-    // BEFORE:
-    // // 0 - point
-    // // 1 - duration
-    // if (args.count == 2 && [args[0] isKindOfClass:[NSDictionary class]] && [args[1] isKindOfClass:[NSNumber class]]) {
-    //   [_view animatedMoveWithPointDict:args[0] duration:[args[1] floatValue]];
-    // }
-    
-    // AFTER:
-    // 0 - lon
-    // 1 - lat
-    // 2 - duration
-    if (args.count == 3 && [args[0] isKindOfClass:[NSNumber class]] && [args[1] isKindOfClass:[NSNumber class]] && [args[2] isKindOfClass:[NSNumber class]]) {
-      // Reconstruct the point dictionary here
-      NSMutableDictionary *pointDict = [NSMutableDictionary new];
-      pointDict[@"lon"] = args[0];
-      pointDict[@"lat"] = args[1];
-      
-      [_view animatedMoveWithPointDict:pointDict duration:[args[2] floatValue]];
-      
-    } else {
-      RCTLogError(@"Invalid arguments for command 'animatedMove'. Expected lon, lat, duration.");
-    }
-    return;
-  } else if ([commandName isEqualToString:@"animatedRotate"]){
-    // 0 - angle (float)
-    // 1 - duration (float)
-    if (args.count == 2 && [args[0] isKindOfClass:[NSNumber class]] && [args[1] isKindOfClass:[NSNumber class]]) {
-      [_view animatedRotateWithAngle:[args[0] floatValue] duration:[args[1] floatValue]];
-    }
-    return;
-  }
-  [super handleCommand:commandName args:args];
+  RCTSimpleYamapMarkerViewHandleCommand(self, commandName, args);
 }
+
+-(void)animatedRotate:(float)angle durationInSeconds:(float)durationInSeconds
+{
+  [_view animatedRotateWithAngle:angle duration:durationInSeconds];
+}
+
+-(void)animatedMove:(double)lon lat:(double)lat durationInSeconds:(float)durationInSeconds
+{
+  NSMutableDictionary *pointDict = [NSMutableDictionary new];
+  pointDict[@"lon"] = @(lon);
+  pointDict[@"lat"]  = @(lat);
+  [_view animatedMoveWithPointDict:pointDict duration:durationInSeconds];
+}
+
+
 
 // Event emitter convenience method
 - (const SimpleYamapMarkerViewEventEmitter &)eventEmitter
