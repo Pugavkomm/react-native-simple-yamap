@@ -14,7 +14,7 @@ import {
   type YamapMarkerRef,
   type YamapRef,
 } from 'react-native-simple-yamap';
-import type { SimplePolygonProps } from '../../src/components';
+import { type SimplePolygonProps } from '../../src/components';
 import { MarkerIcon, MarkerIcon2, MarkerWithDirection } from './images';
 import iconScaleService from './services/iconScaleService';
 
@@ -136,6 +136,25 @@ const ButtonBlock: React.FC<ButtonBlockProps> = (props) => {
       </View>
       <Button title={'37.62, 55.75'} onPress={props.setCenter} />
     </View>
+  );
+};
+
+const MarkerComponent: React.FC = () => {
+  return (
+    <>
+      <SimpleYamap.Marker
+        id={'inside container'}
+        point={{ lon: 50, lat: 10 }}
+        icon={MarkerWithDirection}
+        iconScale={10}
+      />
+      <SimpleYamap.Marker
+        id={'inside container'}
+        point={{ lon: 60, lat: 10 }}
+        icon={MarkerWithDirection}
+        iconScale={10}
+      />
+    </>
   );
 };
 
@@ -380,6 +399,7 @@ export function App() {
             points={poly.points}
           />
         ))}
+        <MarkerComponent />
         <SimpleYamap.Marker
           id={'marker-4'}
           point={{ lon: 74, lat: 40 }}
@@ -415,7 +435,6 @@ export function App() {
             console.info('Press on marker');
           }}
         />
-        {/* Note: Anchor not working on android */}
         <SimpleYamap.Marker
           id={'marker-with-animation'}
           point={{ lon: 55, lat: 52 }}
