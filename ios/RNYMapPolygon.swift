@@ -66,11 +66,9 @@ public class RNYMapPolygon: UIView {
     let newMapObject = mapObjects.addPolygon(with: polygonGeometry)
     
     if let colorValue = fillColor, let color = colorValue as? Int64 {
-      print("Call update fill color: ", colorValue)
       newMapObject.fillColor = UIColorFromARGB(color)
     }
     if let colorValue = strokeColor, let color = colorValue as? Int64 {
-      print("Call update stroke color: ", colorValue)
       newMapObject.strokeColor = UIColorFromARGB(color)
     }
     newMapObject.strokeWidth = strokeWidth?.floatValue ?? 1.0
