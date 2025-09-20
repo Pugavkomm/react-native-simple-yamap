@@ -1,6 +1,6 @@
 // SimpleYamapViewManager
 
-package com.simpleyamap
+package com.simpleyamap.views.map
 
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReadableMap

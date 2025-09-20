@@ -1,4 +1,4 @@
-package com.simpleyamap
+package com.simpleyamap.views.marker
 
 import android.graphics.PointF
 import com.facebook.react.bridge.ReadableMap
