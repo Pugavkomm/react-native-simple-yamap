@@ -18,7 +18,13 @@ class SimpleYamapPolygonView(context: Context) : View(context) {
   //Props
   var polygonId: String? = null
 
-  var points: List<YandexPoint> = emptyList()
+  var outerPoints: List<YandexPoint> = emptyList()
+    set(value) {
+      field = value
+      updatePolygon()
+    }
+
+  var innerPoints: List<List<YandexPoint>> = emptyList()
     set(value) {
       field = value
       updatePolygon()
@@ -77,7 +83,7 @@ class SimpleYamapPolygonView(context: Context) : View(context) {
     }
 
     // Polygon: points >= 3
-    if (points.size < 3) {
+    if (outerPoints.size < 3) {
       mapObject?.let {
         mapObjects.remove(it)
         mapObject = null
@@ -85,20 +91,25 @@ class SimpleYamapPolygonView(context: Context) : View(context) {
       return
     }
 
+    val outerRing = LinearRing(outerPoints)
+    val innerRings = mutableListOf<LinearRing>()
+
+    innerPoints.forEach {
+      if (it.size >= 3) {
+        innerRings.add(LinearRing(it))
+      }
+    }
 
     if (mapObject == null) {
-      val polygonGeometry = YandexPolygon(LinearRing(points), emptyList())
+      val polygonGeometry = YandexPolygon(outerRing, innerRings)
       val newMapObject = mapObjects.addPolygon(polygonGeometry)
-
       newMapObject.fillColor = this.fillColor
       newMapObject.strokeColor = this.strokeColor
       newMapObject.strokeWidth = this.strokeWidth
-
       this.mapObject = newMapObject
-
     } else {
       mapObject?.let { existingObject ->
-        existingObject.geometry = YandexPolygon(LinearRing(points), emptyList())
+        existingObject.geometry = YandexPolygon(outerRing, innerRings)
         existingObject.fillColor = this.fillColor
         existingObject.strokeColor = this.strokeColor
         existingObject.strokeWidth = this.strokeWidth

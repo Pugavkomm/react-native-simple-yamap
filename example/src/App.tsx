@@ -394,6 +394,37 @@ export function App() {
         cameraPosition={initialCameraPosition}
       >
         <>
+          <SimpleYamap.Marker
+            id={'marker inside polygon'}
+            point={{ lat: 15, lon: 12 }}
+            text={{ text: 'Polygon with inner rings' }}
+          />
+          <SimpleYamap.Polygon
+            id={'with-inner'}
+            points={[
+              { lon: 5, lat: 5 },
+              { lon: 20, lat: 5 },
+              { lon: 19, lat: 19 },
+              { lon: 10, lat: 20 },
+            ]}
+            innerPoints={[
+              [
+                { lon: 6, lat: 6 },
+                { lon: 8, lat: 6 },
+                { lon: 8, lat: 8 },
+                { lon: 6, lat: 8 },
+              ],
+              [
+                { lon: 10, lat: 10 },
+                { lon: 12, lat: 10 },
+                { lon: 12, lat: 12 },
+                { lon: 10, lat: 12 },
+              ],
+            ]}
+            fillColor={safeProcessColor('rgba(100, 0, 0, 0.3)')}
+            strokeWidth={2}
+            strokeColor={safeProcessColor('rgba(100, 0, 100, 0.9)')}
+          />
           {polygons.map((poly, index) => (
             <SimpleYamap.Polygon
               id={`poly-${index}`}

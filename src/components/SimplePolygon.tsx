@@ -5,6 +5,7 @@ import type { Point } from '../interfaices';
 export interface SimplePolygonProps {
   id: string;
   points: Readonly<Point[]>;
+  innerPoints?: Readonly<Point[][]>;
   fillColor?: number;
   strokeColor?: number;
   strokeWidth?: number;
