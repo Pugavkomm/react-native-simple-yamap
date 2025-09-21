@@ -11,11 +11,14 @@ import YandexMapsMobile
 @objc(RNYMapPolygon)
 public class RNYMapPolygon: UIView {
   var mapObject: YMKPolygonMapObject?
- 
+  
   
   @objc public var id: NSString = ""
-  @objc public var points: [NSDictionary] = [] {
+  @objc public var outerRing: [NSDictionary] = [] {
     didSet { updatePolygon() }
+  }
+  @objc public var innerRings: [[NSDictionary]] = [] {
+    didSet {updatePolygon()}
   }
   @objc public var fillColor: NSNumber? {
     didSet { updatePolygon() }
@@ -49,20 +52,36 @@ public class RNYMapPolygon: UIView {
   public func updatePolygon() {
     guard let mapView = parentMapView else {return}
     let mapObjects = mapView.getMapObjects()
-
+    
     if let existingObject = self.mapObject {
       mapObjects.remove(with: existingObject)
       self.mapObject = nil
     }
-
-  // TODO: Refactor. No recreate, just update if exists polygon on Map already
-    guard points.count >= 3 else {return}
-    let yandexPoints = points.map { pointDict -> YMKPoint in
+    
+    // TODO: Refactor. No recreate, just update if exists polygon on Map already
+    guard outerRing.count >= 3 else {return}
+    let outerPoints = outerRing.map { pointDict -> YMKPoint in
       let lat = pointDict["lat"] as! Double
       let lon = pointDict["lon"] as! Double
       return YMKPoint(latitude: lat, longitude: lon)
     }
-    let polygonGeometry = YMKPolygon(outerRing: YMKLinearRing(points: yandexPoints), innerRings: [])
+    
+    let innerRingsArray = innerRings.map { pointsList -> YMKLinearRing in
+      let yandexPoints = pointsList.map { pointDict -> YMKPoint in
+        guard let lat = pointDict["lat"] as? Double,
+              let lon = pointDict["lon"] as? Double else {
+          fatalError("Invalid point dictionary format")
+        }
+        return YMKPoint(latitude: lat, longitude: lon)
+      }
+      
+      return YMKLinearRing(points: yandexPoints)
+    }
+    
+    let polygonGeometry = YMKPolygon(
+      outerRing: YMKLinearRing(points: outerPoints),
+      innerRings: innerRingsArray
+    )
     let newMapObject = mapObjects.addPolygon(with: polygonGeometry)
     
     if let colorValue = fillColor, let color = colorValue as? Int64 {
@@ -76,4 +95,4 @@ public class RNYMapPolygon: UIView {
     self.mapObject = newMapObject
   }
 }
-  
+

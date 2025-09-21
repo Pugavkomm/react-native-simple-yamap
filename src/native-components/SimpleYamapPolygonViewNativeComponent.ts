@@ -13,6 +13,7 @@ type Point = Readonly<{
 export interface NativeProps extends ViewProps {
   id: string;
   points: Readonly<Point[]>;
+  innerPoints?: Readonly<Readonly<Point[]>[]>;
   fillColor?: Int32;
   strokeColor?: Int32;
   strokeWidth?: Float;

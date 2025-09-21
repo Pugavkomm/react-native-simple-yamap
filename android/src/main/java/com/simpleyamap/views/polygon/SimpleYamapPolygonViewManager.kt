@@ -40,8 +40,11 @@ class SimpleYamapPolygonViewManager : SimpleViewManager<SimpleYamapPolygonView>(
   }
 
   @ReactProp(name = "points")
-  override fun setPoints(view: SimpleYamapPolygonView, points: ReadableArray?) {
-    if (points == null) return
+  override fun setPoints(view: SimpleYamapPolygonView?, points: ReadableArray?) {
+    if (points == null) {
+      view?.outerPoints = emptyList()
+      return
+    }
     val yandexPoints = mutableListOf<YandexPoint>()
     for (i in 0 until points.size()) {
       val pointMap = points.getMap(i)
@@ -51,22 +54,47 @@ class SimpleYamapPolygonViewManager : SimpleViewManager<SimpleYamapPolygonView>(
         yandexPoints.add(YandexPoint(lat, lon))
       }
     }
-    view.points = yandexPoints
+    view?.outerPoints = yandexPoints
   }
 
 
+  @ReactProp(name = "innerPoints")
+  override fun setInnerPoints(view: SimpleYamapPolygonView?, innerPoints: ReadableArray?) {
+    if (innerPoints == null) {
+      view?.innerPoints = emptyList()
+      return
+    }
+    val innerRings = mutableListOf<MutableList<YandexPoint>>()
+    for (i in 0 until innerPoints.size()) {
+      val ringPoints = innerPoints.getArray(i) as ReadableArray
+      val yandexPoints = mutableListOf<YandexPoint>()
+      for (j in 0 until ringPoints.size()) {
+        val pointMap = ringPoints.getMap(j)
+        if (pointMap != null) {
+          val lat = pointMap.getDouble("lat")
+          val lon = pointMap.getDouble("lon")
+          yandexPoints.add(YandexPoint(lat, lon))
+        }
+      }
+      if (yandexPoints.size >= 3) {
+        innerRings.add(yandexPoints)
+      }
+    }
+    view?.innerPoints = innerRings
+  }
+
   @ReactProp(name = "fillColor", customType = "Color")
-  override fun setFillColor(view: SimpleYamapPolygonView, color: Int) {
-    view.fillColor = color
+  override fun setFillColor(view: SimpleYamapPolygonView?, color: Int) {
+    view?.fillColor = color
   }
 
   @ReactProp(name = "strokeColor", customType = "Color")
-  override fun setStrokeColor(view: SimpleYamapPolygonView, color: Int) {
-    view.strokeColor = color
+  override fun setStrokeColor(view: SimpleYamapPolygonView?, color: Int) {
+    view?.strokeColor = color
   }
 
   @ReactProp(name = "strokeWidth")
-  override fun setStrokeWidth(view: SimpleYamapPolygonView, width: Float) {
-    view.strokeWidth = width
+  override fun setStrokeWidth(view: SimpleYamapPolygonView?, width: Float) {
+    view?.strokeWidth = width
   }
 }
