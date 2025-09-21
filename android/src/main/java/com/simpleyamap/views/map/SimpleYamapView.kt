@@ -1,6 +1,6 @@
 // SimpleYamapView
 
-package com.simpleyamap
+package com.simpleyamap.views.map
 
 import android.content.Context
 import com.facebook.react.bridge.Arguments
@@ -8,6 +8,8 @@ import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.events.Event
+import com.simpleyamap.views.marker.SimpleYamapMarkerView
+import com.simpleyamap.views.polygon.SimpleYamapPolygonView
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.map.CameraListener

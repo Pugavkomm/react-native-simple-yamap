@@ -254,3 +254,4 @@ Made with [create-react-native-library](https://github.com/callstack/react-nativ
 - [ ] Find routes
 - [ ] Lite or full version sdk switcher
 - [ ] Full documentation
+- [ ] Return marker id with tap event

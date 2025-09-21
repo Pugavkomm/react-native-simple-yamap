@@ -1,4 +1,4 @@
-package com.simpleyamap
+package com.simpleyamap.views.marker
 
 
 import EaseInOutCosineInterpolator
@@ -13,6 +13,7 @@ import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.events.Event
+import com.simpleyamap.views.map.SimpleYamapView
 import com.yandex.mapkit.map.IconStyle
 import com.yandex.mapkit.map.MapObject
 import com.yandex.mapkit.map.MapObjectTapListener

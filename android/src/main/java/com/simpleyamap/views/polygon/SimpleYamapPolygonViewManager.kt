@@ -1,4 +1,4 @@
-package com.simpleyamap
+package com.simpleyamap.views.polygon
 
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.module.annotations.ReactModule
