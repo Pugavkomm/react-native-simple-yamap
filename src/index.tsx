@@ -12,8 +12,8 @@ import {
 } from './components';
 
 import type { YamapMarkerRef } from './components/SimpleMarker';
-import type { CameraPositionEvent, YamapRef } from './components/SimpleYamap';
-import type { CameraPosition, Point } from './interfaices';
+import type { YamapRef } from './components/SimpleYamap';
+import type { CameraPosition, CameraPositionEvent, Point } from './interfaices';
 
 export type {
   PolygonProps,

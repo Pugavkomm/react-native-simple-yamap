@@ -10,3 +10,11 @@ export interface CameraPosition {
   azimuth?: number;
   tilt?: number;
 }
+export interface CameraPositionEvent {
+  point: Point;
+  zoom: number;
+  tilt: number;
+  azimuth: number;
+  reason: string;
+  finished: boolean;
+}

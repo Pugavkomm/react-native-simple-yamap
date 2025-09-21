@@ -1,27 +1,27 @@
 import SimpleYamapViewNativeComponent, {
   Commands,
 } from '../native-components/SimpleYamapViewNativeComponent';
-import { forwardRef, type ReactNode, useImperativeHandle, useRef } from 'react';
-import type { CameraPosition, Point } from '../interfaices';
+import {
+  forwardRef,
+  type ReactElement,
+  useImperativeHandle,
+  useRef,
+} from 'react';
+import type { CameraPosition, CameraPositionEvent } from '../interfaices';
 import type { StyleProp, ViewStyle } from 'react-native';
 import type {
   Double,
   Float,
 } from 'react-native/Libraries/Types/CodegenTypesNamespace';
-
-export interface CameraPositionEvent {
-  point: Point;
-  zoom: number;
-  tilt: number;
-  azimuth: number;
-  reason: string;
-  finished: boolean;
-}
+import { type SimpleMarkerProps } from './SimpleMarker';
+import { type SimplePolygonProps } from './SimplePolygon';
 
 export interface YamapProps {
   cameraPosition?: CameraPosition;
+  children?:
+    | ReactElement<SimpleMarkerProps | SimplePolygonProps>
+    | ReactElement<SimpleMarkerProps | SimplePolygonProps>[];
   nightMode?: boolean;
-  children?: ReactNode;
   onCameraPositionChange?: (event: CameraPositionEvent) => void;
   onCameraPositionChangeEnd?: (event: CameraPositionEvent) => void;
 }

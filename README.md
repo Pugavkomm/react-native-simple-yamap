@@ -2,144 +2,230 @@
 
 Yandex simple maps for react native.
 
+> Warning. This is a very raw version of the library. Some things may change over time.
+
 ## Installation
 
 ```sh
 npm install react-native-simple-yamap
 ```
 
-## Usage
+<!-- TOC -->
+* [react-native-simple-yamap](#react-native-simple-yamap)
+  * [Installation](#installation)
+  * [Abstract](#abstract)
+  * [1 Objects](#1-objects)
+    * [1.1 Map (SimpleYamap)](#11-map-simpleyamap)
+      * [1.1.1 Example](#111-example)
+      * [Props](#props)
+    * [1.2 Marker (SimpleMarker)](#12-marker-simplemarker)
+      * [1.2.1 Example](#121-example)
+      * [1.2.2 Props](#122-props)
+    * [1.3 Polygon (SimplePolygon)](#13-polygon-simplepolygon)
+  * [2 Types](#2-types)
+    * [2.1 Point](#21-point)
+      * [2.1.1 Interface](#211-interface)
+      * [2.1.2 Fields](#212-fields)
+    * [2.2 CameraPosition](#22-cameraposition)
+      * [2.2.1 Interface](#221-interface)
+      * [2.2.2 Fields](#222-fields)
+    * [2.3 CameraPositionEvent](#23-camerapositionevent)
+    * [2.4 iconAnchor](#24-iconanchor)
+    * [2.5 MarkerText](#25-markertext)
+  * [3. Instructions](#3-instructions)
+    * [3.1 Simple example](#31-simple-example)
+    * [3.2 IOS Configuration](#32-ios-configuration)
+    * [3.3 Android configuration](#33-android-configuration)
+  * [Dependencies](#dependencies)
+  * [Contributing](#contributing)
+  * [License](#license)
+  * [TODO](#todo)
+<!-- TOC -->
 
-### IOS Configuration
+## Abstract
 
-For ios you need update `AppDelegate.swift`. Add the follow lines:
+This library was written to provide a simple way to interact with the MapKit SDK in React Native. The library is
+being written for our own needs and will be expanded as needed. Currently, only basic features are supported (see
+below for a description of map objects). Currently, the lite version of SDK is used; parts of the full version have
+not yet been used. The library is being without regard for the old architecture; that is, it's intended for use only
+with the new architecture.
 
-```swift
-import YandexMapsMobile
-YMKMapKit.setApiKey("Your key")
-YMKMapKit.setLocale("Your lan")
-YMKMapKit.sharedInstance()
+## 1 Objects
 
+### 1.1 Map (SimpleYamap)
+
+**SimpleYamap**. The main view that displays a map and can be used to place markers or other SimpleYamap objects.
+
+#### 1.1.1 Example
+
+_Example of use:_
+
+```tsx
+<SimpleYamap nightMode cameraPosition={initialCameraPosition} style={styles.mapBox} ref={mapRef}
+        onCameraPositionChange={handleCameraPositionEvent};
+        onCameraPositionChangeEnd={handleEndCameraPositionEvent};
+/>
 ```
 
-Full example (note: '+' indicates that new lines)
+#### Props
 
-```
-import UIKit
-import React
-import React_RCTAppDelegate
-import ReactAppDependencyProvider
-+import YandexMapsMobile
+| **Prop name**  | **Type**                                                                                        | **description**         |
+|----------------|-------------------------------------------------------------------------------------------------|-------------------------|
+| nightMode      | `boolean`                                                                                       | Turn on night mode      |
+| cameraPosition | [`CameraPosition`](#22-cameraposition)                                                          | Current Camera position |
+| children       | one of: [`SimpleMarker`](#12-marker-simplemarker), [`SimplePolygon`](#13-polygon-simplepolygon) | One of map objects      |
 
+### 1.2 Marker (SimpleMarker)
 
-@main
-class AppDelegate: UIResponder, UIApplicationDelegate {
-  var window: UIWindow?
+**SimpleMarker**. A marker is a point object on the screen. It can be an image (icon) or text. It can also contain
+both text and an icon. If necessary, the marker can be moved with animation or rotated with animation.
 
-  var reactNativeDelegate: ReactNativeDelegate?
-  var reactNativeFactory: RCTReactNativeFactory?
+#### 1.2.1 Example
 
-  func application(
-    _ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
-  ) -> Bool {
-    let delegate = ReactNativeDelegate()
-    let factory = RCTReactNativeFactory(delegate: delegate)
-    delegate.dependencyProvider = RCTAppDependencyProvider()
+_Example of use:_
 
-    reactNativeDelegate = delegate
-    reactNativeFactory = factory
-
-    window = UIWindow(frame: UIScreen.main.bounds)
-
-    factory.startReactNative(
-      withModuleName: "SimpleYamapExample",
-      in: window,
-      launchOptions: launchOptions
-    )
-
-    +YMKMapKit.setApiKey("Your key")
-    +YMKMapKit.setLocale("ru_RU")
-    +YMKMapKit.sharedInstance()
-
-
-
-    return true
-  }
-}
-
-class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
-  override func sourceURL(for bridge: RCTBridge) -> URL? {
-    self.bundleURL()
-  }
-
-  override func bundleURL() -> URL? {
-#if DEBUG
-    RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
-#else
-    Bundle.main.url(forResource: "main", withExtension: "jsbundle")
-#endif
-  }
-}
-
+```tsx
+<SimpleYamap.Marker
+  id={'marker-with-animation'}
+  point={{ lon: 55, lat: 52 }}
+  ref={animatedMarkerRef}
+  text={{ text: 'Animated marker' }}
+  icon={MarkerGreenDirection}
+  iconScale={iconScaleService(1)}
+  iconRotated
+  iconAnchor={{ x: 0.5, y: 1.0 }}
+/>
 ```
 
-### Android configuration
+#### 1.2.2 Props
 
-For android you need update `MainApplication.kt`. Add the follow lines:
+| **Prop name** | **Type**                       | **Required** | **description**                                                                                                                     |
+|---------------|--------------------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| id            | `string`                       | Yes          | Unique identifier. Currently not used, but it's recommended to set a unique value, <br/> as its active use is planned in the future |
+| point         | [`Point`](#21-Point)           | Yes          | Point on the map                                                                                                                    |
+| icon          | `ImageSourcePropType`          | No           | Marker icon                                                                                                                         |
+| text          | [`MarkerText`](#25-markertext) | No           | Marker text                                                                                                                         |
+| iconScale     | `number`                       | No           | Scale factor of marker.                                                                                                             |
+| iconRotated   | `boolean`                      | No           | if true - you can use animatedRotate                                                                                                |                                                                                               |
+| iconAnchor    | [`IconAnchor`](#24-iconanchor) | No           | Offsetting the icon relative to the scenter. This can be useful <br/>for rotating markers when the center of image is offset        |                                                                                               |
+| zIndex        | `number`                       | No           | The marker's height above the map. This can be used to position markers above each other                                            |
+| onPress       | `() => void`                   | No           | A function that is called when the marker is pressed or tapped by the user.                                                         |
 
-```
-import com.yandex.mapkit.MapKitFactory
+> Warning! In the release version, the marker size may be slightly larger than in debug mode. The result should be
+> verified during the build process.
 
- override fun onCreate() {
-    super.onCreate()
-    MapKitFactory.setApiKey("YOU_KEY")
-    MapKitFactory.setLocale("YOU_LANG")
-    loadReactNative(this)
+### 1.3 Polygon (SimplePolygon)
 
-  }
-```
+## 2 Types
 
-Full example (note: '+' indicates that new lines )
+### 2.1 Point
 
+Simple base type with longitude and latitude.
 
-```
-import com.facebook.react.ReactNativeHost
-import com.facebook.react.ReactPackage
-import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
-import com.facebook.react.defaults.DefaultReactNativeHost
-+import com.yandex.mapkit.MapKitFactory
+#### 2.1.1 Interface
 
-class MainApplication : Application(), ReactApplication {
-
-  override val reactNativeHost: ReactNativeHost =
-      object : DefaultReactNativeHost(this) {
-        override fun getPackages(): List<ReactPackage> =
-            PackageList(this).packages.apply {
-              // Packages that cannot be autolinked yet can be added manually here, for example:
-              // add(MyReactNativePackage())
-            }
-
-        override fun getJSMainModuleName(): String = "index"
-
-        override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
-
-        override val isNewArchEnabled: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
-        override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
-      }
-
-  override val reactHost: ReactHost
-    get() = getDefaultReactHost(applicationContext, reactNativeHost)
-
-  override fun onCreate() {
-    super.onCreate()
-+    MapKitFactory.setApiKey("Your key")
-+    MapKitFactory.setLocale("ru_RU")
-    loadReactNative(this)
-
-  }
+```ts
+export interface Point {
+  lon: number;
+  lat: number;
 }
 ```
+
+#### 2.1.2 Fields
+
+| **Field name** | **Type** | **Required** | **Description** |
+|----------------|----------|--------------|-----------------|
+| lon            | `number` | Yes          | Longitude       |
+| lat            | `number` | Yes          | Latitude        |
+
+### 2.2 CameraPosition
+
+Map camera position.
+
+#### 2.2.1 Interface
+
+```ts
+export interface CameraPosition {
+  point: Point;
+  zoom: number;
+  duration: number;
+  azimuth?: number;
+  tilt?: number;
+}
+```
+
+#### 2.2.2 Fields
+
+| **Field name** | **Type**             | **Required** | **Description**                                                                                          |
+|----------------|----------------------|--------------|----------------------------------------------------------------------------------------------------------|
+| point          | [`Point`](#21-Point) | Yes          | Point on the map                                                                                         |
+| zoom           | `number`             | Yes          | Map camera zoom                                                                                          |
+| duration       | `number`             | Yes          | Change camera position with duration. The value is specified in seconds. The value 0 = without animation |
+| azimuth        | `number`             | No           | Azimuth                                                                                                  |
+| tilt           | `number`             | No           | Tilt                                                                                                     |
+
+### 2.3 CameraPositionEvent
+
+**Interface**
+
+```ts
+export interface CameraPositionEvent {
+  point: Point;
+  zoom: number;
+  tilt: number;
+  azimuth: number;
+  reason: string;
+  finished: boolean;
+}
+```
+
+**Fields**
+
+| **Field name** | **Type**             | **Required** | **Description**                                                             |
+|----------------|----------------------|--------------|-----------------------------------------------------------------------------|
+| point          | [`Point`](#21-point) | Yes          | Point on the map                                                            |
+| zoom           | `number`             | Yes          | Map camera zoom                                                             |
+| duration       | `number`             | Yes          | Change camera position with duration. The value is specified in seconds     |
+| azimuth        | `number`             | Yes          | Azimuth                                                                     |
+| tilt           | `number`             | Yes          | Tilt                                                                        |
+| reason         | `string`             | Yes          | The reason of the camera update. Possible values: `GESTURES`, `APPLICATION` |
+| finished       | `boolean`            | Yes          | True if the camera finished moving                                          |
+
+### 2.4 iconAnchor
+
+**Interface**
+
+```ts
+export interface IconAnchor {
+  x: number;
+  y: number;
+}
+```
+
+**Fields**
+
+| **Field name** | **Type** | **Required** | **Description**                                                                                                                                                   |
+|----------------|----------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| x              | `number` | Yes          | The x-axis offset. Defaults to 0.5. Can range from 0 to 1. If values are specified outside this range, the result will still be limited to values between 0 and 1 |
+| y              | `number` | Yes          | The y-axis offset. Defaults to 0.5. Can range from 0 to 1. If values are specified outside this range, the result will still be limited to values between 0 and 1 |
+
+### 2.5 MarkerText
+
+**Fields**
+
+| **Field name** | **Type** | **Required** | **Description** |
+|----------------|----------|--------------|-----------------|
+| text           | `string` | Yes          | Text            |
+
+```ts
+export interface MarkerText {
+  text: string;
+}
+```
+
+## 3. Instructions
+
+### 3.1 Simple example
 
 ```tsx
 import {
@@ -215,6 +301,136 @@ import {
         />
 ```
 
+### 3.2 IOS Configuration
+
+For ios you need update `AppDelegate.swift`. Add the follow lines:
+
+```swift
+import YandexMapsMobile
+YMKMapKit.setApiKey("Your key")
+YMKMapKit.setLocale("Your lan")
+YMKMapKit.sharedInstance()
+
+```
+
+Full example (note: '+' indicates that new lines)
+
+```
+import UIKit
+import React
+import React_RCTAppDelegate
+import ReactAppDependencyProvider
++import YandexMapsMobile
+
+
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
+  var window: UIWindow?
+
+  var reactNativeDelegate: ReactNativeDelegate?
+  var reactNativeFactory: RCTReactNativeFactory?
+
+  func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+  ) -> Bool {
+    let delegate = ReactNativeDelegate()
+    let factory = RCTReactNativeFactory(delegate: delegate)
+    delegate.dependencyProvider = RCTAppDependencyProvider()
+
+    reactNativeDelegate = delegate
+    reactNativeFactory = factory
+
+    window = UIWindow(frame: UIScreen.main.bounds)
+
+    factory.startReactNative(
+      withModuleName: "SimpleYamapExample",
+      in: window,
+      launchOptions: launchOptions
+    )
+
+    +YMKMapKit.setApiKey("Your key")
+    +YMKMapKit.setLocale("ru_RU")
+    +YMKMapKit.sharedInstance()
+
+
+
+    return true
+  }
+}
+
+class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
+  override func sourceURL(for bridge: RCTBridge) -> URL? {
+    self.bundleURL()
+  }
+
+  override func bundleURL() -> URL? {
+#if DEBUG
+    RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+#else
+    Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+#endif
+  }
+}
+
+```
+
+### 3.3 Android configuration
+
+For android, you need update `MainApplication.kt`. Add the follow lines:
+
+```
+import com.yandex.mapkit.MapKitFactory
+
+ override fun onCreate() {
+    super.onCreate()
+    MapKitFactory.setApiKey("YOU_KEY")
+    MapKitFactory.setLocale("YOU_LANG")
+    loadReactNative(this)
+
+  }
+```
+
+Full example (note: '+' indicates that new lines )
+
+```
+import com.facebook.react.ReactNativeHost
+import com.facebook.react.ReactPackage
+import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
+import com.facebook.react.defaults.DefaultReactNativeHost
++import com.yandex.mapkit.MapKitFactory
+
+class MainApplication : Application(), ReactApplication {
+
+  override val reactNativeHost: ReactNativeHost =
+      object : DefaultReactNativeHost(this) {
+        override fun getPackages(): List<ReactPackage> =
+            PackageList(this).packages.apply {
+              // Packages that cannot be autolinked yet can be added manually here, for example:
+              // add(MyReactNativePackage())
+            }
+
+        override fun getJSMainModuleName(): String = "index"
+
+        override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
+
+        override val isNewArchEnabled: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
+        override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
+      }
+
+  override val reactHost: ReactHost
+    get() = getDefaultReactHost(applicationContext, reactNativeHost)
+
+  override fun onCreate() {
+    super.onCreate()
++    MapKitFactory.setApiKey("Your key")
++    MapKitFactory.setLocale("ru_RU")
+    loadReactNative(this)
+
+  }
+}
+```
+
 ## Dependencies
 
 - [MapKit SDK 4.22.0 (September 11 2025)](https://yandex.com/maps-api/docs/mapkit/versions.html)
@@ -253,5 +469,5 @@ Made with [create-react-native-library](https://github.com/callstack/react-nativ
 - [ ] Refactor native code from old examples
 - [ ] Find routes
 - [ ] Lite or full version sdk switcher
-- [ ] Full documentation
+- [x] ~~Full documentation~~
 - [ ] Return marker id with tap event
