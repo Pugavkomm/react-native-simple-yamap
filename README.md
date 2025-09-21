@@ -16,7 +16,7 @@ npm install react-native-simple-yamap
   * [Abstract](#abstract)
   * [1 Objects](#1-objects)
     * [1.1 Map (SimpleYamap)](#11-map-simpleyamap)
-      * [Example](#example)
+      * [1.1.1 Example](#111-example)
       * [Props](#props)
     * [1.2 Marker (SimpleMarker)](#12-marker-simplemarker)
       * [1.2.1 Example](#121-example)
@@ -34,6 +34,8 @@ npm install react-native-simple-yamap
     * [2.5 MarkerText](#25-markertext)
   * [3. Instructions](#3-instructions)
     * [3.1 Simple example](#31-simple-example)
+    * [3.2 IOS Configuration](#32-ios-configuration)
+    * [3.3 Android configuration](#33-android-configuration)
   * [Dependencies](#dependencies)
   * [Contributing](#contributing)
   * [License](#license)
@@ -54,7 +56,7 @@ with the new architecture.
 
 **SimpleYamap**. The main view that displays a map and can be used to place markers or other SimpleYamap objects.
 
-#### Example
+#### 1.1.1 Example
 
 _Example of use:_
 
@@ -225,7 +227,81 @@ export interface MarkerText {
 
 ### 3.1 Simple example
 
-### IOS Configuration
+```tsx
+import {
+  type Point,
+  SimpleYamap,
+  type YamapMarkerRef,
+} from 'react-native-simple-yamap';
+
+<SimpleYamap
+        style={styles.box}
+        nightMode={nightMode}
+        cameraPosition={{
+          point: {
+            lon: lon,
+            lat: lat,
+          },
+          duration: 0.5,
+          tilt: tilt,
+          azimuth: azimuth,
+          zoom: zoom,
+        }}
+      >
+        {polygons.map((poly, index) => (
+          <SimpleYamap.Polygon
+            id={`poly-${index}`}
+            key={`poly-${index}`}
+            strokeColor={poly.strokeColor}
+            strokeWidth={poly.strokeWidth}
+            fillColor={poly.fillColor}
+            points={poly.points}
+          />
+        ))}
+        <SimpleYamap.Marker
+          id={'marker-4'}
+          point={{ lon: 74, lat: 40 }}
+          text={{ text: 'Only text marker' }}
+        />
+        <SimpleYamap.Marker
+          id={'marker-z-index-20'}
+          point={{ lon: 50, lat: 40 }}
+          text={{ text: 'zIndex=20' }}
+          zIndex={20}
+          iconScale={5}
+          icon={MarkerIcon}
+        />
+        <SimpleYamap.Marker
+          id={'marker-z-index-10'}
+          point={{ lon: 58, lat: 38 }}
+          text={{ text: 'zIndex=10' }}
+          zIndex={10}
+          iconScale={5}
+          icon={MarkerIcon2}
+        />
+        <SimpleYamap.Marker
+          id={'marker-4'}
+          point={{ lon: 80, lat: 30 }}
+          text={{ text: 'Rotated marker' }}
+          icon={MarkerWithDirection}
+          iconScale={2}
+          ref={rotatableMarkerRef}
+          iconRotated
+          iconAnchor={{ x: 0.5, y: 0.8 }}
+        />
+        <SimpleYamap.Marker
+          id={'marker-with-animation'}
+          point={{ lon: 55, lat: 52 }}
+          ref={animatedMarkerRef}
+          text={{ text: 'Animated marker' }}
+          icon={MarkerWithDirection}
+          iconScale={3}
+          iconRotated
+          iconAnchor={{ x: 0.5, y: 1.0 }}
+        />
+```
+
+### 3.2 IOS Configuration
 
 For ios you need update `AppDelegate.swift`. Add the follow lines:
 
@@ -299,9 +375,9 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
 
 ```
 
-### Android configuration
+### 3.3 Android configuration
 
-For android you need update `MainApplication.kt`. Add the follow lines:
+For android, you need update `MainApplication.kt`. Add the follow lines:
 
 ```
 import com.yandex.mapkit.MapKitFactory
@@ -316,7 +392,6 @@ import com.yandex.mapkit.MapKitFactory
 ```
 
 Full example (note: '+' indicates that new lines )
-
 
 ```
 import com.facebook.react.ReactNativeHost
@@ -354,80 +429,6 @@ class MainApplication : Application(), ReactApplication {
 
   }
 }
-```
-
-```tsx
-import {
-  type Point,
-  SimpleYamap,
-  type YamapMarkerRef,
-} from 'react-native-simple-yamap';
-
-<SimpleYamap
-        style={styles.box}
-        nightMode={nightMode}
-        cameraPosition={{
-          point: {
-            lon: lon,
-            lat: lat,
-          },
-          duration: 0.5,
-          tilt: tilt,
-          azimuth: azimuth,
-          zoom: zoom,
-        }}
-      >
-        {polygons.map((poly, index) => (
-          <SimpleYamap.Polygon
-            id={`poly-${index}`}
-            key={`poly-${index}`}
-            strokeColor={poly.strokeColor}
-            strokeWidth={poly.strokeWidth}
-            fillColor={poly.fillColor}
-            points={poly.points}
-          />
-        ))}
-        <SimpleYamap.Marker
-          id={'marker-4'}
-          point={{ lon: 74, lat: 40 }}
-          text={{ text: 'Only text marker' }}
-        />
-        <SimpleYamap.Marker
-          id={'marker-z-index-20'}
-          point={{ lon: 50, lat: 40 }}
-          text={{ text: 'zIndex=20' }}
-          zIndex={20}
-          iconScale={5}
-          icon={MarkerIcon}
-        />
-        <SimpleYamap.Marker
-          id={'marker-z-index-10'}
-          point={{ lon: 58, lat: 38 }}
-          text={{ text: 'zIndex=10' }}
-          zIndex={10}
-          iconScale={5}
-          icon={MarkerIcon2}
-        />
-        <SimpleYamap.Marker
-          id={'marker-4'}
-          point={{ lon: 80, lat: 30 }}
-          text={{ text: 'Rotated marker' }}
-          icon={MarkerWithDirection}
-          iconScale={2}
-          ref={rotatableMarkerRef}
-          iconRotated
-          iconAnchor={{ x: 0.5, y: 0.8 }}
-        />
-        <SimpleYamap.Marker
-          id={'marker-with-animation'}
-          point={{ lon: 55, lat: 52 }}
-          ref={animatedMarkerRef}
-          text={{ text: 'Animated marker' }}
-          icon={MarkerWithDirection}
-          iconScale={3}
-          iconRotated
-          iconAnchor={{ x: 0.5, y: 1.0 }}
-        />
 ```
 
 ## Dependencies
