@@ -17,9 +17,9 @@ import {
 import { type SimplePolygonProps } from '../../src/components';
 import {
   MarkerGreen,
-  MarkerYellowDirection,
   MarkerGreenDirection,
   MarkerYellow,
+  MarkerYellowDirection,
 } from './images';
 import iconScaleService from './services/iconScaleService';
 
@@ -384,7 +384,6 @@ export function App() {
           );
         }}
         onCameraPositionChangeEnd={(e) => {
-          // setCurrentCameraPosition(e);
           console.info(
             `End camera position changing: (${e.point.lat}, ${e.point.lon})`
           );
@@ -394,62 +393,64 @@ export function App() {
         nightMode={nightMode}
         cameraPosition={initialCameraPosition}
       >
-        {polygons.map((poly, index) => (
-          <SimpleYamap.Polygon
-            id={`poly-${index}`}
-            key={`poly-${index}`}
-            strokeColor={poly.strokeColor}
-            strokeWidth={poly.strokeWidth}
-            fillColor={poly.fillColor}
-            points={poly.points}
+        <>
+          {polygons.map((poly, index) => (
+            <SimpleYamap.Polygon
+              id={`poly-${index}`}
+              key={`poly-${index}`}
+              strokeColor={poly.strokeColor}
+              strokeWidth={poly.strokeWidth}
+              fillColor={poly.fillColor}
+              points={poly.points}
+            />
+          ))}
+          <MarkerComponent />
+          <SimpleYamap.Marker
+            id={'marker-4'}
+            point={{ lon: 74, lat: 40 }}
+            text={{ text: 'Only text marker' }}
+            iconScale={iconScaleService(1)}
           />
-        ))}
-        <MarkerComponent />
-        <SimpleYamap.Marker
-          id={'marker-4'}
-          point={{ lon: 74, lat: 40 }}
-          text={{ text: 'Only text marker' }}
-          iconScale={iconScaleService(1)}
-        />
-        <SimpleYamap.Marker
-          id={'marker-z-index-20'}
-          point={{ lon: 50, lat: 40 }}
-          text={{ text: 'zIndex=20' }}
-          zIndex={20}
-          iconScale={iconScaleService(2)}
-          icon={MarkerGreen}
-        />
-        <SimpleYamap.Marker
-          id={'marker-z-index-10'}
-          point={{ lon: 58, lat: 38 }}
-          text={{ text: 'zIndex=10' }}
-          zIndex={10}
-          iconScale={iconScaleService(2)}
-          icon={MarkerYellow}
-        />
-        <SimpleYamap.Marker
-          id={'marker-4'}
-          point={{ lon: 80, lat: 30 }}
-          text={{ text: 'Rotated marker' }}
-          icon={MarkerYellowDirection}
-          iconScale={iconScaleService(1)}
-          ref={rotatableMarkerRef}
-          iconRotated
-          iconAnchor={{ x: 0.5, y: 0.8 }}
-          onPress={() => {
-            console.info('Press on marker');
-          }}
-        />
-        <SimpleYamap.Marker
-          id={'marker-with-animation'}
-          point={{ lon: 55, lat: 52 }}
-          ref={animatedMarkerRef}
-          text={{ text: 'Animated marker' }}
-          icon={MarkerGreenDirection}
-          iconScale={iconScaleService(1)}
-          iconRotated
-          iconAnchor={{ x: 0.5, y: 1.0 }}
-        />
+          <SimpleYamap.Marker
+            id={'marker-z-index-20'}
+            point={{ lon: 50, lat: 40 }}
+            text={{ text: 'zIndex=20' }}
+            zIndex={20}
+            iconScale={iconScaleService(2)}
+            icon={MarkerGreen}
+          />
+          <SimpleYamap.Marker
+            id={'marker-z-index-10'}
+            point={{ lon: 58, lat: 38 }}
+            text={{ text: 'zIndex=10' }}
+            zIndex={10}
+            iconScale={iconScaleService(2)}
+            icon={MarkerYellow}
+          />
+          <SimpleYamap.Marker
+            id={'marker-4'}
+            point={{ lon: 80, lat: 30 }}
+            text={{ text: 'Rotated marker' }}
+            icon={MarkerYellowDirection}
+            iconScale={iconScaleService(1)}
+            ref={rotatableMarkerRef}
+            iconRotated
+            iconAnchor={{ x: 0.5, y: 0.8 }}
+            onPress={() => {
+              console.info('Press on marker');
+            }}
+          />
+          <SimpleYamap.Marker
+            id={'marker-with-animation'}
+            point={{ lon: 55, lat: 52 }}
+            ref={animatedMarkerRef}
+            text={{ text: 'Animated marker' }}
+            icon={MarkerGreenDirection}
+            iconScale={iconScaleService(1)}
+            iconRotated
+            iconAnchor={{ x: 0.5, y: 1.0 }}
+          />
+        </>
       </SimpleYamap>
     </View>
   );
