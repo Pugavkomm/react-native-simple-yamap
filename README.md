@@ -10,18 +10,28 @@ Yandex simple maps for react native.
 npm install react-native-simple-yamap
 ```
 
+![demo.gif](docs/images/demo/demo.gif)
+
+_Demo example_
+
+
 <!-- TOC -->
+
 * [react-native-simple-yamap](#react-native-simple-yamap)
   * [Installation](#installation)
   * [Abstract](#abstract)
   * [1 Objects](#1-objects)
     * [1.1 Map (SimpleYamap)](#11-map-simpleyamap)
       * [1.1.1 Example](#111-example)
-      * [Props](#props)
+      * [1.1.2 Props](#112-props)
+      * [1.1.3 Methods](#113-methods)
     * [1.2 Marker (SimpleMarker)](#12-marker-simplemarker)
       * [1.2.1 Example](#121-example)
       * [1.2.2 Props](#122-props)
+      * [1.2.3 Methods](#123-methods)
     * [1.3 Polygon (SimplePolygon)](#13-polygon-simplepolygon)
+      * [1.3.1 Example](#131-example)
+      * [1.3.2 Props](#132-props)
   * [2 Types](#2-types)
     * [2.1 Point](#21-point)
       * [2.1.1 Interface](#211-interface)
@@ -40,6 +50,7 @@ npm install react-native-simple-yamap
   * [Contributing](#contributing)
   * [License](#license)
   * [TODO](#todo)
+
 <!-- TOC -->
 
 ## Abstract
@@ -67,13 +78,27 @@ _Example of use:_
 />
 ```
 
-#### Props
+#### 1.1.2 Props
 
 | **Prop name**  | **Type**                                                                                        | **description**         |
 |----------------|-------------------------------------------------------------------------------------------------|-------------------------|
 | nightMode      | `boolean`                                                                                       | Turn on night mode      |
 | cameraPosition | [`CameraPosition`](#22-cameraposition)                                                          | Current Camera position |
 | children       | one of: [`SimpleMarker`](#12-marker-simplemarker), [`SimplePolygon`](#13-polygon-simplepolygon) | One of map objects      |
+
+#### 1.1.3 Methods
+
+You can use method for a map using its `YamapRef` reference. See the table below.
+
+```
+export interface YamapRef {
+  setCenter(center: CameraPosition): void;
+}
+```
+
+| **Method name** | arguments                                                                                                                                                                                                  | **description**                          |
+|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|
+| setCenter       | <table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>center</td><td>[`CameraPosition`](#22-cameraposition) </td><td>New center of the map</td></tr></tbody></table> | Set center of the map to camera position |
 
 ### 1.2 Marker (SimpleMarker)
 
@@ -114,7 +139,70 @@ _Example of use:_
 > Warning! In the release version, the marker size may be slightly larger than in debug mode. The result should be
 > verified during the build process.
 
+#### 1.2.3 Methods
+
+You can use method for a marker using its `YamapMarkerRef` reference. See the table below.
+
+```
+export interface YamapMarkerRef {
+  animatedMove(point: Point, durationInSeconds: number): void;
+  animatedRotate(angle: number, durationInSeconds: number): void;
+}
+```
+
+| **Method name** | arguments                                                                                                                                                                                                                                                                                                 | **description**                          |
+|-----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|
+| animatedMove    | <table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>point</td><td>[`Point`](#21-point) </td><td>New marker position</td></tr><tr><td>durationInSeconds</td><td>`number`</td><td>Animation duration in seconds</td></tr></tbody></table>                           | Set center of the map to camera position |
+| animatedRotate  | <table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>angle</td><td>`number`</td><td>New marker rotation. It works only with `iconRotated=true`</td></tr><tr><td>durationInSeconds</td><td>`number`</td><td>Animation duration in seconds</td></tr></tbody></table> | Set new marker direction                 |
+
 ### 1.3 Polygon (SimplePolygon)
+
+**SimplePolygon**. A map shape with any number of point, but no less than three. It can have a fill or stroke. You
+can also use inner points, meaning you can cut out certain areas within the polygon.
+
+#### 1.3.1 Example
+
+_Example of use:_
+
+```tsx
+<SimpleYamap.Polygon
+  id={'with-inner'}
+  points={[
+    { lon: 5, lat: 5 },
+    { lon: 20, lat: 5 },
+    { lon: 19, lat: 19 },
+    { lon: 10, lat: 20 },
+  ]}
+  innerPoints={[
+    [
+      { lon: 6, lat: 6 },
+      { lon: 8, lat: 6 },
+      { lon: 8, lat: 8 },
+      { lon: 6, lat: 8 },
+    ],
+    [
+      { lon: 10, lat: 10 },
+      { lon: 12, lat: 10 },
+      { lon: 12, lat: 12 },
+      { lon: 10, lat: 12 },
+    ],
+  ]}
+  fillColor={safeProcessColor('rgba(100, 0, 0, 0.3)')}
+  strokeWidth={2}
+  strokeColor={safeProcessColor('rgba(100, 0, 100, 0.9)')}
+/>
+```
+
+#### 1.3.2 Props
+
+| **Prop name** | **Type**                 | **Required** | **description**                                                                                                                     |
+|---------------|--------------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| id            | `string`                 | Yes          | Unique identifier. Currently not used, but it's recommended to set a unique value, <br/> as its active use is planned in the future |
+| points        | [`Point[]`](#21-point)   | Yes          | Outer ring                                                                                                                          |
+| innerPoints   | [`Point[][]`](#21-point) | No           | Inner rings                                                                                                                         |
+| fillColor     | 'number                  | No           | Color in integer format                                                                                                             |
+| strokeColor   | 'number                  | No           | Color in integer format                                                                                                             |
+| strokeWidth   | 'number                  | No           | Width of stroke. By default 1. If 0 - without stroke                                                                                |
 
 ## 2 Types
 
@@ -227,79 +315,8 @@ export interface MarkerText {
 
 ### 3.1 Simple example
 
-```tsx
-import {
-  type Point,
-  SimpleYamap,
-  type YamapMarkerRef,
-} from 'react-native-simple-yamap';
+see [App.tsx](./example/src/App.tsx)
 
-<SimpleYamap
-        style={styles.box}
-        nightMode={nightMode}
-        cameraPosition={{
-          point: {
-            lon: lon,
-            lat: lat,
-          },
-          duration: 0.5,
-          tilt: tilt,
-          azimuth: azimuth,
-          zoom: zoom,
-        }}
-      >
-        {polygons.map((poly, index) => (
-          <SimpleYamap.Polygon
-            id={`poly-${index}`}
-            key={`poly-${index}`}
-            strokeColor={poly.strokeColor}
-            strokeWidth={poly.strokeWidth}
-            fillColor={poly.fillColor}
-            points={poly.points}
-          />
-        ))}
-        <SimpleYamap.Marker
-          id={'marker-4'}
-          point={{ lon: 74, lat: 40 }}
-          text={{ text: 'Only text marker' }}
-        />
-        <SimpleYamap.Marker
-          id={'marker-z-index-20'}
-          point={{ lon: 50, lat: 40 }}
-          text={{ text: 'zIndex=20' }}
-          zIndex={20}
-          iconScale={5}
-          icon={MarkerIcon}
-        />
-        <SimpleYamap.Marker
-          id={'marker-z-index-10'}
-          point={{ lon: 58, lat: 38 }}
-          text={{ text: 'zIndex=10' }}
-          zIndex={10}
-          iconScale={5}
-          icon={MarkerIcon2}
-        />
-        <SimpleYamap.Marker
-          id={'marker-4'}
-          point={{ lon: 80, lat: 30 }}
-          text={{ text: 'Rotated marker' }}
-          icon={MarkerWithDirection}
-          iconScale={2}
-          ref={rotatableMarkerRef}
-          iconRotated
-          iconAnchor={{ x: 0.5, y: 0.8 }}
-        />
-        <SimpleYamap.Marker
-          id={'marker-with-animation'}
-          point={{ lon: 55, lat: 52 }}
-          ref={animatedMarkerRef}
-          text={{ text: 'Animated marker' }}
-          icon={MarkerWithDirection}
-          iconScale={3}
-          iconRotated
-          iconAnchor={{ x: 0.5, y: 1.0 }}
-        />
-```
 
 ### 3.2 IOS Configuration
 

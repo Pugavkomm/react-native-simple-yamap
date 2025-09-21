@@ -51,20 +51,44 @@ using namespace facebook::react;
   
   _view.id = [NSString stringWithUTF8String:newViewProps.id.c_str()];
   
-  // Points
-  NSMutableArray *points = [NSMutableArray new];
+  // Outer points
+  NSMutableArray *outerRings = [NSMutableArray new];
   for (const auto &point : newViewProps.points) {
     NSMutableDictionary  *pointDict = [NSMutableDictionary new];
     pointDict[@"lat"] = @(point.lat);
     pointDict[@"lon"] = @(point.lon);
-    [points addObject:pointDict];
+    [outerRings addObject:pointDict];
     }
-  _view.points = points;
+  _view.outerRing = outerRings;
+  
+  
+  // Inner points
+  NSMutableArray *innerRings = [NSMutableArray new];
+  for (const auto &points : newViewProps.innerPoints) {
+    NSMutableArray *innerRing = [NSMutableArray new];
+    for (const auto &point : points) {
+      NSMutableDictionary *pointDict = [NSMutableDictionary new];
+      pointDict[@"lat"] = @(point.lat);
+      pointDict[@"lon"] = @(point.lon);
+      [innerRing addObject:pointDict];
+    }
+    [innerRings addObject:innerRing];
+  }
+  _view.innerRings = innerRings;
+  
+  
+  
   // Colors & Width
-  NSLog(@"Call update from update props: %d", newViewProps.strokeColor);
-  _view.fillColor = @(newViewProps.fillColor);
-  _view.strokeColor = @(newViewProps.strokeColor);
-  _view.strokeWidth = @(newViewProps.strokeWidth);
+  if (oldViewProps.fillColor != newViewProps.fillColor) {
+    _view.fillColor = @(newViewProps.fillColor);
+  }
+  if (oldViewProps.strokeColor != newViewProps.strokeColor){
+    _view.strokeColor = @(newViewProps.strokeColor);
+  }
+  if (oldViewProps.strokeWidth != newViewProps.strokeWidth) {
+    _view.strokeWidth = @(newViewProps.strokeWidth);
+  }
+  
   [super updateProps:props oldProps:oldProps];
 }
 
