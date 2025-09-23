@@ -27,7 +27,7 @@ class SimpleYamapViewManager : ViewGroupManager<SimpleYamapView>(),
   }
 
   public override fun createViewInstance(context: ThemedReactContext): SimpleYamapView {
-    context.addLifecycleEventListener(this) // Подписываемся на события
+    context.addLifecycleEventListener(this)
     val view = SimpleYamapView(context)
     this.viewInstance = view
     return view
