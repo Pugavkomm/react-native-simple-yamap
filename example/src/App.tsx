@@ -385,7 +385,7 @@ export function App() {
         }}
         onCameraPositionChangeEnd={(e) => {
           console.info(
-            `End camera position changing: (${e.point.lat}, ${e.point.lon})`
+            `End camera position changing: (${e.point.lat}, ${e.point.lon}). Reason: ${e.reason}`
           );
         }}
         ref={mapRef}

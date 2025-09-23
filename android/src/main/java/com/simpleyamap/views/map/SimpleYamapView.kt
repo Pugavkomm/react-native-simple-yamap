@@ -44,7 +44,7 @@ class SimpleYamapView(context: Context) : MapView(context), CameraListener {
     )
     if (finished) {
       sendCameraPositionEvent(
-        "topCameraPositionChange",
+        "topCameraPositionChangeEnd",
         cameraPosition,
         cameraUpdateReason.toString(),
         false
