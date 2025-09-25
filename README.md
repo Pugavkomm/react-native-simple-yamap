@@ -204,6 +204,25 @@ _Example of use:_
 | strokeColor   | 'number                  | No           | Color in integer format                                                                                                             |
 | strokeWidth   | 'number                  | No           | Width of stroke. By default 1. If 0 - without stroke                                                                                |
 
+### 1.4 Circle (SimpleCircle)
+
+**SimpleCircle**. Circle on the map with color fill and border.
+
+#### 1.4.1  Example
+
+TODO
+
+#### 1.4.2 Props
+
+| **Prop name** | **Type**             | **Required** | **description**                                                                                                                     |
+|---------------|----------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| id            | `string`             | Yes          | Unique identifier. Currently not used, but it's recommended to set a unique value, <br/> as its active use is planned in the future |
+| center        | [`Point`](#21-point) | Yes          | Center of circle                                                                                                                    |
+| radius        | 'number'             | Yes          | Circle radius                                                                                                                       |
+| fillColor     | 'number              | No           | Color in integer format                                                                                                             |
+| strokeColor   | 'number              | No           | Color in integer format                                                                                                             |
+| strokeWidth   | 'number              | No           | Width of stroke. By default 1. If 0 - without stroke                                                                                |
+
 ## 2 Types
 
 ### 2.1 Point
@@ -254,7 +273,7 @@ export interface CameraPosition {
 
 ### 2.3 CameraPositionEvent
 
-**Interface**
+#### 2.3.1 Interface
 
 ```ts
 export interface CameraPositionEvent {
@@ -267,7 +286,7 @@ export interface CameraPositionEvent {
 }
 ```
 
-**Fields**
+#### 2.3.2 Fields
 
 | **Field name** | **Type**             | **Required** | **Description**                                                             |
 |----------------|----------------------|--------------|-----------------------------------------------------------------------------|
@@ -281,7 +300,7 @@ export interface CameraPositionEvent {
 
 ### 2.4 iconAnchor
 
-**Interface**
+### 2.4.1 Interface
 
 ```ts
 export interface IconAnchor {
@@ -290,7 +309,7 @@ export interface IconAnchor {
 }
 ```
 
-**Fields**
+#### 2.4.2 Fields
 
 | **Field name** | **Type** | **Required** | **Description**                                                                                                                                                   |
 |----------------|----------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -299,7 +318,7 @@ export interface IconAnchor {
 
 ### 2.5 MarkerText
 
-**Fields**
+#### 2.5.1 Fields
 
 | **Field name** | **Type** | **Required** | **Description** |
 |----------------|----------|--------------|-----------------|
@@ -311,14 +330,39 @@ export interface MarkerText {
 }
 ```
 
-## 3. Instructions
+## 3 Utils
 
-### 3.1 Simple example
+### 3.1 simpleColorConverter
+
+Color is assumed to be transmitted using an int value. To simplify definition, a utility function was developed
+(`simpleColorConverter`).
+
+The goal was to retain the ability to specify numeric values, as in the original SDK, but also to allow for more
+convenient values like `red` or `rgba(255, 0, 0, 0.5)`.
+
+There are two possible ways for use. The first one:
+
+```ts
+import { simpleColorConverter } from 'react-native-simple-yamap';
+const colorRed = simpleColorConverter('red');
+const colorRed80 = simpleColorConverter('rgba(255, 0, 0, 0.8)');
+```
+
+The second one:
+
+```ts
+import SimpleYamap from 'react-native-simple-yamap';
+const colorRed = SimpleYamap.color('red');
+const colorRed80 = SimpleYamap.color('rgba(255, 0, 0, 0.8)');
+```
+
+## 4 Instructions
+
+### 4.1 Simple example
 
 see [App.tsx](./example/src/App.tsx)
 
-
-### 3.2 IOS Configuration
+### 4.2 IOS Configuration
 
 For ios you need update `AppDelegate.swift`. Add the follow lines:
 
@@ -392,7 +436,7 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
 
 ```
 
-### 3.3 Android configuration
+### 4.3 Android configuration
 
 For android, you need update `MainApplication.kt`. Add the follow lines:
 

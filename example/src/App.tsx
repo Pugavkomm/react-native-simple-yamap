@@ -7,6 +7,7 @@ import {
 } from 'react-native-simple-yamap';
 import {
   BrandComponent,
+  HeartBeatCircle,
   MapInfoComponent,
   MapNavigBtnsComponent,
   MarkersComponent,
@@ -179,6 +180,16 @@ export function App() {
         nightMode={nightMode}
         cameraPosition={initialCameraPosition}
       >
+        <HeartBeatCircle />
+        <HeartBeatCircle />
+        <HeartBeatCircle />
+        <HeartBeatCircle />
+        <HeartBeatCircle />
+        <HeartBeatCircle />
+        <HeartBeatCircle />
+        <HeartBeatCircle />
+        <HeartBeatCircle />
+        <HeartBeatCircle />
         <MarkersComponent />
         <PolygonsComponent />
       </SimpleYamap>

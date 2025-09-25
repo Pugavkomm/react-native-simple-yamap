@@ -164,7 +164,8 @@
       "componentProvider": {
         "SimpleYamapView": "SimpleYamapView",
         "SimpleYamapPolygonView": "SimpleYamapPolygonView",
-        "SimpleYamapMarkerView": "SimpleYamapMarkerView"
+        "SimpleYamapMarkerView": "SimpleYamapMarkerView",
+        "SimpleYamapCircleView": "SimpleYamapCircleView"
       }
     }
   },

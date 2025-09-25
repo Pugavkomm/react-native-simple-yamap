@@ -36,10 +36,8 @@ public class RNYMapPolygon: UIView {
     super.didMoveToSuperview()
     if let mapView = self.superview as? RNYMapView {
       self.parentMapView = mapView
-      mapView.addPolygonChild(self)
     } else if self.superview == nil {
       // TODO: Check this logic
-      parentMapView?.removePolygonChild(self)
       self.parentMapView = nil
     }
   }

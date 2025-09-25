@@ -75,11 +75,6 @@ const MarkersComponent: React.FC = () => {
   return (
     <>
       <SimpleYamap.Marker
-        id={'marker inside polygon'}
-        point={{ lat: 15, lon: 12 }}
-        text={{ text: 'Polygon with inner rings' }}
-      />
-      <SimpleYamap.Marker
         id={'marker-4'}
         point={{ lon: 74, lat: 40 }}
         text={{ text: 'Only text marker' }}

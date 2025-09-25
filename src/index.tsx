@@ -1,14 +1,16 @@
 // index.ts
 
-import type { NativeProps as MapViewProps } from './native-components/SimpleYamapViewNativeComponent';
 import BaseMapView from './native-components/SimpleYamapViewNativeComponent';
-import type { NativeProps as PolygonProps } from './native-components/SimpleYamapPolygonViewNativeComponent';
 
 import {
   type MarkerText,
   SimpleMarker,
   SimplePolygon,
+  SimpleCircle,
   SimpleYamapView,
+  type SimpleCircleProps,
+  type SimpleMarkerProps,
+  type SimplePolygonProps,
 } from './components';
 
 import type { YamapMarkerRef } from './components/SimpleMarker';
@@ -16,8 +18,9 @@ import type { YamapRef } from './components/SimpleYamap';
 import type { CameraPosition, CameraPositionEvent, Point } from './interfaices';
 
 export type {
-  PolygonProps,
-  MapViewProps,
+  SimpleMarkerProps,
+  SimplePolygonProps,
+  SimpleCircleProps,
   MarkerText,
   YamapMarkerRef,
   YamapRef,
@@ -29,12 +32,19 @@ export type {
 type YamapComposition = typeof SimpleYamapView & {
   Marker: typeof SimpleMarker;
   Polygon: typeof SimplePolygon;
+  Circle: typeof SimpleCircle;
+  color: typeof simpleColorConverter;
 };
+
+import { simpleColorConverter } from './utils';
 
 const SimpleYamap = SimpleYamapView as YamapComposition;
 
 SimpleYamap.Polygon = SimplePolygon;
 SimpleYamap.Marker = SimpleMarker;
+SimpleYamap.Circle = SimpleCircle;
+SimpleYamap.color = simpleColorConverter;
 
-export { BaseMapView, SimplePolygon, SimpleYamap, SimpleMarker };
+export { BaseMapView, SimplePolygon, SimpleYamap, SimpleMarker, SimpleCircle };
+export { simpleColorConverter };
 export default SimpleYamap;

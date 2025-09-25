@@ -2,15 +2,6 @@ import React, { useEffect, useState } from 'react';
 import SimpleYamap, {
   type SimplePolygonProps,
 } from 'react-native-simple-yamap';
-import { processColor } from 'react-native';
-
-const safeProcessColor = (color: string): number | undefined => {
-  const processed = processColor(color);
-  if (typeof processed === 'number') {
-    return processed;
-  }
-  return undefined;
-};
 
 const initialPolygons: SimplePolygonProps[] = [
   {
@@ -22,8 +13,8 @@ const initialPolygons: SimplePolygonProps[] = [
       { lat: 10, lon: 10 },
       { lat: 50, lon: 20 },
     ],
-    fillColor: safeProcessColor('rgba(100, 100, 250, 0.2)'),
-    strokeColor: safeProcessColor('rgba(0, 0, 100, 0.1)'),
+    fillColor: SimpleYamap.color('rgba(100, 100, 250, 0.2)'),
+    strokeColor: SimpleYamap.color('rgba(0, 0, 100, 0.1)'),
     strokeWidth: 1.0,
   },
   {
@@ -33,8 +24,8 @@ const initialPolygons: SimplePolygonProps[] = [
       { lat: 60, lon: 100 },
       { lat: 100, lon: 100 },
     ],
-    fillColor: safeProcessColor('rgba(100, 0, 0, 0.3)'),
-    strokeColor: safeProcessColor('rgba(50, 0, 0, 1)'),
+    fillColor: SimpleYamap.color('rgba(100, 0, 0, 0.3)'),
+    strokeColor: SimpleYamap.color('rgba(50, 0, 0, 1)'),
     strokeWidth: 2.0,
   },
 ];
@@ -81,9 +72,9 @@ const PolygonsComponent: React.FC = () => {
             { lon: 10, lat: 12 },
           ],
         ]}
-        fillColor={safeProcessColor('rgba(100, 0, 0, 0.3)')}
+        fillColor={SimpleYamap.color('rgba(100, 0, 0, 0.3)')}
         strokeWidth={2}
-        strokeColor={safeProcessColor('rgba(100, 0, 100, 0.9)')}
+        strokeColor={SimpleYamap.color('rgba(100, 0, 100, 0.9)')}
       />
       {polygons.map((poly, index) => (
         <SimpleYamap.Polygon

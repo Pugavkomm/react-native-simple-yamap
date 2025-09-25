@@ -3,6 +3,7 @@ import PolygonsComponent from './PolygonsComponent';
 import MapNavigBtnsComponent from './MapNavigBtnsComponent';
 import MapInfoComponent from './InfoComponent';
 import BrandComponent from './BrandComponent';
+import HeartBeatCircle from './HeartBeatCircle';
 
 export {
   MarkersComponent,
@@ -10,4 +11,5 @@ export {
   MapNavigBtnsComponent,
   MapInfoComponent,
   BrandComponent,
+  HeartBeatCircle,
 };
