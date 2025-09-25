@@ -12,7 +12,17 @@ export interface SimpleCircleProps {
 }
 
 const SimpleCircle: React.FC<SimpleCircleProps> = (props) => {
-  return <SimpleYamapCircleViewNativeComponent {...props} />;
+  return (
+    <SimpleYamapCircleViewNativeComponent
+      id={props.id}
+      center={props.center}
+      radius={props.radius}
+      fillColor={props.fillColor}
+      strokeColor={props.strokeColor}
+      strokeWidth={props.strokeWidth}
+      zIndexV={props.zIndex}
+    />
+  );
 };
 
 export default SimpleCircle;

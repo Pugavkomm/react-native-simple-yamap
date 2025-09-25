@@ -5,7 +5,7 @@ const MAX_RADIUS = 2000000;
 const MIN_RADIUS = 100000;
 
 const colors = [
-  SimpleYamap.color('rgba(255, 0, 0, 0.2)'),
+  SimpleYamap.color('rgba(100, 0, 0, 0.2)'),
   SimpleYamap.color('rgba(0, 255, 0, 0.2)'),
   SimpleYamap.color('rgba(0, 0, 255, 0.2)'),
   SimpleYamap.color('rgba(100, 0, 255, 0.2)'),
@@ -38,8 +38,9 @@ const HeartBeatCircle: React.FC = () => {
       center={{ lon: 10, lat: 25 }}
       radius={radius}
       fillColor={color}
-      strokeColor={SimpleYamap.color('rgba(200, 0, 100, 0.8)')}
+      strokeColor={SimpleYamap.color('rgba(255, 0, 100, 0.8)')}
       strokeWidth={1}
+      zIndex={1000}
     />
   );
 };
