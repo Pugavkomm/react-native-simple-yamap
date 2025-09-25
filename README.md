@@ -16,7 +16,6 @@ _Demo example_
 
 
 <!-- TOC -->
-
 * [react-native-simple-yamap](#react-native-simple-yamap)
   * [Installation](#installation)
   * [Abstract](#abstract)
@@ -32,6 +31,9 @@ _Demo example_
     * [1.3 Polygon (SimplePolygon)](#13-polygon-simplepolygon)
       * [1.3.1 Example](#131-example)
       * [1.3.2 Props](#132-props)
+    * [1.4 Circle (SimpleCircle)](#14-circle-simplecircle)
+      * [1.4.1  Example](#141--example)
+      * [1.4.2 Props](#142-props)
   * [2 Types](#2-types)
     * [2.1 Point](#21-point)
       * [2.1.1 Interface](#211-interface)
@@ -40,17 +42,23 @@ _Demo example_
       * [2.2.1 Interface](#221-interface)
       * [2.2.2 Fields](#222-fields)
     * [2.3 CameraPositionEvent](#23-camerapositionevent)
+      * [2.3.1 Interface](#231-interface)
+      * [2.3.2 Fields](#232-fields)
     * [2.4 iconAnchor](#24-iconanchor)
+    * [2.4.1 Interface](#241-interface)
+      * [2.4.2 Fields](#242-fields)
     * [2.5 MarkerText](#25-markertext)
-  * [3. Instructions](#3-instructions)
-    * [3.1 Simple example](#31-simple-example)
-    * [3.2 IOS Configuration](#32-ios-configuration)
-    * [3.3 Android configuration](#33-android-configuration)
+      * [2.5.1 Fields](#251-fields)
+  * [3 Utils](#3-utils)
+    * [3.1 simpleColorConverter](#31-simplecolorconverter)
+  * [4 Instructions](#4-instructions)
+    * [4.1 Simple example](#41-simple-example)
+    * [4.2 IOS Configuration](#42-ios-configuration)
+    * [4.3 Android configuration](#43-android-configuration)
   * [Dependencies](#dependencies)
   * [Contributing](#contributing)
   * [License](#license)
   * [TODO](#todo)
-
 <!-- TOC -->
 
 ## Abstract
