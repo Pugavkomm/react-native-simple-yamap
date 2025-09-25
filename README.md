@@ -34,6 +34,7 @@ _Demo example_
     * [1.4 Circle (SimpleCircle)](#14-circle-simplecircle)
       * [1.4.1  Example](#141--example)
       * [1.4.2 Props](#142-props)
+      * [1.2.3 Methods](#123-methods-1)
   * [2 Types](#2-types)
     * [2.1 Point](#21-point)
       * [2.1.1 Interface](#211-interface)
@@ -283,6 +284,24 @@ export default HeartBeatCircle;
 | strokeColor   | 'number              | No           | Color in integer format                                                                                                             |
 | strokeWidth   | 'number              | No           | Width of stroke. By default 0. If 0 - without stroke                                                                                |
 
+#### 1.2.3 Methods
+
+You can use method for a marker using its `YamapCircleRef` reference. See the table below.
+
+```ts
+export interface YamapCircleRef {
+  animatedMove(point: Point, durationInSeconds: number, radius: number): void;
+}
+```
+
+| **Method name** | arguments                                                                                                                                                                                                                                                                                                                                     | **description**                          |
+|-----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|
+| animatedMove    | <table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>point</td><td>[`Point`](#21-point) </td><td>New circle position</td></tr><tr><td>durationInSeconds</td><td>`number`</td><td>Animation duration in seconds</td></tr><tr><td>radius<td>`number`</td><td>New circle radius</td></tr></tbody></table> | Set center of the map to camera position |
+
+
+_animatedMove demo_
+
+![demo_circles_animatedMove.gif](docs/images/demo/demo_circles_animatedMove.gif)
 ## 2 Types
 
 ### 2.1 Point

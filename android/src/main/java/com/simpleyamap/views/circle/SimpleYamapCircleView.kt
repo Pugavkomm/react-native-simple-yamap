@@ -1,7 +1,9 @@
 package com.simpleyamap.views.circle
 
+import android.animation.ValueAnimator
 import android.view.View
 import android.content.Context
+import com.simpleyamap.views.animations.EaseInOutCosineInterpolator
 import com.simpleyamap.views.map.SimpleYamapView
 import com.yandex.mapkit.map.CircleMapObject
 import com.yandex.mapkit.geometry.Point as YandexPoint
@@ -88,6 +90,41 @@ class SimpleYamapCircleView(context: Context) : View(context) {
       updateCircleGeom(circleGeom)
     }
     updateCircleStyle()
+  }
+
+  private fun updateRadius(radius: Float) {
+    mapObject?.let { existingObject ->
+      val center = existingObject.geometry.center
+      val radius = radius
+      existingObject.geometry = YandexCircle(center, radius)
+    }
+  }
+
+  fun animatedMove(lon: Double, lat: Double, duration: Float, radius: Float) {
+    updateRadius(radius)
+    val circle = mapObject ?: return
+    val endPosition = YandexPoint(lat, lon)
+    val startPosition = circle.geometry.center
+
+    if (duration <= 0) {
+      circle.geometry = YandexCircle(endPosition, radius)
+      return
+    }
+
+    val deltaLat = endPosition.latitude - startPosition.latitude
+    val deltaLon = endPosition.longitude - startPosition.longitude
+
+    val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
+    valueAnimator.duration = (duration * 1000).toLong()
+    valueAnimator.interpolator = EaseInOutCosineInterpolator()
+
+    valueAnimator.addUpdateListener { animation ->
+      val progress = animation.animatedValue as Float
+      val currentLat = startPosition.latitude + (deltaLat * progress)
+      val currentLon = startPosition.longitude + (deltaLon * progress)
+      mapObject?.geometry = YandexCircle( YandexPoint(currentLat, currentLon), radius)
+    }
+    valueAnimator.start()
   }
 
   fun updateCircleStyle() {

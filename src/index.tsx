@@ -16,6 +16,7 @@ import {
 import type { YamapMarkerRef } from './components/SimpleMarker';
 import type { YamapRef } from './components/SimpleYamap';
 import type { CameraPosition, CameraPositionEvent, Point } from './interfaices';
+import type { YamapCircleRef } from './components/SimpleCircle';
 
 export type {
   SimpleMarkerProps,
@@ -27,6 +28,7 @@ export type {
   Point,
   CameraPosition,
   CameraPositionEvent,
+  YamapCircleRef,
 };
 
 type YamapComposition = typeof SimpleYamapView & {

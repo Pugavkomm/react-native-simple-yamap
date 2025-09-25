@@ -76,6 +76,16 @@ class SimpleYamapCircleViewManager : SimpleViewManager<SimpleYamapCircleView>(),
         view?.zIndexV = value.toFloat()
     }
 
+  override fun animatedMove(
+    view: SimpleYamapCircleView?,
+    lon: Double,
+    lat: Double,
+    durationInSeconds: Float,
+    radius: Float
+  ) {
+    view?.animatedMove(lon, lat, durationInSeconds, radius)
+  }
+
 }
 
 
