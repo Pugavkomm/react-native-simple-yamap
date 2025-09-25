@@ -38,7 +38,20 @@ using namespace facebook::react;
   return self;
 }
 
+- (void)handleCommand:(const NSString *)commandName args:(const NSArray *)args
+{
+  RCTSimpleYamapCircleViewHandleCommand(self, commandName, args);
+}
 
+
+- (void)animatedMove:(double)lon lat:(double)lat durationInSeconds:(float)durationInSeconds radius:(float)radius
+{
+  NSMutableDictionary *pointDict = [NSMutableDictionary new];
+  pointDict[@"lon"] = @(lon);
+  pointDict[@"lat"] = @(lat);
+  
+  [_view animatedMoveWithPointDict:pointDict duration:durationInSeconds radius:radius];
+}
 
 - (void)updateProps:(const facebook::react::Props::Shared &)props oldProps:(const facebook::react::Props::Shared &)oldProps
 {

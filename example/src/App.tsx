@@ -180,16 +180,12 @@ export function App() {
         nightMode={nightMode}
         cameraPosition={initialCameraPosition}
       >
-        <HeartBeatCircle />
-        <HeartBeatCircle />
-        <HeartBeatCircle />
-        <HeartBeatCircle />
-        <HeartBeatCircle />
-        <HeartBeatCircle />
-        <HeartBeatCircle />
-        <HeartBeatCircle />
-        <HeartBeatCircle />
-        <HeartBeatCircle />
+        <>
+          {Array.from({ length: 10 }).map((_, index) => (
+            <HeartBeatCircle key={index} />
+          ))}
+        </>
+
         <MarkersComponent />
         <PolygonsComponent />
       </SimpleYamap>

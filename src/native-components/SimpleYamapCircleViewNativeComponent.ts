@@ -3,7 +3,12 @@ import type {
   Float,
   Int32,
 } from 'react-native/Libraries/Types/CodegenTypesNamespace';
-import { codegenNativeComponent, type ViewProps } from 'react-native';
+import {
+  codegenNativeCommands,
+  codegenNativeComponent,
+  type HostComponent,
+  type ViewProps,
+} from 'react-native';
 
 type Point = Readonly<{
   lon: Double;
@@ -19,5 +24,19 @@ export interface NativeProps extends ViewProps {
   strokeWidth?: Float;
   zIndexV?: Double;
 }
+
+export interface NativeCommands {
+  animatedMove: (
+    viewRef: React.ElementRef<HostComponent<NativeProps>>,
+    lon: Double,
+    lat: Double,
+    durationInSeconds: Float,
+    radius?: Float
+  ) => void;
+}
+
+export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
+  supportedCommands: ['animatedMove'],
+});
 
 export default codegenNativeComponent<NativeProps>('SimpleYamapCircleView');

@@ -1,3 +1,5 @@
+package com.simpleyamap.views.animations
+
 import android.animation.TimeInterpolator
 import kotlin.math.PI
 import kotlin.math.cos

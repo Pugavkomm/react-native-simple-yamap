@@ -1,7 +1,7 @@
 package com.simpleyamap.views.marker
 
 
-import EaseInOutCosineInterpolator
+import com.simpleyamap.views.animations.EaseInOutCosineInterpolator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -120,7 +120,6 @@ class SimpleYamapMarkerView(context: Context) : View(context), MapObjectTapListe
     } else {
       mapObject?.geometry = currentPoint
     }
-    print("Call marker props")
     applyMarkerProps()
   }
 

@@ -136,7 +136,7 @@ public class RNYMapMarker: UIView, YMKMapObjectTapListener {
     
     // Update Stage
     let progress = Double(frame) / Double(totalFrames)
-    let easedProgress = -0.5 * (cos(Double.pi * Double(progress)) - 1)
+    let easedProgress = easeInOut(progress: progress)
     let cLat = startPoint.latitude + (deltaLat * easedProgress)
     let cLon = startPoint.longitude + (deltaLon * easedProgress)
     let newPosition = YMKPoint(latitude: cLat, longitude: cLon)
@@ -203,6 +203,10 @@ public class RNYMapMarker: UIView, YMKMapObjectTapListener {
       }
     }
   }
+  
+    
+
+
   
   public func updateMarker() {
     guard let mapView = parentMapView else {return}
