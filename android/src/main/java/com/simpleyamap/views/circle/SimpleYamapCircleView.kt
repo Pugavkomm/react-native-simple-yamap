@@ -72,27 +72,26 @@ class SimpleYamapCircleView(context: Context) : View(context) {
     }
   }
 
-
   fun updateCircle() {
     val mapView = parentMapView ?: return
     val mapObjects = mapView.getMapObjects()
     val currentCenter = center
     val currentRadius = radius
-
-    if (mapObject == null) {
-
-      if (currentRadius != null && currentCenter != null) {
-        val circle = YandexCircle(currentCenter, currentRadius)
-        mapObject = mapObjects.addCircle(circle)
-      } else {
-        return
-      }
+    if (currentCenter == null || currentRadius == null) {
+      throw IllegalArgumentException("Circle center and radius cannot be null.")
     }
 
+    val circleGeom = YandexCircle(currentCenter, currentRadius)
+    if (mapObject == null) {
+      mapObject = mapObjects.addCircle(circleGeom)
+    } else {
+      updateCircleGeom(circleGeom)
+    }
+    updateCircleStyle()
+  }
+
+  fun updateCircleStyle() {
     mapObject?.let { existingObject ->
-      if (currentRadius != null && currentCenter != null) {
-        existingObject.geometry = YandexCircle(currentCenter, currentRadius)
-      }
       strokeColor?.let { color ->
         existingObject.strokeColor = color
       }
@@ -101,6 +100,13 @@ class SimpleYamapCircleView(context: Context) : View(context) {
         existingObject.fillColor = color
       }
       existingObject.zIndex = zIndexV
+    }
+  }
+
+
+  fun updateCircleGeom(geometry: YandexCircle) {
+    mapObject?.let { existingObject ->
+      existingObject.geometry = geometry
     }
   }
 }
