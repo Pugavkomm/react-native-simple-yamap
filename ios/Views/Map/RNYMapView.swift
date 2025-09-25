@@ -86,6 +86,22 @@ public class RNYMapView: YMKMapView, YMKMapCameraListener{
     }
   }
   
+  
+  //Circles
+  // Add circle to map
+  @objc public func addCircleChild(_ circleView: RNYMapCircle) {
+    circleView.parentMapView = self
+    circleView.updateCircle() // Draw yourself
+  }
+  
+  // Remove circle
+  @objc public func removeCircleChild(_ circleView: RNYMapCircle) {
+    if let mapObject = circleView.mapObject {
+      mapObjects.remove(with: mapObject)
+      circleView.mapObject = nil
+    }
+  }
+  
   // Markers
   // Add marker to map
   @objc public func addMarkerChild(_ markerView: RNYMapMarker) {

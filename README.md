@@ -16,7 +16,6 @@ _Demo example_
 
 
 <!-- TOC -->
-
 * [react-native-simple-yamap](#react-native-simple-yamap)
   * [Installation](#installation)
   * [Abstract](#abstract)
@@ -32,6 +31,9 @@ _Demo example_
     * [1.3 Polygon (SimplePolygon)](#13-polygon-simplepolygon)
       * [1.3.1 Example](#131-example)
       * [1.3.2 Props](#132-props)
+    * [1.4 Circle (SimpleCircle)](#14-circle-simplecircle)
+      * [1.4.1  Example](#141--example)
+      * [1.4.2 Props](#142-props)
   * [2 Types](#2-types)
     * [2.1 Point](#21-point)
       * [2.1.1 Interface](#211-interface)
@@ -40,17 +42,23 @@ _Demo example_
       * [2.2.1 Interface](#221-interface)
       * [2.2.2 Fields](#222-fields)
     * [2.3 CameraPositionEvent](#23-camerapositionevent)
+      * [2.3.1 Interface](#231-interface)
+      * [2.3.2 Fields](#232-fields)
     * [2.4 iconAnchor](#24-iconanchor)
+    * [2.4.1 Interface](#241-interface)
+      * [2.4.2 Fields](#242-fields)
     * [2.5 MarkerText](#25-markertext)
-  * [3. Instructions](#3-instructions)
-    * [3.1 Simple example](#31-simple-example)
-    * [3.2 IOS Configuration](#32-ios-configuration)
-    * [3.3 Android configuration](#33-android-configuration)
+      * [2.5.1 Fields](#251-fields)
+  * [3 Utils](#3-utils)
+    * [3.1 simpleColorConverter](#31-simplecolorconverter)
+  * [4 Instructions](#4-instructions)
+    * [4.1 Simple example](#41-simple-example)
+    * [4.2 IOS Configuration](#42-ios-configuration)
+    * [4.3 Android configuration](#43-android-configuration)
   * [Dependencies](#dependencies)
   * [Contributing](#contributing)
   * [License](#license)
   * [TODO](#todo)
-
 <!-- TOC -->
 
 ## Abstract
@@ -204,6 +212,77 @@ _Example of use:_
 | strokeColor   | 'number                  | No           | Color in integer format                                                                                                             |
 | strokeWidth   | 'number                  | No           | Width of stroke. By default 1. If 0 - without stroke                                                                                |
 
+### 1.4 Circle (SimpleCircle)
+
+**SimpleCircle**. Circle on the map with color fill and border.
+
+![demo_circles.gif](docs/images/demo/demo_circles.gif)
+
+#### 1.4.1  Example
+
+```tsx
+import SimpleYamap from 'react-native-simple-yamap';
+import { useEffect, useState } from 'react';
+
+const MAX_RADIUS = 2000000;
+const MIN_RADIUS = 100000;
+
+const colors = [
+  SimpleYamap.color('rgba(100, 0, 0, 0.2)'),
+  SimpleYamap.color('rgba(0, 255, 0, 0.2)'),
+  SimpleYamap.color('rgba(0, 0, 255, 0.2)'),
+  SimpleYamap.color('rgba(100, 0, 255, 0.2)'),
+];
+
+const getColor = (): number => {
+  return colors[Math.floor(Math.random() * colors.length)]!;
+};
+
+const HeartBeatCircle: React.FC = () => {
+  const [color, setColor] = useState<number>(getColor());
+  const [radius, setRadius] = useState<number>(MAX_RADIUS);
+
+  const changeRadius = () => {
+    const newRadius = Math.random() * (MAX_RADIUS - MIN_RADIUS) + MIN_RADIUS;
+    setRadius(newRadius);
+    setColor(getColor());
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      changeRadius();
+    }, Math.random() * 10000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  return (
+    <SimpleYamap.Circle
+      id={'circle-1'}
+      center={{ lon: 10, lat: 25 }}
+      radius={radius}
+      fillColor={color}
+      strokeColor={SimpleYamap.color('rgba(255, 0, 100, 0.8)')}
+      strokeWidth={1}
+      zIndex={1000}
+    />
+  );
+};
+
+export default HeartBeatCircle;
+
+```
+
+#### 1.4.2 Props
+
+| **Prop name** | **Type**             | **Required** | **description**                                                                                                                     |
+|---------------|----------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| id            | `string`             | Yes          | Unique identifier. Currently not used, but it's recommended to set a unique value, <br/> as its active use is planned in the future |
+| center        | [`Point`](#21-point) | Yes          | Center of circle                                                                                                                    |
+| radius        | 'number'             | Yes          | Circle radius                                                                                                                       |
+| fillColor     | 'number              | No           | Color in integer format                                                                                                             |
+| strokeColor   | 'number              | No           | Color in integer format                                                                                                             |
+| strokeWidth   | 'number              | No           | Width of stroke. By default 0. If 0 - without stroke                                                                                |
+
 ## 2 Types
 
 ### 2.1 Point
@@ -254,7 +333,7 @@ export interface CameraPosition {
 
 ### 2.3 CameraPositionEvent
 
-**Interface**
+#### 2.3.1 Interface
 
 ```ts
 export interface CameraPositionEvent {
@@ -267,7 +346,7 @@ export interface CameraPositionEvent {
 }
 ```
 
-**Fields**
+#### 2.3.2 Fields
 
 | **Field name** | **Type**             | **Required** | **Description**                                                             |
 |----------------|----------------------|--------------|-----------------------------------------------------------------------------|
@@ -281,7 +360,7 @@ export interface CameraPositionEvent {
 
 ### 2.4 iconAnchor
 
-**Interface**
+### 2.4.1 Interface
 
 ```ts
 export interface IconAnchor {
@@ -290,7 +369,7 @@ export interface IconAnchor {
 }
 ```
 
-**Fields**
+#### 2.4.2 Fields
 
 | **Field name** | **Type** | **Required** | **Description**                                                                                                                                                   |
 |----------------|----------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -299,7 +378,7 @@ export interface IconAnchor {
 
 ### 2.5 MarkerText
 
-**Fields**
+#### 2.5.1 Fields
 
 | **Field name** | **Type** | **Required** | **Description** |
 |----------------|----------|--------------|-----------------|
@@ -311,14 +390,39 @@ export interface MarkerText {
 }
 ```
 
-## 3. Instructions
+## 3 Utils
 
-### 3.1 Simple example
+### 3.1 simpleColorConverter
+
+Color is assumed to be transmitted using an int value. To simplify definition, a utility function was developed
+(`simpleColorConverter`).
+
+The goal was to retain the ability to specify numeric values, as in the original SDK, but also to allow for more
+convenient values like `red` or `rgba(255, 0, 0, 0.5)`.
+
+There are two possible ways for use. The first one:
+
+```ts
+import { simpleColorConverter } from 'react-native-simple-yamap';
+const colorRed = simpleColorConverter('red');
+const colorRed80 = simpleColorConverter('rgba(255, 0, 0, 0.8)');
+```
+
+The second one:
+
+```ts
+import SimpleYamap from 'react-native-simple-yamap';
+const colorRed = SimpleYamap.color('red');
+const colorRed80 = SimpleYamap.color('rgba(255, 0, 0, 0.8)');
+```
+
+## 4 Instructions
+
+### 4.1 Simple example
 
 see [App.tsx](./example/src/App.tsx)
 
-
-### 3.2 IOS Configuration
+### 4.2 IOS Configuration
 
 For ios you need update `AppDelegate.swift`. Add the follow lines:
 
@@ -392,7 +496,7 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
 
 ```
 
-### 3.3 Android configuration
+### 4.3 Android configuration
 
 For android, you need update `MainApplication.kt`. Add the follow lines:
 

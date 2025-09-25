@@ -14,6 +14,7 @@
 #import "SimpleYamapPolygonView.h"
 #import "SimpleYamapView.h"
 #import "SimpleYamapMarkerView.h"
+#import "SimpleYamapCircleView.h"
 #import "SimpleYamap-Swift.h"
 #import <folly/dynamic.h>
 #import <jsi/jsi.h>
@@ -141,6 +142,11 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
     RNYMapMarker *marker = [markerView getView];
     [_view addMarkerChild:marker];
     return;
+  } else if ([childComponentView isKindOfClass:[SimpleYamapCircleView class]]) {
+    SimpleYamapCircleView *circleView = (SimpleYamapCircleView *)childComponentView;
+    RNYMapCircle *circle = [circleView getView];
+    [_view addCircleChild:circle];
+    return;
   }
   
   [super mountChildComponentView:childComponentView index:index];
@@ -157,6 +163,11 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
     SimpleYamapMarkerView *markerView = (SimpleYamapMarkerView *)childComponentView;
     RNYMapMarker *marker = [markerView getView];
     [_view removeMarkerChild:marker];
+    return;
+  } else if ([childComponentView isKindOfClass:[SimpleYamapCircleView class]]) {
+    SimpleYamapCircleView  *circleView = (SimpleYamapCircleView *)childComponentView;
+    RNYMapCircle *circle = [circleView getView];
+    [_view removeCircleChild:circle];
     return;
   }
   

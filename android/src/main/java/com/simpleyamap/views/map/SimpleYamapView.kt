@@ -8,6 +8,7 @@ import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.events.Event
+import com.simpleyamap.views.circle.SimpleYamapCircleView
 import com.simpleyamap.views.marker.SimpleYamapMarkerView
 import com.simpleyamap.views.polygon.SimpleYamapPolygonView
 import com.yandex.mapkit.Animation
@@ -121,6 +122,17 @@ class SimpleYamapView(context: Context) : MapView(context), CameraListener {
     markerView.mapObject?.let {
       mapObjects.remove(it)
       markerView.mapObject = null
+    }
+  }
+
+  fun addCircleChild(circleView: SimpleYamapCircleView) {
+    circleView.updateCircle()
+  }
+
+  fun removeCircleChild(circleView: SimpleYamapCircleView) {
+    circleView.mapObject?.let {
+      mapObjects.remove(it)
+      circleView.mapObject = null
     }
   }
 

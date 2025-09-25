@@ -51,16 +51,13 @@ public class RNYMapMarker: UIView, YMKMapObjectTapListener {
     super.didMoveToSuperview()
     if let mapView = self.superview as? RNYMapView {
       self.parentMapView = mapView
-      mapView.addMarkerChild(self)
     } else if self.superview == nil {
       // TODO: Check this logic. Dublicate logic. Like polygon
-      parentMapView?.removeMarkerChild(self)
       self.parentMapView = nil
     }
   }
   
   override public func removeFromSuperview() {
-    parentMapView?.removeMarkerChild(self)
     super.removeFromSuperview()
   }
   
