@@ -16,7 +16,6 @@ _Demo example_
 
 
 <!-- TOC -->
-
 * [react-native-simple-yamap](#react-native-simple-yamap)
   * [Installation](#installation)
   * [Abstract](#abstract)
@@ -35,6 +34,7 @@ _Demo example_
     * [1.4 Circle (SimpleCircle)](#14-circle-simplecircle)
       * [1.4.1  Example](#141--example)
       * [1.4.2 Props](#142-props)
+      * [1.2.3 Methods](#123-methods-1)
   * [2 Types](#2-types)
     * [2.1 Point](#21-point)
       * [2.1.1 Interface](#211-interface)
@@ -60,7 +60,6 @@ _Demo example_
   * [Contributing](#contributing)
   * [License](#license)
   * [TODO](#todo)
-
 <!-- TOC -->
 
 ## Abstract
