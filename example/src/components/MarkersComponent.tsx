@@ -76,13 +76,13 @@ const MarkersComponent: React.FC = () => {
     <>
       <SimpleYamap.Marker
         id={'marker-4'}
-        point={{ lon: 74, lat: 40 }}
+        position={{ lon: 74, lat: 40 }}
         text={{ text: 'Only text marker' }}
         iconScale={iconScaleService(1)}
       />
       <SimpleYamap.Marker
         id={'marker-z-index-20'}
-        point={{ lon: 50, lat: 40 }}
+        position={{ lon: 50, lat: 40 }}
         text={{ text: 'zIndex=20' }}
         zIndex={20}
         iconScale={iconScaleService(2)}
@@ -90,7 +90,7 @@ const MarkersComponent: React.FC = () => {
       />
       <SimpleYamap.Marker
         id={'marker-z-index-10'}
-        point={{ lon: 58, lat: 38 }}
+        position={{ lon: 58, lat: 38 }}
         text={{ text: 'zIndex=10' }}
         zIndex={10}
         iconScale={iconScaleService(2)}
@@ -98,7 +98,7 @@ const MarkersComponent: React.FC = () => {
       />
       <SimpleYamap.Marker
         id={'marker-4'}
-        point={{ lon: 80, lat: 30 }}
+        position={{ lon: 80, lat: 30 }}
         text={{ text: 'Rotated marker' }}
         icon={MarkerYellowDirection}
         iconScale={iconScaleService(1)}
@@ -111,7 +111,7 @@ const MarkersComponent: React.FC = () => {
       />
       <SimpleYamap.Marker
         id={'marker-with-animation'}
-        point={{ lon: 55, lat: 52 }}
+        position={{ lon: 55, lat: 52 }}
         ref={animatedMarkerRef}
         text={{ text: 'Animated marker' }}
         icon={MarkerGreenDirection}

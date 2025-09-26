@@ -178,7 +178,7 @@ export function App() {
         ref={mapRef}
         style={styles.mapBox}
         nightMode={nightMode}
-        cameraPosition={initialCameraPosition}
+        position={initialCameraPosition}
       >
         <>
           {Array.from({ length: 10 }).map((_, index) => (
