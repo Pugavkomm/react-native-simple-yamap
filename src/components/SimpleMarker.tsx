@@ -18,7 +18,7 @@ export interface IconAnchor {
 
 export interface SimpleMarkerProps {
   id: string;
-  point: Point;
+  position: Point;
   text?: MarkerText;
   icon?: ImageSourcePropType;
   iconScale?: number;
@@ -29,7 +29,7 @@ export interface SimpleMarkerProps {
 }
 
 export interface YamapMarkerRef {
-  animatedMove(point: Point, durationInSeconds: number): void;
+  animatedMove(position: Point, durationInSeconds: number): void;
   animatedRotate(angle: number, durationInSeconds: number): void;
 }
 const SimpleMarkerRender: React.ForwardRefRenderFunction<
@@ -50,7 +50,7 @@ const SimpleMarkerRender: React.ForwardRefRenderFunction<
   }, [props.icon]);
   const componentProps: NativeProps = {
     id: props.id,
-    point: props.point,
+    point: props.position,
     text: props.text,
     iconScale: props.iconScale,
     iconRotated: props.iconRotated === undefined ? false : props.iconRotated,
@@ -61,12 +61,12 @@ const SimpleMarkerRender: React.ForwardRefRenderFunction<
 
   // Handlers
   useImperativeHandle(ref, () => ({
-    animatedMove(point: Point, durationInSeconds: number) {
+    animatedMove(position: Point, durationInSeconds: number) {
       if (nativeRef.current) {
         Commands.animatedMove(
           nativeRef.current,
-          point.lon,
-          point.lat,
+          position.lon,
+          position.lat,
           durationInSeconds
         );
       }

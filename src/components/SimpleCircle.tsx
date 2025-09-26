@@ -6,7 +6,7 @@ import { forwardRef, useImperativeHandle, useRef } from 'react';
 
 export interface SimpleCircleProps {
   id: string;
-  center: Point;
+  position: Point;
   radius: number;
   fillColor?: number;
   strokeColor?: number;
@@ -15,7 +15,11 @@ export interface SimpleCircleProps {
 }
 
 export interface YamapCircleRef {
-  animatedMove(point: Point, durationInSeconds: number, radius: number): void;
+  animatedMove(
+    position: Point,
+    durationInSeconds: number,
+    radius: number
+  ): void;
 }
 
 const SimpleCircleRender: React.ForwardRefRenderFunction<
@@ -28,12 +32,12 @@ const SimpleCircleRender: React.ForwardRefRenderFunction<
     );
 
   useImperativeHandle(ref, () => ({
-    animatedMove(point: Point, durationInSeconds: number, radius?: number) {
+    animatedMove(position: Point, durationInSeconds: number, radius?: number) {
       if (nativeRef.current) {
         Commands.animatedMove(
           nativeRef.current,
-          point.lon,
-          point.lat,
+          position.lon,
+          position.lat,
           durationInSeconds,
           radius
         );
@@ -44,7 +48,7 @@ const SimpleCircleRender: React.ForwardRefRenderFunction<
   return (
     <SimpleYamapCircleViewNativeComponent
       id={props.id}
-      center={props.center}
+      center={props.position}
       radius={props.radius}
       fillColor={props.fillColor}
       strokeColor={props.strokeColor}

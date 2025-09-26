@@ -121,7 +121,7 @@ _Example of use:_
 ```tsx
 <SimpleYamap.Marker
   id={'marker-with-animation'}
-  point={{ lon: 55, lat: 52 }}
+  position={{ lon: 55, lat: 52 }}
   ref={animatedMarkerRef}
   text={{ text: 'Animated marker' }}
   icon={MarkerGreenDirection}
@@ -136,7 +136,7 @@ _Example of use:_
 | **Prop name** | **Type**                       | **Required** | **description**                                                                                                                     |
 |---------------|--------------------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------|
 | id            | `string`                       | Yes          | Unique identifier. Currently not used, but it's recommended to set a unique value, <br/> as its active use is planned in the future |
-| point         | [`Point`](#21-Point)           | Yes          | Point on the map                                                                                                                    |
+| position      | [`Point`](#21-Point)           | Yes          | Point on the map                                                                                                                    |
 | icon          | `ImageSourcePropType`          | No           | Marker icon                                                                                                                         |
 | text          | [`MarkerText`](#25-markertext) | No           | Marker text                                                                                                                         |
 | iconScale     | `number`                       | No           | Scale factor of marker.                                                                                                             |
@@ -154,14 +154,14 @@ You can use method for a marker using its `YamapMarkerRef` reference. See the ta
 
 ```
 export interface YamapMarkerRef {
-  animatedMove(point: Point, durationInSeconds: number): void;
+  animatedMove(position: Point, durationInSeconds: number): void;
   animatedRotate(angle: number, durationInSeconds: number): void;
 }
 ```
 
 | **Method name** | arguments                                                                                                                                                                                                                                                                                                 | **description**                          |
 |-----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|
-| animatedMove    | <table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>point</td><td>[`Point`](#21-point) </td><td>New marker position</td></tr><tr><td>durationInSeconds</td><td>`number`</td><td>Animation duration in seconds</td></tr></tbody></table>                           | Set center of the map to camera position |
+| animatedMove    | <table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>position</td><td>[`Point`](#21-point) </td><td>New marker position</td></tr><tr><td>durationInSeconds</td><td>`number`</td><td>Animation duration in seconds</td></tr></tbody></table>                        | Set center of the map to camera position |
 | animatedRotate  | <table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>angle</td><td>`number`</td><td>New marker rotation. It works only with `iconRotated=true`</td></tr><tr><td>durationInSeconds</td><td>`number`</td><td>Animation duration in seconds</td></tr></tbody></table> | Set new marker direction                 |
 
 ### 1.3 Polygon (SimplePolygon)
@@ -259,7 +259,7 @@ const HeartBeatCircle: React.FC = () => {
   return (
     <SimpleYamap.Circle
       id={'circle-1'}
-      center={{ lon: 10, lat: 25 }}
+      position={{ lon: 10, lat: 25 }}
       radius={radius}
       fillColor={color}
       strokeColor={SimpleYamap.color('rgba(255, 0, 100, 0.8)')}
@@ -278,7 +278,7 @@ export default HeartBeatCircle;
 | **Prop name** | **Type**             | **Required** | **description**                                                                                                                     |
 |---------------|----------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------|
 | id            | `string`             | Yes          | Unique identifier. Currently not used, but it's recommended to set a unique value, <br/> as its active use is planned in the future |
-| center        | [`Point`](#21-point) | Yes          | Center of circle                                                                                                                    |
+| position      | [`Point`](#21-point) | Yes          | Center of circle                                                                                                                    |
 | radius        | 'number'             | Yes          | Circle radius                                                                                                                       |
 | fillColor     | 'number              | No           | Color in integer format                                                                                                             |
 | strokeColor   | 'number              | No           | Color in integer format                                                                                                             |
@@ -290,18 +290,18 @@ You can use method for a marker using its `YamapCircleRef` reference. See the ta
 
 ```ts
 export interface YamapCircleRef {
-  animatedMove(point: Point, durationInSeconds: number, radius: number): void;
+  animatedMove(position: Point, durationInSeconds: number, radius: number): void;
 }
 ```
 
-| **Method name** | arguments                                                                                                                                                                                                                                                                                                                                     | **description**                          |
-|-----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|
-| animatedMove    | <table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>point</td><td>[`Point`](#21-point) </td><td>New circle position</td></tr><tr><td>durationInSeconds</td><td>`number`</td><td>Animation duration in seconds</td></tr><tr><td>radius<td>`number`</td><td>New circle radius</td></tr></tbody></table> | Set center of the map to camera position |
-
+| **Method name** | arguments                                                                                                                                                                                                                                                                                                                                        | **description**                          |
+|-----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|
+| animatedMove    | <table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>position</td><td>[`Point`](#21-point) </td><td>New circle position</td></tr><tr><td>durationInSeconds</td><td>`number`</td><td>Animation duration in seconds</td></tr><tr><td>radius<td>`number`</td><td>New circle radius</td></tr></tbody></table> | Set center of the map to camera position |
 
 _animatedMove demo_
 
 ![demo_circles_animatedMove.gif](docs/images/demo/demo_circles_animatedMove.gif)
+
 ## 2 Types
 
 ### 2.1 Point
@@ -332,7 +332,7 @@ Map camera position.
 
 ```ts
 export interface CameraPosition {
-  point: Point;
+  position: Point;
   zoom: number;
   duration: number;
   azimuth?: number;
@@ -344,7 +344,7 @@ export interface CameraPosition {
 
 | **Field name** | **Type**             | **Required** | **Description**                                                                                          |
 |----------------|----------------------|--------------|----------------------------------------------------------------------------------------------------------|
-| point          | [`Point`](#21-Point) | Yes          | Point on the map                                                                                         |
+| position       | [`Point`](#21-Point) | Yes          | Point on the map                                                                                         |
 | zoom           | `number`             | Yes          | Map camera zoom                                                                                          |
 | duration       | `number`             | Yes          | Change camera position with duration. The value is specified in seconds. The value 0 = without animation |
 | azimuth        | `number`             | No           | Azimuth                                                                                                  |
@@ -356,7 +356,7 @@ export interface CameraPosition {
 
 ```ts
 export interface CameraPositionEvent {
-  point: Point;
+  position: Point;
   zoom: number;
   tilt: number;
   azimuth: number;
@@ -369,7 +369,7 @@ export interface CameraPositionEvent {
 
 | **Field name** | **Type**             | **Required** | **Description**                                                             |
 |----------------|----------------------|--------------|-----------------------------------------------------------------------------|
-| point          | [`Point`](#21-point) | Yes          | Point on the map                                                            |
+| position       | [`Point`](#21-point) | Yes          | Point on the map                                                            |
 | zoom           | `number`             | Yes          | Map camera zoom                                                             |
 | duration       | `number`             | Yes          | Change camera position with duration. The value is specified in seconds     |
 | azimuth        | `number`             | Yes          | Azimuth                                                                     |
@@ -592,6 +592,7 @@ Made with [create-react-native-library](https://github.com/callstack/react-nativ
 ## TODO
 
 - [ ] Marker is visible prop
+- [ ] Animated markers, circles etc. with props
 - [ ] zIndex for polygons
 - [ ] Polygon interactions
 - [ ] Polyline
@@ -611,3 +612,4 @@ Made with [create-react-native-library](https://github.com/callstack/react-nativ
 - [ ] Lite or full version sdk switcher
 - [x] ~~Full documentation~~
 - [ ] Return marker id with tap event
+- [ ] Refactor native props handling with separated updates

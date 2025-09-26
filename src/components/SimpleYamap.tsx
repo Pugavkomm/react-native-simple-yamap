@@ -17,7 +17,7 @@ import { type SimpleMarkerProps } from './SimpleMarker';
 import { type SimplePolygonProps } from './SimplePolygon';
 
 export interface YamapProps {
-  cameraPosition?: CameraPosition;
+  position?: CameraPosition;
   children?:
     | ReactElement<SimpleMarkerProps | SimplePolygonProps>
     | ReactElement<SimpleMarkerProps | SimplePolygonProps>[];
@@ -31,7 +31,7 @@ export type SimpleYamapProps = YamapProps & {
 };
 
 export interface YamapRef {
-  setCenter(center: CameraPosition): void;
+  setCenter(position: CameraPosition): void;
 }
 const SimpleYamapRender: React.ForwardRefRenderFunction<
   YamapRef,
@@ -41,16 +41,16 @@ const SimpleYamapRender: React.ForwardRefRenderFunction<
     useRef<React.ComponentRef<typeof SimpleYamapViewNativeComponent>>(null);
 
   useImperativeHandle(ref, () => ({
-    setCenter(center: CameraPosition) {
+    setCenter(position: CameraPosition) {
       if (nativeRef.current) {
         Commands.setCenter(
           nativeRef.current,
-          center.point.lon,
-          center.point.lat,
-          center.zoom,
-          center.duration,
-          center.azimuth,
-          center.tilt
+          position.point.lon,
+          position.point.lat,
+          position.zoom,
+          position.duration,
+          position.azimuth,
+          position.tilt
         );
       }
     },
@@ -97,13 +97,13 @@ const SimpleYamapRender: React.ForwardRefRenderFunction<
         }
       }}
       cameraPosition={
-        props.cameraPosition && {
-          lon: props.cameraPosition.point.lon,
-          lat: props.cameraPosition.point.lat,
-          zoom: props.cameraPosition.zoom,
-          azimuth: props.cameraPosition.azimuth,
-          tilt: props.cameraPosition.tilt,
-          duration: props.cameraPosition.duration || 0.5,
+        props.position && {
+          lon: props.position.point.lon,
+          lat: props.position.point.lat,
+          zoom: props.position.zoom,
+          azimuth: props.position.azimuth,
+          tilt: props.position.tilt,
+          duration: props.position.duration || 0.5,
         }
       }
     >

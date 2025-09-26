@@ -44,7 +44,7 @@ const HeartBeatCircle: React.FC = () => {
   return (
     <SimpleYamap.Circle
       id={'circle-1'}
-      center={{ lon: 10, lat: 25 }}
+      position={{ lon: 10, lat: 25 }}
       radius={100000}
       fillColor={color}
       strokeColor={SimpleYamap.color('rgba(255, 0, 100, 0.8)')}
