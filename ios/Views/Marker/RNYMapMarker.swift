@@ -14,35 +14,35 @@ public class RNYMapMarker: UIView, YMKMapObjectTapListener {
   @objc public weak var parentMapView: RNYMapView?
   @objc public var onTap: (() -> Void)? // On press (tap)
   @objc public var id: NSString = ""
+  
   @objc public var point: NSDictionary = [:] {
-    didSet {updateMarker()}
+    didSet {updateMarkerGeometry()}
   }
   
   @objc public var text: String = "" {
-    didSet {updateMarker()}
+    didSet {updateMarkerText()}
   }
   
   @objc public var iconSource: NSString? = "" {
-    didSet {updateMarker()}
+    didSet {updateMarkerIcon()}
   }
   
   @objc public var iconScale: NSNumber = 1.0 {
-    didSet {updateMarker()}
+    didSet {updateMarkerIcon()}
   }
   
   @objc public var iconRotated: Bool = false {
-    didSet {updateMarker()}
+    didSet {updateMarkerIcon()}
   }
   
   @objc public var iconAnchor: NSValue = NSValue(cgPoint: CGPoint(x: 0.5, y:0.5)) {
-    didSet {updateMarker()}
+    didSet {updateMarkerIcon()}
   }
   
   @objc public var zIndexV: NSNumber = 0.0 {
-    didSet {updateMarker()}
+    didSet {updateMarkerIcon()}
   }
   
-  // TODO optimize perfromance after setup all
   
   // TODO: textStyle...
   
@@ -184,10 +184,20 @@ public class RNYMapMarker: UIView, YMKMapObjectTapListener {
     }
   }
   
-  private func updateIcon(marker: YMKPlacemarkMapObject) {
+  private func getMapObjects() -> YMKMapObjectCollection? {
+    guard let mapView = parentMapView else {return nil}
+    let mapObjects = mapView.getMapObjects()
+    return mapObjects
+    
+  }
+  
+  
+  private func updateMarkerIcon() {
     guard let source = self.iconSource as String?, !source.isEmpty else {
       return
     }
+    guard let mapObjects = getMapObjects() else {return}
+    let marker = getOrCreateMapObject(mapObjects: mapObjects)
     loadImage(from: source) { [weak self, weak marker] image in
       guard let self = self, let marker = marker, let finalImage = image else {
         print("Error: Failed to load image from source: \(source)")
@@ -204,26 +214,33 @@ public class RNYMapMarker: UIView, YMKMapObjectTapListener {
     }
   }
   
-    
-
-
   
-  public func updateMarker() {
-    guard let mapView = parentMapView else {return}
-    let mapObjects = mapView.getMapObjects()
+  private func updateMarkerGeometry() {
+    guard let mapObjects = getMapObjects() else {return}
     let marker = getOrCreateMapObject(mapObjects: mapObjects)
     let markerGeom = YMKPoint(
       latitude: self.point["lat"] as! Double,
       longitude: self.point["lon"] as! Double
     )
     marker.geometry = markerGeom
+  }
+  
+  private func updateMarkerText() {
+    guard let mapObjects = getMapObjects() else {return}
+    let marker = getOrCreateMapObject(mapObjects: mapObjects)
     if (!self.text.isEmpty){
       marker.setTextWithText(self.text)
     } else {
       marker.setTextWithText("")
     }
-    self.mapObject = marker
-    updateIcon(marker: marker)
+    
+  }
+  
+  
+  public func updateMarker() {
+    updateMarkerGeometry()
+    updateMarkerText()
+    updateMarkerIcon()
   }
   
   // Actions (events)

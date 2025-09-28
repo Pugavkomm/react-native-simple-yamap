@@ -40,43 +40,43 @@ class SimpleYamapMarkerView(context: Context) : View(context), MapObjectTapListe
   var point: YandexPoint? = null
     set(value) {
       field = value
-      updateMarker()
+      updateMarkerGeometry()
     }
 
   var textMarker: String? = null
     set(value) {
       field = value
-      updateMarker()
+      updateMarkerText()
     }
 
   var iconSource: String? = null
     set(value) {
       field = value
-      updateMarker()
+      updateMarkerIcon()
     }
 
   var iconScale: Double = 1.0
     set(value) {
       field = value
-      updateMarker()
+      updateMarkerIcon()
     }
 
   var iconRotated: Boolean = false
     set(value) {
       field = value
-      updateMarker()
+      updateMarkerIcon()
     }
 
   var iconAnchor: PointF = PointF(0.5f, 0.5f)
     set(value) {
       field = value
-      updateMarker()
+      updateMarkerIcon()
     }
 
   var zIndexValue: Float = 0f
     set(value) {
       field = value
-      updateMarker()
+      updateMarkerIcon()
     }
 
   //  Lifecycle
@@ -104,28 +104,36 @@ class SimpleYamapMarkerView(context: Context) : View(context), MapObjectTapListe
   }
 
 
-  fun updateMarker() {
-    val mapObjects = parentMapView?.getMapObjects() ?: return
-    val currentPoint = this.point ?: run {
-      mapObject?.let { mapObjects.remove(it) }
-      mapObject = null
-      return
+  private fun getOrCreateMapObject(): PlacemarkMapObject? {
+    if (mapObject != null) {
+      return mapObject
     }
-
-    if (mapObject == null) {
-      mapObject = mapObjects.addPlacemark().apply {
-        geometry = currentPoint
-        addTapListener(this@SimpleYamapMarkerView)
-      }
-    } else {
-      mapObject?.geometry = currentPoint
-    }
-    applyMarkerProps()
+    val mapObjects = parentMapView?.getMapObjects() ?: return null
+    this.mapObject = mapObjects.addPlacemark()
+    this.mapObject?.addTapListener(this@SimpleYamapMarkerView)
+    return mapObject
   }
 
-  private fun applyMarkerProps() {
+  private fun updateMarkerGeometry() {
+    val marker = getOrCreateMapObject() ?: return
+    if (point == null) {
+      return
+    }
+    marker.geometry = point!!
+  }
+
+  private fun updateMarkerText() {
+    mapObject?.setText(textMarker ?: "")
+  }
+
+  fun updateMarker() {
+    updateMarkerGeometry()
+    updateMarkerText()
+    updateMarkerIcon()
+  }
+
+  private fun updateMarkerIcon() {
     mapObject?.let { marker ->
-      marker.setText(textMarker ?: "")
       CoroutineScope(Dispatchers.IO).launch {
         val imageProvider = iconSource?.let { createImageProviderFromUri(it) }
         withContext(Dispatchers.Main) {
