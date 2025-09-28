@@ -78,7 +78,6 @@ const MarkersComponent: React.FC = () => {
         id={'marker-4'}
         position={{ lon: 74, lat: 40 }}
         text={{ text: 'Only text marker' }}
-        iconScale={iconScaleService(1)}
       />
       <SimpleYamap.Marker
         id={'marker-z-index-20'}
