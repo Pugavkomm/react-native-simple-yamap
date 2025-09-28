@@ -38,6 +38,7 @@ export interface NativeProps extends ViewProps {
   iconAnchor?: IconAnchor;
   zIndexV?: Double;
   onTap?: BubblingEventHandler<Readonly<{}>> | null;
+  transitionDurationPosition?: Float; // seconds
 }
 
 export interface NativeCommands {

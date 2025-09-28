@@ -43,6 +43,7 @@ public class RNYMapMarker: UIView, YMKMapObjectTapListener {
     didSet {updateMarkerIcon()}
   }
   
+  @objc public var transitionDurationPosition: Float = 0.0
   
   // TODO: textStyle...
   
@@ -218,11 +219,20 @@ public class RNYMapMarker: UIView, YMKMapObjectTapListener {
   private func updateMarkerGeometry() {
     guard let mapObjects = getMapObjects() else {return}
     let marker = getOrCreateMapObject(mapObjects: mapObjects)
-    let markerGeom = YMKPoint(
-      latitude: self.point["lat"] as! Double,
-      longitude: self.point["lon"] as! Double
-    )
-    marker.geometry = markerGeom
+    if (transitionDurationPosition > 0){
+      animatedMove(
+        pointDict: point,
+        duration: transitionDurationPosition
+      )
+      
+    } else {
+      let markerGeom = YMKPoint(
+        latitude: point["lat"] as! Double,
+        longitude: point["lon"] as! Double
+      )
+      marker.geometry = markerGeom
+      
+    }
   }
   
   private func updateMarkerText() {

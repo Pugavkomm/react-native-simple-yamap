@@ -118,6 +118,16 @@ const MarkersComponent: React.FC = () => {
         iconRotated
         iconAnchor={{ x: 0.5, y: 1.0 }}
       />
+      <SimpleYamap.Marker
+        id={'marker-with-animation-through-props'}
+        position={movableMarkerPosition}
+        text={{
+          text: `Animated with props:\n coordinates(${movableMarkerPosition.lon}, ${movableMarkerPosition.lat})\nduration: ${1}s`,
+        }}
+        transitionDuration={1000}
+        zIndex={100}
+        icon={MarkerYellow}
+      />
     </>
   );
 };

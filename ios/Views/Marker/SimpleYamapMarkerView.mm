@@ -78,6 +78,11 @@ using namespace facebook::react;
   _view.iconAnchor = [NSValue valueWithCGPoint:clampedAnchor];
   
   
+  if (oldViewProps.transitionDurationPosition != newViewProps.transitionDurationPosition){
+    _view.transitionDurationPosition = newViewProps.transitionDurationPosition;
+  }
+  
+  
   if (oldViewProps.iconRotated != newViewProps.iconRotated) {
     _view.iconRotated = newViewProps.iconRotated;
   }

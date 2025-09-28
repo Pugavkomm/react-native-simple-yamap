@@ -37,6 +37,8 @@ class SimpleYamapMarkerView(context: Context) : View(context), MapObjectTapListe
   //Props
   var markerId: String? = null
 
+  var transitionDurationPosition: Float = 0.0F
+
   var point: YandexPoint? = null
     set(value) {
       field = value
@@ -116,10 +118,19 @@ class SimpleYamapMarkerView(context: Context) : View(context), MapObjectTapListe
 
   private fun updateMarkerGeometry() {
     val marker = getOrCreateMapObject() ?: return
-    if (point == null) {
+    val currentPoint = point
+    if (currentPoint == null) {
       return
     }
-    marker.geometry = point!!
+    if (transitionDurationPosition > 0) {
+      animatedMove(
+        currentPoint.longitude,
+        currentPoint.latitude,
+        transitionDurationPosition.toDouble()
+      ) // TODO: refactor animatedMove with float
+    } else {
+      marker.geometry = currentPoint
+    }
   }
 
   private fun updateMarkerText() {

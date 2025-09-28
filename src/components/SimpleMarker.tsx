@@ -24,6 +24,7 @@ export interface SimpleMarkerProps {
   iconScale?: number;
   iconRotated?: boolean;
   iconAnchor?: IconAnchor;
+  transitionDuration?: number;
   zIndex?: number;
   onPress?: () => void;
 }
@@ -57,6 +58,8 @@ const SimpleMarkerRender: React.ForwardRefRenderFunction<
     iconAnchor: !props.iconAnchor ? { x: 0.5, y: 0.5 } : props.iconAnchor,
     zIndexV: props.zIndex,
     onTap: props.onPress,
+    transitionDurationPosition:
+      props.transitionDuration && props.transitionDuration / 1000,
   };
 
   // Handlers

@@ -188,6 +188,24 @@ export function App() {
 
         <MarkersComponent />
         <PolygonsComponent />
+        <SimpleYamap.Circle
+          id={'static-circle-red'}
+          position={{ lat: 20, lon: -100 }}
+          radius={4000000}
+          fillColor={SimpleYamap.color('rgba(255, 0, 0, 0.5)')}
+        />
+        <SimpleYamap.Circle
+          id={'static-circle-green'}
+          position={{ lat: 20, lon: -61.7 }}
+          radius={4000000}
+          fillColor={SimpleYamap.color('rgba(0, 255, 0, 0.5)')}
+        />
+        <SimpleYamap.Circle
+          id={'static-circle-blue'}
+          position={{ lat: 50.9, lon: -119.15 }}
+          radius={4000000}
+          fillColor={SimpleYamap.color('rgba(0, 0, 255, 0.5)')}
+        />
       </SimpleYamap>
     </SafeAreaView>
   );
