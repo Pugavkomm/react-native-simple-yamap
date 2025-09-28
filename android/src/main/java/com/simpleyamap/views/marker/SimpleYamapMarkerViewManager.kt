@@ -86,6 +86,13 @@ class SimpleYamapMarkerViewManager : SimpleViewManager<SimpleYamapMarkerView>(),
     view.zIndexValue = zIndexV.toFloat()
   }
 
+  override fun setTransitionDurationPosition(
+    view: SimpleYamapMarkerView?,
+    value: Float
+  ) {
+    view?.transitionDurationPosition = value
+  }
+
   override fun animatedMove(
     view: SimpleYamapMarkerView,
     lon: Double,

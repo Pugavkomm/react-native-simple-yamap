@@ -16,6 +16,7 @@ _Demo example_
 
 
 <!-- TOC -->
+
 * [react-native-simple-yamap](#react-native-simple-yamap)
   * [Installation](#installation)
   * [Abstract](#abstract)
@@ -60,6 +61,7 @@ _Demo example_
   * [Contributing](#contributing)
   * [License](#license)
   * [TODO](#todo)
+
 <!-- TOC -->
 
 ## Abstract
@@ -114,6 +116,16 @@ export interface YamapRef {
 **SimpleMarker**. A marker is a point object on the screen. It can be an image (icon) or text. It can also contain
 both text and an icon. If necessary, the marker can be moved with animation or rotated with animation.
 
+> You can use `transitionDuration` to specify the time it takes for the coordinates to change via props. If the
+> value if not specified, it defaults 0, meaning the change is instantaneous. Any negative value of
+> `transitionDuration` will be treated as 0. Changing the position in this case would be equivalent to using an
+> `animatedMove` through reference. The angle rotation can currently only be done through `animatedRotate`.
+
+> It's important to ensure that the marker's position is updated no more frequently than the animation duration, as
+> this can disrupt the animation process. This applies to position changes view `animatedMove` via props.
+
+
+
 #### 1.2.1 Example
 
 _Example of use:_
@@ -122,6 +134,7 @@ _Example of use:_
 <SimpleYamap.Marker
   id={'marker-with-animation'}
   position={{ lon: 55, lat: 52 }}
+  transitionDuration={1000}
   ref={animatedMarkerRef}
   text={{ text: 'Animated marker' }}
   icon={MarkerGreenDirection}
@@ -133,17 +146,18 @@ _Example of use:_
 
 #### 1.2.2 Props
 
-| **Prop name** | **Type**                       | **Required** | **description**                                                                                                                     |
-|---------------|--------------------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| id            | `string`                       | Yes          | Unique identifier. Currently not used, but it's recommended to set a unique value, <br/> as its active use is planned in the future |
-| position      | [`Point`](#21-Point)           | Yes          | Point on the map                                                                                                                    |
-| icon          | `ImageSourcePropType`          | No           | Marker icon                                                                                                                         |
-| text          | [`MarkerText`](#25-markertext) | No           | Marker text                                                                                                                         |
-| iconScale     | `number`                       | No           | Scale factor of marker.                                                                                                             |
-| iconRotated   | `boolean`                      | No           | if true - you can use animatedRotate                                                                                                |                                                                                               |
-| iconAnchor    | [`IconAnchor`](#24-iconanchor) | No           | Offsetting the icon relative to the scenter. This can be useful <br/>for rotating markers when the center of image is offset        |                                                                                               |
-| zIndex        | `number`                       | No           | The marker's height above the map. This can be used to position markers above each other                                            |
-| onPress       | `() => void`                   | No           | A function that is called when the marker is pressed or tapped by the user.                                                         |
+| **Prop name**      | **Type**                       | **Required** | **description**                                                                                                                     |
+|--------------------|--------------------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| id                 | `string`                       | Yes          | Unique identifier. Currently not used, but it's recommended to set a unique value, <br/> as its active use is planned in the future |
+| position           | [`Point`](#21-Point)           | Yes          | Point on the map                                                                                                                    |
+| transitionDuration | `number`                       | No           | Transition duration in ms                                                                                                           |
+| icon               | `ImageSourcePropType`          | No           | Marker icon                                                                                                                         |
+| text               | [`MarkerText`](#25-markertext) | No           | Marker text                                                                                                                         |
+| iconScale          | `number`                       | No           | Scale factor of marker.                                                                                                             |
+| iconRotated        | `boolean`                      | No           | if true - you can use animatedRotate                                                                                                |                                                                                               |
+| iconAnchor         | [`IconAnchor`](#24-iconanchor) | No           | Offsetting the icon relative to the scenter. This can be useful <br/>for rotating markers when the center of image is offset        |                                                                                               |
+| zIndex             | `number`                       | No           | The marker's height above the map. This can be used to position markers above each other                                            |
+| onPress            | `() => void`                   | No           | A function that is called when the marker is pressed or tapped by the user.                                                         |
 
 > Warning! In the release version, the marker size may be slightly larger than in debug mode. The result should be
 > verified during the build process.
