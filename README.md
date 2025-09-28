@@ -606,7 +606,7 @@ Made with [create-react-native-library](https://github.com/callstack/react-nativ
 ## TODO
 
 - [ ] Marker is visible prop
-- [ ] Animated markers, circles etc. with props
+- [ ] Animated ~~markers~~, circles etc. with props
 - [ ] zIndex for polygons
 - [ ] Polygon interactions
 - [ ] Polyline
@@ -621,9 +621,12 @@ Made with [create-react-native-library](https://github.com/callstack/react-nativ
   - [ ] getCurrentCameraPosition
 - [ ] Default marker icon
 - [ ] Fix android auto scale icons
-- [ ] Refactor native code from old examples
+- [x] ~~Refactor native code from old examples~~
 - [ ] Find routes
 - [ ] Lite or full version sdk switcher
 - [x] ~~Full documentation~~
 - [ ] Return marker id with tap event
 - [ ] Refactor native props handling with separated updates
+  - [x] ~~Markers~~
+  - [x] ~~Circles~~
+  - [ ] Polygons
