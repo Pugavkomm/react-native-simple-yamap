@@ -3,6 +3,8 @@ package com.simpleyamap.views.circle
 import android.animation.ValueAnimator
 import android.view.View
 import android.content.Context
+import android.graphics.Color
+import androidx.core.animation.doOnEnd
 import com.simpleyamap.views.animations.EaseInOutCosineInterpolator
 import com.simpleyamap.views.map.SimpleYamapView
 import com.yandex.mapkit.map.CircleMapObject
@@ -19,36 +21,36 @@ class SimpleYamapCircleView(context: Context) : View(context) {
   var center: YandexPoint? = null
     set(value) {
       field = value
-      updateCircle()
+      updateCircleGeom()
     }
 
   var radius: Float? = null
     set(value) {
       field = value
-      updateCircle()
+      updateCircleRadius()
     }
 
   var fillColor: Int? = null
     set(value) {
       field = value
-      updateCircle()
+      updateCircleFillColor()
     }
   var strokeColor: Int? = null
     set(value) {
       field = value
-      updateCircle()
+      updateCircleStrokeColor()
     }
 
   var strokeWidth: Float = 0.0f
     set(value) {
       field = value
-      updateCircle()
+      updateCircleStrokeWidth()
     }
 
   var zIndexV: Float = 0.0f
     set(value) {
       field = value
-      updateCircle()
+      updateCircleZIndex()
     }
 
   override fun onAttachedToWindow() {
@@ -74,34 +76,24 @@ class SimpleYamapCircleView(context: Context) : View(context) {
     }
   }
 
-  fun updateCircle() {
+  private fun getOrCreateMapObject() {
+    findParentMapView()
+    if (mapObject != null) {
+      return
+    }
     val mapView = parentMapView ?: return
     val mapObjects = mapView.getMapObjects()
     val currentCenter = center
     val currentRadius = radius
-    if (currentCenter == null || currentRadius == null) {
-      throw IllegalArgumentException("Circle center and radius cannot be null.")
-    }
-
-    val circleGeom = YandexCircle(currentCenter, currentRadius)
-    if (mapObject == null) {
-      mapObject = mapObjects.addCircle(circleGeom)
-    } else {
-      updateCircleGeom(circleGeom)
-    }
-    updateCircleStyle()
-  }
-
-  private fun updateRadius(radius: Float) {
-    mapObject?.let { existingObject ->
-      val center = existingObject.geometry.center
-      val radius = radius
-      existingObject.geometry = YandexCircle(center, radius)
+    if (currentCenter != null && currentRadius != null) {
+      val circleGeom = YandexCircle(currentCenter, currentRadius)
+      val mapObject = mapObjects.addCircle(circleGeom)
+      this.mapObject = mapObject
     }
   }
+
 
   fun animatedMove(lon: Double, lat: Double, duration: Float, radius: Float) {
-    updateRadius(radius)
     val circle = mapObject ?: return
     val endPosition = YandexPoint(lat, lon)
     val startPosition = circle.geometry.center
@@ -122,28 +114,79 @@ class SimpleYamapCircleView(context: Context) : View(context) {
       val progress = animation.animatedValue as Float
       val currentLat = startPosition.latitude + (deltaLat * progress)
       val currentLon = startPosition.longitude + (deltaLon * progress)
-      mapObject?.geometry = YandexCircle( YandexPoint(currentLat, currentLon), radius)
+      mapObject?.geometry = YandexCircle(YandexPoint(currentLat, currentLon), radius)
     }
     valueAnimator.start()
+    valueAnimator.doOnEnd {
+      this.radius = radius
+    }
   }
 
-  fun updateCircleStyle() {
+  private fun updateCircleFillColor() {
     mapObject?.let { existingObject ->
-      strokeColor?.let { color ->
-        existingObject.strokeColor = color
+      fillColor.let { color ->
+        if (color != null) {
+          existingObject.fillColor = color
+        } else {
+          existingObject.fillColor = Color.TRANSPARENT
+        }
       }
+    }
+  }
+
+  private fun updateCircleStrokeColor() {
+    mapObject?.let { existingObject ->
+      strokeColor.let { color ->
+        if (color != null) {
+          existingObject.strokeColor = color
+        } else {
+          existingObject.strokeColor = Color.TRANSPARENT
+        }
+      }
+    }
+  }
+
+  private fun updateCircleStrokeWidth() {
+    mapObject?.let { existingObject ->
       existingObject.strokeWidth = strokeWidth
-      fillColor?.let { color ->
-        existingObject.fillColor = color
-      }
+    }
+  }
+
+  private fun updateCircleZIndex() {
+    mapObject?.let { existingObject ->
       existingObject.zIndex = zIndexV
     }
   }
 
-
-  fun updateCircleGeom(geometry: YandexCircle) {
+  fun updateCircleGeom() {
+    val currentCenter = center
+    val currentRadius = radius
+    if (currentCenter == null || currentRadius == null) {
+      return
+    }
+    val geometry = YandexCircle(currentCenter, currentRadius)
     mapObject?.let { existingObject ->
       existingObject.geometry = geometry
     }
+  }
+
+  private fun updateCircleRadius() {
+    if (radius == null) {
+      return
+    }
+    mapObject?.let { existingObject ->
+      val center = existingObject.geometry.center
+      val radius = radius
+      existingObject.geometry = YandexCircle(center, radius!!)
+    }
+  }
+
+  fun updateCircle() {
+    getOrCreateMapObject()
+    updateCircleGeom()
+    updateCircleFillColor()
+    updateCircleStrokeColor()
+    updateCircleStrokeWidth()
+    updateCircleZIndex()
   }
 }

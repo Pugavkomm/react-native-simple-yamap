@@ -17,19 +17,19 @@ public class RNYMapCircle: UIView {
     didSet {updateCircle()}
   }
   @objc public var radius: Float = 1.0 {
-    didSet{updateCircle()}
+    didSet{updateRadius(radius: radius )}
   }
   @objc public var fillColor: NSNumber? {
-    didSet { updateCircle() }
+    didSet { updateCircleFillColor() }
   }
   @objc public var strokeColor: NSNumber? {
-    didSet { updateCircle() }
+    didSet { updateCircleStrokeColor() }
   }
   @objc public var strokeWidth: NSNumber? {
-    didSet { updateCircle() }
+    didSet { updateCircleStrokeWidth() }
   }
   @objc public var zIndexV: NSNumber? {
-    didSet { updateCircle()}
+    didSet { updateCircleZIndex()}
   }
   
   
@@ -47,12 +47,12 @@ public class RNYMapCircle: UIView {
     super.removeFromSuperview()
   }
   
-  private func getOrCreateMapObject(mapObjects: YMKMapObjectCollection) -> YMKCircleMapObject {
+  private func getOrCreateMapObject() -> YMKCircleMapObject? {
+    guard let mapView = parentMapView else {return nil}
+    let mapObjects = mapView.getMapObjects()
     if let existingObject = self.mapObject {
       return existingObject;
     } else {
-      
-      
       let newCircle = mapObjects.addCircle(
         with: YMKCircle()
       )
@@ -122,28 +122,57 @@ public class RNYMapCircle: UIView {
     }
   }
   
-  
-  // TODO: Optimize rerender!
-  public func updateCircle() {
-    guard let mapView = parentMapView else {return}
-    let mapObjects = mapView.getMapObjects()
+  private func updateCircleGeom() {
+    guard let circle = getOrCreateMapObject() else {return}
     let circleGeomCenter = YMKPoint(
       latitude: self
         .circleCenter["lat"] as! Double, longitude: self
         .circleCenter["lon"] as! Double
     )
     let circleGeom = YMKCircle(center: circleGeomCenter, radius: radius)
-    let circle = getOrCreateMapObject(mapObjects: mapObjects)
     circle.geometry = circleGeom
+  }
+  
+  private func updateCircleFillColor(){
+    guard let circle = getOrCreateMapObject() else {return}
+    if (fillColor == nil){
+      circle.fillColor = UIColor.clear
+      return
+    }
     if let colorValue = fillColor, let color = colorValue as? Int64 {
       circle.fillColor  = UIColorFromARGB(color)
+    }
+    
+  }
+  
+  private func updateCircleStrokeColor() {
+    guard let circle = getOrCreateMapObject() else {return}
+    if(strokeColor == nil) {
+      circle.strokeColor = UIColor.clear
+      return
     }
     if let colorValue = strokeColor, let color = colorValue as? Int64 {
       circle.strokeColor = UIColorFromARGB(color)
     }
-    circle.strokeWidth = strokeWidth?.floatValue ?? 1.0
-    self.mapObject = circle;
+  }
+  
+  private func updateCircleStrokeWidth() {
+    guard let circle = getOrCreateMapObject() else {return}
+    circle.strokeWidth = strokeWidth?.floatValue ?? 0.0
+  }
+  
+  private func updateCircleZIndex() {
+    guard let circle = getOrCreateMapObject() else {return}
     circle.zIndex = zIndexV?.floatValue ?? 0.0
+  }
+  
+  public func updateCircle() {
+    updateCircleGeom()
+    updateRadius(radius: radius)
+    updateCircleFillColor()
+    updateCircleStrokeColor()
+    updateCircleStrokeWidth()
+    updateCircleZIndex()
   }
 }
 
