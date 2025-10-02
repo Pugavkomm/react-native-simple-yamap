@@ -34,7 +34,7 @@ class MainApplication : Application(), ReactApplication {
 
   override fun onCreate() {
     super.onCreate()
-    MapKitFactory.setApiKey("")
+    MapKitFactory.setApiKey("b894843e-21c1-42f7-962a-98449712ff4c")
     MapKitFactory.setLocale("ru_RU")
     loadReactNative(this)
 

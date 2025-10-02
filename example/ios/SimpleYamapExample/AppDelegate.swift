@@ -8,10 +8,10 @@ import YandexMapsMobile
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
-
+  
   var reactNativeDelegate: ReactNativeDelegate?
   var reactNativeFactory: RCTReactNativeFactory?
-
+  
   func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
@@ -19,23 +19,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)
     delegate.dependencyProvider = RCTAppDependencyProvider()
-
+    
     reactNativeDelegate = delegate
     reactNativeFactory = factory
-
+    
     window = UIWindow(frame: UIScreen.main.bounds)
-
+    
     factory.startReactNative(
       withModuleName: "SimpleYamapExample",
       in: window,
       launchOptions: launchOptions
     )
-    YMKMapKit.setApiKey("")
+    YMKMapKit.setApiKey("b894843e-21c1-42f7-962a-98449712ff4c")
     YMKMapKit.setLocale("ru_RU")
     YMKMapKit.sharedInstance()
-
-
-
+    
+    
+    
     return true
   }
 }
@@ -44,7 +44,7 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
   override func sourceURL(for bridge: RCTBridge) -> URL? {
     self.bundleURL()
   }
-
+  
   override func bundleURL() -> URL? {
 #if DEBUG
     RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
