@@ -26,9 +26,6 @@ class SimpleYamapView(context: Context) : MapView(context), CameraListener {
 
   init {
     mapWindow.map.addCameraListener(this)
-    mapWindow.map.move(
-      CameraPosition(YandexPoint(55.751244, 37.618423), 10.0f, 0.0f, 0.0f)
-    )
   }
 
   override fun onCameraPositionChanged(

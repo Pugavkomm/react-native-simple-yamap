@@ -51,7 +51,6 @@ class SimpleYamapViewManager : ViewGroupManager<SimpleYamapView>(),
       val tilt = it.getDouble("tilt").toFloat()
       val azimuth = it.getDouble("azimuth").toFloat()
       val duration = it.getDouble("duration").toFloat()
-
       view.moveMap(lon, lat, zoom, duration, tilt, azimuth)
     }
   }
