@@ -19,9 +19,9 @@ import { MAP_Z_INDEX } from './const';
 const CAMERA_SPEED = 10;
 
 const initialCameraPosition: CameraPosition = {
-  point: { lon: 37.62, lat: 55.75 },
-  zoom: 3,
-  tilt: 100,
+  point: { lon: 100, lat: 55.75 },
+  zoom: 5,
+  tilt: 1,
   azimuth: 0,
   duration: 1,
 };

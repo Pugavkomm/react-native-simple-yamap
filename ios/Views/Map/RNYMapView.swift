@@ -20,8 +20,9 @@ public class RNYMapView: YMKMapView, YMKMapCameraListener{
   @objc public var onCameraPositionChange: CameraPositionCallback?
   @objc public var onCameraPositionChangeEnd: CameraPositionCallback?
   
+  // Props
   
-
+  
   private lazy var mapObjects = self.mapWindow.map.mapObjects
   private var propPolygons = [String: YMKPolygonMapObject]()
   
@@ -39,6 +40,8 @@ public class RNYMapView: YMKMapView, YMKMapCameraListener{
     super.init(frame: frame)
     setupMap()
   }
+  
+  
   
   
   // Set center
@@ -119,14 +122,6 @@ public class RNYMapView: YMKMapView, YMKMapCameraListener{
   
   private func setupMap() {
     self.mapWindow.map.addCameraListener(with: self)
-    self.mapWindow.map.move(
-      with: YMKCameraPosition(
-        target: YMKPoint(latitude: 55.751244, longitude: 37.618423),
-        zoom: 100,
-        azimuth: 0,
-        tilt: 0
-      )
-    )
   }
   
   public func onCameraPositionChanged(
