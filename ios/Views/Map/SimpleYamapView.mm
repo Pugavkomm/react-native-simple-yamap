@@ -185,7 +185,7 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
   double lat = newViewProps.cameraPosition.lat;
   
   // Camera
-  int zoom = newViewProps.cameraPosition.zoom;
+  float zoom = newViewProps.cameraPosition.zoom;
   float tilt = newViewProps.cameraPosition.tilt;
   float azimuth = newViewProps.cameraPosition.azimuth;
   
