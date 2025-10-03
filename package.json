@@ -1,6 +1,6 @@
 {
   "name": "react-native-simple-yamap",
-  "version": "0.0.1-rc.12",
+  "version": "0.0.1-rc.13",
   "description": "Yandex simple maps for react native",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
