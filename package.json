@@ -165,7 +165,8 @@
         "SimpleYamapView": "SimpleYamapView",
         "SimpleYamapPolygonView": "SimpleYamapPolygonView",
         "SimpleYamapMarkerView": "SimpleYamapMarkerView",
-        "SimpleYamapCircleView": "SimpleYamapCircleView"
+        "SimpleYamapCircleView": "SimpleYamapCircleView",
+        "SimpleYamapPolyLineView": "SimpleYamapPolyLineView"
       }
     }
   },

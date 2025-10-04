@@ -62,7 +62,7 @@ using namespace facebook::react;
   NSMutableDictionary *centerDict = [NSMutableDictionary new];
   centerDict[@"lon"] = @(center.lon);
   centerDict[@"lat"] = @(center.lat);
-  _view.circleCenter = centerDict;
+  _view.circleCenter = centerDict; // TODO: compare old and new centers
   if (oldViewProps.radius != newViewProps.radius){
     _view.radius = newViewProps.radius;
   }
