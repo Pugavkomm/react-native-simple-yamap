@@ -85,6 +85,13 @@ class SimpleYamapPolyLineViewManager : SimpleViewManager<SimpleYamapPolyLineView
     view?.outlineColor = color
   }
 
+  override fun setZIndexV(
+    view: SimpleYamapPolyLineView?,
+    zIndex: Float
+  ) {
+    view?.zIndexV = zIndex
+  }
+
   @ReactProp(name = "outlineWidth")
   override fun setOutlineWidth(view: SimpleYamapPolyLineView?, width: Float) {
     view?.outlineWidth = width

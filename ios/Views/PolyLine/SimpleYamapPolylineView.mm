@@ -63,6 +63,10 @@ using namespace facebook::react;
     _view.outlineWidth = @(newViewProps.outlineWidth);
   }
   
+  if(oldViewProps.zIndexV != newViewProps.zIndexV) {
+    _view.zIndexV = @(newViewProps.zIndexV);
+  }
+  
   bool pointsEqual = (oldViewProps.points.size() == newViewProps.points.size()) &&
                      std::equal(
                          oldViewProps.points.begin(),

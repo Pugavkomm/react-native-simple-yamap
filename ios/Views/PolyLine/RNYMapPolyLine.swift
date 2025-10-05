@@ -17,17 +17,20 @@ public class RNYMapPolyLine: UIView {
   var mapObject: YMKPolylineMapObject?
   
   @objc public var id: NSString = "" // Reserved
+  @objc public var zIndexV: NSNumber?{
+    didSet {updatePolyLineZIndex()}
+  }
   @objc public var strokeColor: NSNumber? {
-    didSet {updateStrokeColor()}
+    didSet {updatePolyLineStrokeColor()}
   }
   @objc public var outlineColor: NSNumber? {
-    didSet {updateOutlineColor()}
+    didSet {updatePolyLineOutlineColor()}
   }
   @objc public var strokeWidth: NSNumber?{
-    didSet {updateStrokeWidth()}
+    didSet {updatePolyLineStrokeWidth()}
   }
   @objc public var outlineWidth: NSNumber?{
-    didSet {updateOutlineWidth()}
+    didSet {updatePolyLineOutlineWidth()}
   }
   @objc public var points: [NSDictionary] = [] {
     didSet {updatePolyLineGeometry()}
@@ -93,7 +96,7 @@ public class RNYMapPolyLine: UIView {
   /**
    Update stroke width in unus from props
    */
-  private func updateStrokeWidth() {
+  private func updatePolyLineStrokeWidth() {
     guard let polyline = getOrCreateMapObject() else {return}
     let style = polyline.style
     if let width = strokeWidth, let w = width as? Float {
@@ -107,7 +110,7 @@ public class RNYMapPolyLine: UIView {
   /**
    Update outline width in units from props
    */
-  private func updateOutlineWidth() {
+  private func updatePolyLineOutlineWidth() {
     guard let polyline = getOrCreateMapObject() else {return}
     let style = polyline.style
     if let width = outlineWidth, let w = width as? Float {
@@ -120,9 +123,9 @@ public class RNYMapPolyLine: UIView {
   }
   
   /**
-  Update outline color from prop
+   Update outline color from prop
    */
-  private func updateOutlineColor() {
+  private func updatePolyLineOutlineColor() {
     guard let polyline = getOrCreateMapObject() else {return}
     let style = polyline.style
     if let colorValue = outlineColor, let color = colorValue as? Int64 {
@@ -133,7 +136,10 @@ public class RNYMapPolyLine: UIView {
     polyline.style = style
   }
   
-  private func updateStrokeColor() {
+  /**
+   Update stroke color from props
+   */
+  private func updatePolyLineStrokeColor() {
     guard let polyLine = getOrCreateMapObject() else {return}
     if let colorValue = strokeColor, let color = colorValue as? Int64 {
       polyLine.setStrokeColorWith(UIColorFromARGB(color))
@@ -143,14 +149,27 @@ public class RNYMapPolyLine: UIView {
   }
   
   /**
+   Update z index from props
+   */
+  private func updatePolyLineZIndex() {
+    guard let polyLine = getOrCreateMapObject() else {return}
+    if let zIndex = zIndexV, let zIdx = zIndex as? Float {
+      polyLine.zIndex = zIdx
+    }
+  }
+  
+  /**
    Full update poly line object
+   
+   This method can be used for intialization
    */
   @objc public func updatePolyLine(){
     updatePolyLineGeometry()
-    updateStrokeWidth()
-    updateStrokeColor()
-    updateOutlineWidth()
-    updateOutlineColor()
+    updatePolyLineStrokeWidth()
+    updatePolyLineStrokeColor()
+    updatePolyLineOutlineWidth()
+    updatePolyLineOutlineColor()
+    updatePolyLineZIndex()
   }
 }
 

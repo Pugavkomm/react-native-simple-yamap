@@ -9,10 +9,21 @@ export interface SimplePolyLineProps {
   outlineWidth?: number;
   strokeColor?: number;
   outlineColor?: number;
+  zIndex?: number;
 }
 
 const SimplePolyLine: React.FC<SimplePolyLineProps> = (props) => {
-  return <SimpleYamapPolyLineViewNativeComponent {...props} />;
+  return (
+    <SimpleYamapPolyLineViewNativeComponent
+      id={props.id}
+      points={props.points}
+      strokeWidth={props.strokeWidth}
+      strokeColor={props.strokeColor}
+      outlineWidth={props.outlineWidth}
+      outlineColor={props.outlineColor}
+      zIndexV={props.zIndex}
+    />
+  );
 };
 
 export default SimplePolyLine;

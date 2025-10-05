@@ -98,6 +98,7 @@ const MeanderComponent = () => {
         strokeColor={SimpleYamap.color('#278A47')}
         outlineWidth={5}
         outlineColor={SimpleYamap.color('#706AD9')}
+        zIndex={1}
       />
     </>
   );

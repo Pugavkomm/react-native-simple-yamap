@@ -26,6 +26,12 @@ class SimpleYamapPolyLineView(context: Context) : View(context) {
 
   var polyLineId: String? = null
 
+  var zIndexV: Float = 0.0f
+    set(value) {
+      field = value
+      updatePolyLineZIndex()
+    }
+
   var points: List<YandexPoint> = emptyList()
     set(value) {
       field = value
@@ -133,11 +139,20 @@ class SimpleYamapPolyLineView(context: Context) : View(context) {
     polyLine.style = style
   }
 
+  /**
+   * Update z index from props
+   */
+  fun updatePolyLineZIndex() {
+    val polyline = getOrCreateMapObject() ?: return
+    polyline.zIndex = zIndexV
+  }
+
   fun updatePolyLine() {
     updatePolyLineGeometry()
     updateStrokeColor()
     updateStrokeWidth()
     updateOutlineColor()
     updateOutlineWidth()
+    updatePolyLineZIndex()
   }
 }

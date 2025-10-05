@@ -17,6 +17,7 @@ export interface NativeProps extends ViewProps {
   outlineWidth?: Float;
   strokeColor?: Int32;
   outlineColor?: Int32;
+  zIndexV?: Float;
 }
 
 export default codegenNativeComponent<NativeProps>('SimpleYamapPolyLineView');
