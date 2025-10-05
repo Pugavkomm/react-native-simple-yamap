@@ -81,37 +81,56 @@ public class RNYMapPolyLine: UIView {
     }
   }
   
+  /**
+   Update geometry from points
+   */
   private func updatePolyLineGeometry() {
     guard let polyLine = getOrCreateMapObject() else {return}
     let polyLineGeometry = prepareGeometryFromProp()
     polyLine.geometry = polyLineGeometry
   }
   
+  /**
+   Update stroke width in unus from props
+   */
   private func updateStrokeWidth() {
     guard let polyline = getOrCreateMapObject() else {return}
+    let style = polyline.style
     if let width = strokeWidth, let w = width as? Float {
-      polyline.style.strokeWidth = w
+      style.strokeWidth = w
     } else {
-      polyline.style.strokeWidth = DEFAULT_POLYLINE_STROKE_WIDTH
+      style.strokeWidth = DEFAULT_POLYLINE_STROKE_WIDTH
     }
+    polyline.style = style
   }
   
+  /**
+   Update outline width in units from props
+   */
   private func updateOutlineWidth() {
     guard let polyline = getOrCreateMapObject() else {return}
+    let style = polyline.style
     if let width = outlineWidth, let w = width as? Float {
-      polyline.outlineWidth = w
+      style.outlineWidth = w
     } else {
-      polyline.outlineWidth = DEFAULT_POLYLINE_OUTLINE_WIDTH
+      style.outlineWidth = DEFAULT_POLYLINE_OUTLINE_WIDTH
     }
+    
+    polyline.style = style
   }
   
+  /**
+  Update outline color from prop
+   */
   private func updateOutlineColor() {
     guard let polyline = getOrCreateMapObject() else {return}
+    let style = polyline.style
     if let colorValue = outlineColor, let color = colorValue as? Int64 {
-      polyline.outlineColor = UIColorFromARGB(color)
+      style.outlineColor = UIColorFromARGB(color)
     } else {
-      polyline.outlineColor = DEFAULT_POLYLINE_COLOR
+      style.outlineColor = DEFAULT_POLYLINE_COLOR
     }
+    polyline.style = style
   }
   
   private func updateStrokeColor() {
@@ -123,6 +142,9 @@ public class RNYMapPolyLine: UIView {
     }
   }
   
+  /**
+   Full update poly line object
+   */
   @objc public func updatePolyLine(){
     updatePolyLineGeometry()
     updateStrokeWidth()

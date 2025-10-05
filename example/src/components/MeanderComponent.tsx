@@ -94,7 +94,7 @@ const MeanderComponent = () => {
       <SimpleYamap.PolyLine
         id={'polyline-1'}
         points={meanderPoints}
-        strokeWidth={100000000}
+        strokeWidth={10}
         strokeColor={SimpleYamap.color('#278A47')}
         outlineWidth={5}
         outlineColor={SimpleYamap.color('#706AD9')}

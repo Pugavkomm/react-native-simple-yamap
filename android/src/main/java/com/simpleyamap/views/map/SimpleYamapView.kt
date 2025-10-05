@@ -10,6 +10,7 @@ import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.events.Event
 import com.simpleyamap.views.circle.SimpleYamapCircleView
 import com.simpleyamap.views.marker.SimpleYamapMarkerView
+import com.simpleyamap.views.polyLine.SimpleYamapPolyLineView
 import com.simpleyamap.views.polygon.SimpleYamapPolygonView
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
@@ -130,6 +131,17 @@ class SimpleYamapView(context: Context) : MapView(context), CameraListener {
     circleView.mapObject?.let {
       mapObjects.remove(it)
       circleView.mapObject = null
+    }
+  }
+
+  fun addPolyLineChild(polyLineView: SimpleYamapPolyLineView){
+    polyLineView.updatePolyLine()
+  }
+
+  fun removePolyLineChild(polyLineView: SimpleYamapPolyLineView){
+    polyLineView.mapObject?.let {
+      mapObjects.remove(it)
+      polyLineView.mapObject = null
     }
   }
 
