@@ -7,6 +7,7 @@ import com.facebook.react.uimanager.ViewManager
 import com.simpleyamap.views.circle.SimpleYamapCircleViewManager
 import com.simpleyamap.views.map.SimpleYamapViewManager
 import com.simpleyamap.views.marker.SimpleYamapMarkerViewManager
+import com.simpleyamap.views.polyLine.SimpleYamapPolyLineViewManager
 import com.simpleyamap.views.polygon.SimpleYamapPolygonViewManager
 
 class SimpleYamapViewPackage : ReactPackage {
@@ -16,6 +17,7 @@ class SimpleYamapViewPackage : ReactPackage {
     viewManagers.add(SimpleYamapPolygonViewManager())
     viewManagers.add(SimpleYamapMarkerViewManager())
     viewManagers.add(SimpleYamapCircleViewManager())
+    viewManagers.add(SimpleYamapPolyLineViewManager())
     return viewManagers
   }
 

@@ -15,6 +15,8 @@ import {
 } from './components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MAP_Z_INDEX } from './const';
+import MeanderComponent from './components/MeanderComponent';
+import DashedPolyLine from './components/DashedPolyLine';
 
 const CAMERA_SPEED = 10;
 
@@ -206,6 +208,8 @@ export function App() {
           radius={4000000}
           fillColor={SimpleYamap.color('rgba(0, 0, 255, 0.5)')}
         />
+        <MeanderComponent />
+        <DashedPolyLine />
       </SimpleYamap>
     </SafeAreaView>
   );

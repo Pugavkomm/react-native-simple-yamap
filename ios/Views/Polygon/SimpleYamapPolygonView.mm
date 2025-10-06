@@ -53,6 +53,7 @@ using namespace facebook::react;
   
   // Outer points
   NSMutableArray *outerRings = [NSMutableArray new];
+  // TODO: compare old and new rings
   for (const auto &point : newViewProps.points) {
     NSMutableDictionary  *pointDict = [NSMutableDictionary new];
     pointDict[@"lat"] = @(point.lat);
@@ -63,6 +64,7 @@ using namespace facebook::react;
   
   
   // Inner points
+  // TODO: compare old and new rings
   NSMutableArray *innerRings = [NSMutableArray new];
   for (const auto &points : newViewProps.innerPoints) {
     NSMutableArray *innerRing = [NSMutableArray new];

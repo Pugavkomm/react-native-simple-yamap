@@ -120,6 +120,24 @@ public class RNYMapView: YMKMapView, YMKMapCameraListener{
     }
   }
   
+  
+  // Polylines
+  // Add polyline to map
+  @objc public func addPolyLineChild(_ polyLineView: RNYMapPolyLine){
+    polyLineView.parentMapView = self
+    polyLineView.updatePolyLine()
+  }
+  
+  
+  // Remove polyline from map
+  @objc public func removePolyLineChild(_ polyLineView: RNYMapPolyLine){
+    if let mapObject = polyLineView.mapObject {
+      mapObjects.remove(with: mapObject)
+      polyLineView.mapObject = nil
+    }
+  }
+  
+  
   private func setupMap() {
     self.mapWindow.map.addCameraListener(with: self)
   }

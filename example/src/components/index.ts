@@ -4,6 +4,7 @@ import MapNavigBtnsComponent from './MapNavigBtnsComponent';
 import MapInfoComponent from './InfoComponent';
 import BrandComponent from './BrandComponent';
 import HeartBeatCircle from './HeartBeatCircle';
+import MeanderComponent from './MeanderComponent';
 
 export {
   MarkersComponent,
@@ -12,4 +13,5 @@ export {
   MapInfoComponent,
   BrandComponent,
   HeartBeatCircle,
+  MeanderComponent,
 };

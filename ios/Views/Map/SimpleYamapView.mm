@@ -15,6 +15,7 @@
 #import "SimpleYamapView.h"
 #import "SimpleYamapMarkerView.h"
 #import "SimpleYamapCircleView.h"
+#import "SimpleYamapPolylineView.h"
 #import "SimpleYamap-Swift.h"
 #import <folly/dynamic.h>
 #import <jsi/jsi.h>
@@ -147,6 +148,11 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
     RNYMapCircle *circle = [circleView getView];
     [_view addCircleChild:circle];
     return;
+  } else if ([childComponentView isKindOfClass:[SimpleYamapPolyLineView class]]){
+    SimpleYamapPolyLineView *polyLineView = (SimpleYamapPolyLineView *)childComponentView;
+    RNYMapPolyLine *polyLine = [polyLineView getView];
+    [_view addPolyLineChild:polyLine];
+    return;
   }
   
   [super mountChildComponentView:childComponentView index:index];
@@ -168,6 +174,11 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
     SimpleYamapCircleView  *circleView = (SimpleYamapCircleView *)childComponentView;
     RNYMapCircle *circle = [circleView getView];
     [_view removeCircleChild:circle];
+    return;
+  } else if ([childComponentView isKindOfClass:[SimpleYamapPolyLineView class]]) {
+    SimpleYamapPolyLineView *polyLineView = (SimpleYamapPolyLineView *)childComponentView;
+    RNYMapPolyLine *polyLine = [polyLineView getView];
+    [_view removePolyLineChild:polyLine];
     return;
   }
   
