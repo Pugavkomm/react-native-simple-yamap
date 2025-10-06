@@ -52,7 +52,7 @@ using namespace facebook::react;
   }
   
   if (oldViewProps.strokeWidth != newViewProps.strokeWidth) {
-    _view.strokeWidth = @(newViewProps.strokeWidth);
+    _view.strokeWidth = @(fmax(newViewProps.strokeWidth, 0.0));
   }
   
   if (oldViewProps.outlineColor != newViewProps.outlineColor) {
@@ -60,7 +60,7 @@ using namespace facebook::react;
   }
   
   if (oldViewProps.outlineWidth != newViewProps.outlineWidth) {
-    _view.outlineWidth = @(newViewProps.outlineWidth);
+    _view.outlineWidth = @(fmax(newViewProps.outlineWidth, 0.0));
   }
   
   if(oldViewProps.zIndexV != newViewProps.zIndexV) {

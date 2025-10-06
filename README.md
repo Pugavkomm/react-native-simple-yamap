@@ -124,8 +124,6 @@ both text and an icon. If necessary, the marker can be moved with animation or r
 > It's important to ensure that the marker's position is updated no more frequently than the animation duration, as
 > this can disrupt the animation process. This applies to position changes view `animatedMove` via props.
 
-
-
 #### 1.2.1 Example
 
 _Example of use:_
@@ -316,6 +314,95 @@ _animatedMove demo_
 
 ![demo_circles_animatedMove.gif](docs/images/demo/demo_circles_animatedMove.gif)
 
+### 1.5 PolyLine (SimplePolyLine)
+
+**SimplePolyLine** - A line that consists of several segments.
+
+#### 1.5.1 Example
+
+```tsx
+import React, { useMemo } from 'react';
+import SimpleYamap, {
+  type Point,
+  type SimplePolyLineDashStyle,
+  type SimplePolyLineRenderConfig,
+} from 'react-native-simple-yamap';
+
+const DashedPolyLine: React.FC = () => {
+  const points: Point[] = [
+    {
+      lon: 15,
+      lat: 25,
+    },
+    { lon: -40, lat: 21 },
+    { lon: -30, lat: 11 },
+    { lon: -15, lat: 31 },
+    { lon: 0, lat: 41 },
+  ];
+  const dashStyle: SimplePolyLineDashStyle = useMemo<SimplePolyLineDashStyle>(
+    () => ({
+      dashLength: 30.0,
+      gapLength: 3.0,
+      dashOffset: 20.0,
+    }),
+    []
+  );
+
+  const renderConfig: SimplePolyLineRenderConfig =
+    useMemo<SimplePolyLineRenderConfig>(
+      () => ({
+        arcApproximationStep: 16,
+        turnRadius: 50,
+      }),
+      []
+    );
+  return (
+    <SimpleYamap.PolyLine
+      id={'dashed'}
+      points={points}
+      dashStyle={dashStyle}
+      strokeWidth={3}
+      strokeColor={SimpleYamap.color('white')}
+      outlineWidth={1}
+      outlineColor={SimpleYamap.color('red')}
+      zIndex={1000}
+      renderConfig={renderConfig}
+    />
+  );
+};
+
+export default DashedPolyLine;
+
+```
+
+#### 1.5.2 Props
+
+```ts
+export interface SimplePolyLineProps {
+  id: string;
+  points: Readonly<Point[]>;
+  strokeWidth?: number;
+  outlineWidth?: number;
+  strokeColor?: number;
+  outlineColor?: number;
+  dashStyle?: SimplePolyLineDashStyle;
+  renderConfig?: SimplePolyLineRenderConfig;
+  zIndex?: number;
+}
+```
+
+| **Prop name** | **Type**                                                       | **Required** | **description**                                                                                                                     |
+|---------------|----------------------------------------------------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| id            | `string`                                                       | Yes          | Unique identifier. Currently not used, but it's recommended to set a unique value, <br/> as its active use is planned in the future |
+| points        | [`Point`](#21-point)                                           | Yes          | Points of segments. One segment: [$(x1, y1)$, $(x2, y2)$]. Two segments:[$(x1, y1)$, $(x2, y2)$, $(x3, y3)$]                        |
+| strokeWidth   | `number`                                                       | No           | Width of stroke in units. By default 1. If 0 - without stroke                                                                       |
+| strokeColor   | `number`                                                       | No           | Color of stroke in integer format. By default Transparent                                                                           |                                                                                                                                    |
+| outlineWidth  | `number`                                                       | No           | Width of outline in units. By default 1. If 0 - without outline                                                                     |
+| outlineColor  | `number`                                                       | No           | Color of outline in integer format                                                                                                  |
+| dashStyle     | [`SimplePolyLineDashStyle`](#26-simplepolylinedashstyle)       | No           | Dash style                                                                                                                          |
+| renderConfig  | [`SimplePolyLineRenderConfig`](#27-simplepolylinerenderconfig) | No           | Render configuration                                                                                                                |
+| zIndex        | `number`                                                       | No           | The polyline's height above the map. This can be used to position polylines above each other                                        |
+
 ## 2 Types
 
 ### 2.1 Point
@@ -422,6 +509,44 @@ export interface MarkerText {
   text: string;
 }
 ```
+
+### 2.6 SimplePolyLineDashStyle
+
+#### 2.6.1 Interface
+
+```ts
+export interface SimplePolyLineDashStyle {
+  dashLength?: number;
+  gapLength?: number;
+  dashOffset?: number;
+}
+```
+
+#### 2.6.2 Fields
+
+| **Field name** | **Type** | **Required** | **Description**                                                      |
+|----------------|----------|--------------|----------------------------------------------------------------------|
+| dashLength     | `number` | No           | Length of dash in units                                              |
+| gapLength      | `number` | No           | Length of gap between two dashes in units                            |
+| dashOffset     | `number` | No           | Offset from the start of the polyline to the reference dash in units |
+
+### 2.7 SimplePolyLineRenderConfig
+
+#### 2.7.1 Interface
+
+```ts
+export interface SimplePolyLineRenderConfig {
+  turnRadius?: number;
+  arcApproximationStep?: number;
+}
+```
+
+#### 2.7.2 Fields
+
+| **Field name**       | **Type** | **Required** | **Description**           |
+|----------------------|----------|--------------|---------------------------|
+| turnRadius           | `number` | No           | Maximum radius of a turn  |
+| arcApproximationStep | `number` | No           | Step of arc approximation |
 
 ## 3 Utils
 
@@ -606,10 +731,15 @@ Made with [create-react-native-library](https://github.com/callstack/react-nativ
 ## TODO
 
 - [ ] Marker is visible prop
-- [ ] Animated ~~markers~~, circles etc. with props
-- [ ] zIndex for polygons
-- [ ] Polygon interactions
+- [ ] Animated ~~markers~~, ~~circles~~, polylines. with props
 - [ ] Polyline
+  - [x] ~~Polyline object~~
+  - [x] ~~Dash control~~
+  - [x] ~~Render control~~
+  - [x] ~~zIndex~~
+  - [ ] Add arrow
+  - [ ] Interactions (tap, ...)
+  - [ ] Rerender geometry event
 - [ ] Style text
 - [ ] Clusters
 - [x] ~~Lite version, functionality from high has not been used yet~~
@@ -630,3 +760,5 @@ Made with [create-react-native-library](https://github.com/callstack/react-nativ
   - [x] ~~Markers~~
   - [x] ~~Circles~~
   - [ ] Polygons
+    - [ ] zIndex for polygons
+    - [ ] Polygon interactions

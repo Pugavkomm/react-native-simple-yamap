@@ -187,7 +187,7 @@ public class RNYMapPolyLine: UIView {
   }
   
   /**
-   Update length of gap between two dashes in units
+   Update length of gap between two dashes in units from props
    */
   private func updatePolyLineGapLength() {
     guard let polyline = getOrCreateMapObject() else {return}
