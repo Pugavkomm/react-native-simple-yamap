@@ -4,20 +4,23 @@ import BaseMapView from './native-components/SimpleYamapViewNativeComponent';
 
 import {
   type MarkerText,
-  SimpleMarker,
-  SimplePolygon,
   SimpleCircle,
-  SimpleYamapView,
   type SimpleCircleProps,
+  SimpleMarker,
   type SimpleMarkerProps,
+  SimplePolygon,
   type SimplePolygonProps,
   SimplePolyLine,
+  type SimplePolyLineDashStyle,
+  type SimplePolyLineRenderConfig,
+  SimpleYamapView,
 } from './components';
 
 import type { YamapMarkerRef } from './components/SimpleMarker';
 import type { YamapRef } from './components/SimpleYamap';
 import type { CameraPosition, CameraPositionEvent, Point } from './interfaices';
 import type { YamapCircleRef } from './components/SimpleCircle';
+import { simpleColorConverter } from './utils';
 
 export type {
   SimpleMarkerProps,
@@ -30,6 +33,8 @@ export type {
   CameraPosition,
   CameraPositionEvent,
   YamapCircleRef,
+  SimplePolyLineDashStyle,
+  SimplePolyLineRenderConfig,
 };
 
 type YamapComposition = typeof SimpleYamapView & {
@@ -39,8 +44,6 @@ type YamapComposition = typeof SimpleYamapView & {
   PolyLine: typeof SimplePolyLine;
   color: typeof simpleColorConverter;
 };
-
-import { simpleColorConverter } from './utils';
 
 const SimpleYamap = SimpleYamapView as YamapComposition;
 

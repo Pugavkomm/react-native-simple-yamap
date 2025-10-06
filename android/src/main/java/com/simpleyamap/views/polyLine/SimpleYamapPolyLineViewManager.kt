@@ -8,6 +8,8 @@ import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.SimpleYamapPolyLineViewManagerDelegate
 import com.facebook.react.viewmanagers.SimpleYamapPolyLineViewManagerInterface
+import kotlin.math.max
+import kotlin.math.min
 import com.yandex.mapkit.geometry.Point as YandexPoint
 
 @ReactModule(name = SimpleYamapPolyLineViewManager.NAME)
@@ -85,11 +87,46 @@ class SimpleYamapPolyLineViewManager : SimpleViewManager<SimpleYamapPolyLineView
     view?.outlineColor = color
   }
 
+  override fun setTurnRadius(
+    view: SimpleYamapPolyLineView?,
+    value: Float
+  ) {
+    view?.turnRadius = max(value, 0.0f) // Only positive
+  }
+
+  override fun setDashOffset(
+    view: SimpleYamapPolyLineView?,
+    value: Float
+  ) {
+    view?.dashOffset = max(value, 0.0f) // Only positive
+  }
+
+  override fun setDashLength(
+    view: SimpleYamapPolyLineView?,
+    value: Float
+  ) {
+    view?.dashLength = max(value, 0.0f) // Only positive
+  }
+
+  override fun setGapLength(
+    view: SimpleYamapPolyLineView?,
+    value: Float
+  ) {
+    view?.gapLength = max(value, 0.0f) // Only positive
+  }
+
   override fun setZIndexV(
     view: SimpleYamapPolyLineView?,
     zIndex: Float
   ) {
     view?.zIndexV = zIndex
+  }
+
+  override fun setArcApproximationStep(
+    view: SimpleYamapPolyLineView?,
+    value: Float
+  ) {
+    view?.arcApproximationStep = value
   }
 
   @ReactProp(name = "outlineWidth")

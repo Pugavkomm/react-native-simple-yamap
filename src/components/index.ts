@@ -1,4 +1,8 @@
-import SimplePolyLine, { type SimplePolyLineProps } from './SimplePolyLine';
+import SimplePolyLine, {
+  type SimplePolyLineDashStyle,
+  type SimplePolyLineProps,
+  type SimplePolyLineRenderConfig,
+} from './SimplePolyLine';
 import SimpleYamapView, { type SimpleYamapProps } from './SimpleYamap';
 import SimplePolygon, { type SimplePolygonProps } from './SimplePolygon';
 import SimpleCircle, { type SimpleCircleProps } from './SimpleCircle';
@@ -22,4 +26,6 @@ export type {
   SimpleMarkerProps,
   SimpleCircleProps,
   SimplePolyLineProps,
+  SimplePolyLineRenderConfig,
+  SimplePolyLineDashStyle,
 };

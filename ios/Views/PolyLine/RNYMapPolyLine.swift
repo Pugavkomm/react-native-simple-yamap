@@ -35,6 +35,22 @@ public class RNYMapPolyLine: UIView {
   @objc public var points: [NSDictionary] = [] {
     didSet {updatePolyLineGeometry()}
   }
+  @objc public var dashLength: NSNumber = 0.0 {
+    didSet {updatePolyLineDashLength()}
+  }
+  @objc public var gapLength: NSNumber = 0.0 {
+    didSet {updatePolyLineGapLength()}
+  }
+  @objc public var dashOffset: NSNumber = 0.0 {
+    didSet {updatePolyLineDashOffset()}
+  }
+  @objc public var turnRadius: NSNumber = 16.0 {
+    didSet {updatePolyLineTurnRadius()}
+  }
+  @objc public var arcApproximationStep: NSNumber = 10.0{
+    didSet {updateArcApproximationStep()}
+  }
+  
   
   override public func didMoveToSuperview() {
     super.didMoveToSuperview()
@@ -159,6 +175,66 @@ public class RNYMapPolyLine: UIView {
   }
   
   /**
+   Update length of dash in units from props
+   */
+  private func updatePolyLineDashLength() {
+    guard let polyline = getOrCreateMapObject() else {return}
+    if let length = dashLength as? Float{
+      let style = polyline.style
+      style.dashLength = length
+      polyline.style = style
+    }
+  }
+  
+  /**
+   Update length of gap between two dashes in units
+   */
+  private func updatePolyLineGapLength() {
+    guard let polyline = getOrCreateMapObject() else {return}
+    if let length = gapLength as? Float {
+      let style = polyline.style
+      style.gapLength = length
+      polyline.style = style
+    }
+  }
+  
+  /**
+   Update offset from the start of the polyline to the reference dash in units from props
+   */
+  private func updatePolyLineDashOffset() {
+    guard let polyline = getOrCreateMapObject() else {return}
+    if let offset = dashOffset as? Float {
+      let style = polyline.style
+      style.dashOffset = offset
+      polyline.style = style
+    }
+    
+  }
+  
+  /**
+   Update maximum radius of a turn from props
+   */
+  private func updatePolyLineTurnRadius() {
+    guard let polyline = getOrCreateMapObject() else {return}
+    if let tRadius = turnRadius as? Float {
+      let style = polyline.style
+      style.turnRadius = tRadius
+      polyline.style = style
+    }
+  }
+  
+  /**
+   Update step of arc approximation from props
+   */
+  private func updateArcApproximationStep() {
+    guard let polyline = getOrCreateMapObject() else {return}
+    if let arc = arcApproximationStep as? Float {
+      let style = polyline.style
+      style.arcApproximationStep = arc
+      polyline.style = style
+    }
+  }
+  /**
    Full update poly line object
    
    This method can be used for intialization
@@ -170,6 +246,11 @@ public class RNYMapPolyLine: UIView {
     updatePolyLineOutlineWidth()
     updatePolyLineOutlineColor()
     updatePolyLineZIndex()
+    updatePolyLineDashLength()
+    updatePolyLineGapLength()
+    updatePolyLineDashOffset()
+    updatePolyLineTurnRadius()
+    updateArcApproximationStep()
   }
 }
 

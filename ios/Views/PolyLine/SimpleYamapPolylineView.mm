@@ -67,6 +67,26 @@ using namespace facebook::react;
     _view.zIndexV = @(newViewProps.zIndexV);
   }
   
+  if(oldViewProps.dashLength != newViewProps.dashLength) {
+    _view.dashLength = @(fmax(newViewProps.dashLength, 0.0)); // Only positive
+  }
+  
+  if (oldViewProps.gapLength != newViewProps.gapLength){
+    _view.gapLength = @(fmax(newViewProps.gapLength, 0.0)); // Only positive
+  }
+  
+  if (oldViewProps.dashOffset != newViewProps.dashOffset){
+    _view.dashOffset = @(fmax(newViewProps.dashOffset, 0.0));
+  }
+  
+  if (oldViewProps.turnRadius != newViewProps.turnRadius) {
+    _view.turnRadius = @(fmax(newViewProps.turnRadius, 0.0));
+  }
+  
+  if (oldViewProps.arcApproximationStep != newViewProps.arcApproximationStep){
+    _view.arcApproximationStep = @(newViewProps.arcApproximationStep);
+  }
+  
   bool pointsEqual = (oldViewProps.points.size() == newViewProps.points.size()) &&
                      std::equal(
                          oldViewProps.points.begin(),

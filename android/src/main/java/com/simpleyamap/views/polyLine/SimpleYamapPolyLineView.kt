@@ -32,6 +32,33 @@ class SimpleYamapPolyLineView(context: Context) : View(context) {
       updatePolyLineZIndex()
     }
 
+  var turnRadius: Float = 10.0f
+    set(value) {
+      field = value
+      updatePolyLineTurnRadius()
+    }
+  var dashOffset: Float = 0.0f
+    set(value) {
+      field = value
+      updatePolyLineDashOffset()
+    }
+  var dashLength: Float = 0.0f
+    set(value) {
+      field = value
+      updatePolyLineDashLength()
+    }
+  var gapLength: Float = 0.0f
+    set(value) {
+      field = value
+      updatePolyLineGapLength()
+    }
+  var arcApproximationStep: Float = 16.0f
+    set(value) {
+      field = value
+      updatePolyLineArcApproximationStep()
+    }
+
+
   var points: List<YandexPoint> = emptyList()
     set(value) {
       field = value
@@ -40,22 +67,22 @@ class SimpleYamapPolyLineView(context: Context) : View(context) {
   var strokeColor: Int = Color.TRANSPARENT
     set(value) {
       field = value
-      updateStrokeColor()
+      updatePolyLineStrokeColor()
     }
   var strokeWidth: Float = 1.0f
     set(value) {
       field = value
-      updateStrokeWidth()
+      updatePolyLineStrokeWidth()
     }
   var outlineColor: Int = Color.TRANSPARENT
     set(value) {
       field = value
-      updateOutlineColor()
+      updatePolyLineOutlineColor()
     }
   var outlineWidth: Float = 1.0f
     set(value) {
       field = value
-      updateOutlineWidth()
+      updatePolyLineOutlineWidth()
     }
 
   /**
@@ -104,7 +131,7 @@ class SimpleYamapPolyLineView(context: Context) : View(context) {
   /**
    * Update stroke color from props
    */
-  fun updateStrokeColor() {
+  fun updatePolyLineStrokeColor() {
     val polyLine = getOrCreateMapObject() ?: return
     polyLine.setStrokeColor(strokeColor)
   }
@@ -112,7 +139,7 @@ class SimpleYamapPolyLineView(context: Context) : View(context) {
   /**
    * Update stroke width in units from props
    */
-  fun updateStrokeWidth() {
+  fun updatePolyLineStrokeWidth() {
     val polyLine = getOrCreateMapObject() ?: return
     val style = polyLine.style
     style.strokeWidth = strokeWidth
@@ -122,7 +149,7 @@ class SimpleYamapPolyLineView(context: Context) : View(context) {
   /**
    * Update outline color  from props
    */
-  fun updateOutlineColor() {
+  fun updatePolyLineOutlineColor() {
     val polyLine = getOrCreateMapObject() ?: return
     val style = polyLine.style
     style.outlineColor = outlineColor
@@ -132,7 +159,7 @@ class SimpleYamapPolyLineView(context: Context) : View(context) {
   /**
    * Update outline width in units from props
    */
-  fun updateOutlineWidth() {
+  fun updatePolyLineOutlineWidth() {
     val polyLine = getOrCreateMapObject() ?: return
     val style = polyLine.style
     style.outlineWidth = outlineWidth
@@ -147,12 +174,75 @@ class SimpleYamapPolyLineView(context: Context) : View(context) {
     polyline.zIndex = zIndexV
   }
 
+  /**
+   * Update maximum radius of a turn from props
+   */
+  fun updatePolyLineTurnRadius() {
+    val polyLine = getOrCreateMapObject() ?: return
+    val style = polyLine.style
+    style.turnRadius = turnRadius
+    polyLine.style = style
+  }
+
+  /**
+   * Update step of arc approximation from props
+   */
+  fun updatePolyLineArcApproximationStep() {
+    val polyLine = getOrCreateMapObject() ?: return
+    val style = polyLine.style
+    style.arcApproximationStep = arcApproximationStep
+    polyLine.style = style
+  }
+
+  /**
+   * Update offset from the start of the polyline to the
+   * reference dash in units from props
+   */
+  fun updatePolyLineDashOffset() {
+    val polyLine = getOrCreateMapObject() ?: return
+    val style = polyLine.style
+    style.dashOffset = dashOffset
+    polyLine.style = style
+  }
+
+  /**
+   * Update length of dash in units from props
+   */
+  fun updatePolyLineDashLength() {
+    val polyLine = getOrCreateMapObject() ?: return
+    val style = polyLine.style
+    style.dashLength = dashLength
+    polyLine.style = style
+
+  }
+
+  /**
+   * Update length of gap between two dashes in units
+   */
+  fun updatePolyLineGapLength() {
+    val polyLine = getOrCreateMapObject() ?: return
+    val style = polyLine.style
+    style.gapLength = gapLength
+    polyLine.style = style
+  }
+
+
+  /**
+   * Perform all updates.
+   *
+   * Can be used for initialization
+   */
   fun updatePolyLine() {
     updatePolyLineGeometry()
-    updateStrokeColor()
-    updateStrokeWidth()
-    updateOutlineColor()
-    updateOutlineWidth()
+    updatePolyLineStrokeColor()
+    updatePolyLineStrokeWidth()
+    updatePolyLineOutlineColor()
+    updatePolyLineOutlineWidth()
     updatePolyLineZIndex()
+    updatePolyLineArcApproximationStep()
+    updatePolyLineTurnRadius()
+    updatePolyLineDashOffset()
+    updatePolyLineDashLength()
+    updatePolyLineGapLength()
   }
 }
