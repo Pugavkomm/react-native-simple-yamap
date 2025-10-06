@@ -36,6 +36,9 @@ _Demo example_
       * [1.4.1  Example](#141--example)
       * [1.4.2 Props](#142-props)
       * [1.2.3 Methods](#123-methods-1)
+    * [1.5 PolyLine (SimplePolyLine)](#15-polyline-simplepolyline)
+      * [1.5.1 Example](#151-example)
+      * [1.5.2 Props](#152-props)
   * [2 Types](#2-types)
     * [2.1 Point](#21-point)
       * [2.1.1 Interface](#211-interface)
@@ -51,6 +54,12 @@ _Demo example_
       * [2.4.2 Fields](#242-fields)
     * [2.5 MarkerText](#25-markertext)
       * [2.5.1 Fields](#251-fields)
+    * [2.6 SimplePolyLineDashStyle](#26-simplepolylinedashstyle)
+      * [2.6.1 Interface](#261-interface)
+      * [2.6.2 Fields](#262-fields)
+    * [2.7 SimplePolyLineRenderConfig](#27-simplepolylinerenderconfig)
+      * [2.7.1 Interface](#271-interface)
+      * [2.7.2 Fields](#272-fields)
   * [3 Utils](#3-utils)
     * [3.1 simpleColorConverter](#31-simplecolorconverter)
   * [4 Instructions](#4-instructions)
@@ -402,6 +411,14 @@ export interface SimplePolyLineProps {
 | dashStyle     | [`SimplePolyLineDashStyle`](#26-simplepolylinedashstyle)       | No           | Dash style                                                                                                                          |
 | renderConfig  | [`SimplePolyLineRenderConfig`](#27-simplepolylinerenderconfig) | No           | Render configuration                                                                                                                |
 | zIndex        | `number`                                                       | No           | The polyline's height above the map. This can be used to position polylines above each other                                        |
+
+_Dashed polyline example_
+
+<img src="docs/images/demo/demo-dashed-polyline.png" width="300">
+
+_Animated polyline with js_
+
+![animated-polyline-with-js.gif](docs/images/demo/animated-polyline-with-js.gif)
 
 ## 2 Types
 
