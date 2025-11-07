@@ -21,8 +21,6 @@ public class RNYMapView: YMKMapView, YMKMapCameraListener{
   @objc public var onCameraPositionChangeEnd: CameraPositionCallback?
   
   // Props
-  
-  
   private lazy var mapObjects = self.mapWindow.map.mapObjects
   private var propPolygons = [String: YMKPolygonMapObject]()
   
@@ -41,7 +39,9 @@ public class RNYMapView: YMKMapView, YMKMapCameraListener{
     setupMap()
   }
   
-  
+  deinit {
+      self.mapWindow.map.removeCameraListener(with: self)
+  }
   
   
   // Set center
@@ -83,9 +83,14 @@ public class RNYMapView: YMKMapView, YMKMapCameraListener{
   
   // Remove polygon
   @objc public func removePolygonChild(_ polygonView: RNYMapPolygon) {
-    if let mapObject = polygonView.mapObject {
-      mapObjects.remove(with: mapObject)
+    DispatchQueue.main.async{[weak self, weak polygonView] in
+      guard let self = self else { return }
+      guard let polygonView = polygonView  else {return}
+      guard let mapObjToRemove = polygonView.mapObject else {
+        return
+      }
       polygonView.mapObject = nil
+      mapObjects.remove(with: mapObjToRemove)
     }
   }
   
@@ -99,9 +104,14 @@ public class RNYMapView: YMKMapView, YMKMapCameraListener{
   
   // Remove circle
   @objc public func removeCircleChild(_ circleView: RNYMapCircle) {
-    if let mapObject = circleView.mapObject {
-      mapObjects.remove(with: mapObject)
+    DispatchQueue.main.async {[weak self, weak circleView] in
+      guard let self = self else {return}
+      guard let circleView = circleView else {return}
+      guard let mapObjToRemove = circleView.mapObject else {
+        return
+      }
       circleView.mapObject = nil
+      mapObjects.remove(with: mapObjToRemove)
     }
   }
   
@@ -114,9 +124,13 @@ public class RNYMapView: YMKMapView, YMKMapCameraListener{
   
   // Remove marker from map
   @objc public func removeMarkerChild(_ markerView: RNYMapMarker) {
-    if let mapObject = markerView.mapObject {
-      mapObjects.remove(with: mapObject)
+    DispatchQueue.main.async {[weak self, weak markerView] in
+      guard let self = self else {return}
+      guard let markerView = markerView else {return}
+      guard let mapObjToRemove = markerView.mapObject else {
+        return }
       markerView.mapObject = nil
+      mapObjects.remove(with: mapObjToRemove)
     }
   }
   
