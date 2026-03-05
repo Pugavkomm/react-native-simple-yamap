@@ -58,24 +58,29 @@ using namespace facebook::react;
   const auto &oldViewProps = *std::static_pointer_cast<SimpleYamapMarkerViewProps const>(_props);
   const auto &newViewProps = *std::static_pointer_cast<SimpleYamapMarkerViewProps const>(props);
   
+  if(oldViewProps.id != newViewProps.id){
+    _view.id = [NSString stringWithUTF8String:newViewProps.id.c_str()];
+  }
   // TODO: Skip without changes props: old == new
-  _view.id = [NSString stringWithUTF8String:newViewProps.id.c_str()];
   // Points
-  const auto point = newViewProps.point;
-  NSMutableDictionary *pointDict = [NSMutableDictionary new];
-  pointDict[@"lat"] = @(point.lat);
-  pointDict[@"lon"] = @(point.lon);
-  _view.point = pointDict;
-  if (!newViewProps.text.text.empty()){
-    const char* c_string = newViewProps.text.text.c_str();
-    NSString *objectiveCString = [NSString stringWithUTF8String:c_string];
-    _view.text = objectiveCString;
+  if(oldViewProps.point.lat != newViewProps.point.lat || oldViewProps.point.lon != newViewProps.point.lon) {
+    const auto point = newViewProps.point;
+    NSMutableDictionary *pointDict = [NSMutableDictionary new];
+    pointDict[@"lat"] = @(point.lat);
+    pointDict[@"lon"] = @(point.lon);
+    _view.point = pointDict;
+  }
+    
+  if (oldViewProps.text.text != newViewProps.text.text){
+    _view.text = [NSString stringWithUTF8String:newViewProps.text.text.c_str()];
   }
   
-  CGFloat clampedX = fmax(0.0, fmin(1.0, newViewProps.iconAnchor.x));
-  CGFloat clampedY = fmax(0.0, fmin(1.0, newViewProps.iconAnchor.y));
-  CGPoint clampedAnchor = CGPointMake(clampedX, clampedY);
-  _view.iconAnchor = [NSValue valueWithCGPoint:clampedAnchor];
+  if(oldViewProps.iconAnchor.x != newViewProps.iconAnchor.x || oldViewProps.iconAnchor.y != newViewProps.iconAnchor.y){
+    CGFloat clampedX = fmax(0.0, fmin(1.0, newViewProps.iconAnchor.x));
+    CGFloat clampedY = fmax(0.0, fmin(1.0, newViewProps.iconAnchor.y));
+    CGPoint clampedAnchor = CGPointMake(clampedX, clampedY);
+    _view.iconAnchor = [NSValue valueWithCGPoint:clampedAnchor];
+  }
   
   
   if (oldViewProps.transitionDurationPosition != newViewProps.transitionDurationPosition){
@@ -87,19 +92,21 @@ using namespace facebook::react;
     _view.iconRotated = newViewProps.iconRotated;
   }
   
-  _view.zIndexV = @(newViewProps.zIndexV);
-  
-  const auto &imageSource = newViewProps.icon;
-  if(!imageSource.uri.empty()) {
-    _view.iconSource = [NSString stringWithUTF8String:imageSource.uri.c_str()];
-  } else {
-    _view.iconSource = nil;
+  if(oldViewProps.zIndexV != newViewProps.zIndexV) {
+    _view.zIndexV = @(newViewProps.zIndexV);
   }
   
-  if (newViewProps.iconScale > 0) {
-    _view.iconScale = @(newViewProps.iconScale);
-  } else {
-    _view.iconScale = @(1.0);
+  if(oldViewProps.icon.uri != newViewProps.icon.uri) {
+    const auto &imageSource = newViewProps.icon;
+    if(!imageSource.uri.empty()) {
+      _view.iconSource = [NSString stringWithUTF8String:imageSource.uri.c_str()];
+    } else {
+      _view.iconSource = nil;
+    }
+  }
+  
+  if(oldViewProps.iconScale != newViewProps.iconScale){
+    _view.iconScale = newViewProps.iconScale > 0 ? @(newViewProps.iconScale) : @(1.0);
   }
   [super updateProps:props oldProps:oldProps];
 }
