@@ -87,7 +87,7 @@ public class RNYMapPolyLine: UIView {
    */
   private func getOrCreateMapObject() -> YMKPolylineMapObject? {
     guard let mapView = parentMapView else {return nil}
-    if let existingObject = self.mapObject{
+    if let existingObject = self.mapObject, existingObject.isValid{
       return existingObject
     } else {
       let mapObjects = mapView.getMapObjects()

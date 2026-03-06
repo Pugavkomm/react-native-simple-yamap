@@ -50,7 +50,7 @@ public class RNYMapCircle: UIView {
   private func getOrCreateMapObject() -> YMKCircleMapObject? {
     guard let mapView = parentMapView else {return nil}
     let mapObjects = mapView.getMapObjects()
-    if let existingObject = self.mapObject {
+    if let existingObject = self.mapObject, existingObject.isValid {
       return existingObject;
     } else {
       let newCircle = mapObjects.addCircle(
