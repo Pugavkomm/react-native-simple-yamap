@@ -133,6 +133,11 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+      - name: download platforms
+        run: |
+          xcrun simctl list
+          xcodebuild -downloadPlatform iOS
+
       - name: Cache turborepo for iOS
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
