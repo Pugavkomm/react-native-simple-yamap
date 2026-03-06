@@ -36,7 +36,7 @@ using namespace facebook::react;
     _props = defaultProps;
     _view = [[RNYMapMarker alloc] init];
     self.contentView = _view;
-    
+
     // onTap callback
     __weak SimpleYamapMarkerView *weakSelf = self;
     _view.onTap = ^{
@@ -57,7 +57,7 @@ using namespace facebook::react;
 {
   const auto &oldViewProps = *std::static_pointer_cast<SimpleYamapMarkerViewProps const>(_props);
   const auto &newViewProps = *std::static_pointer_cast<SimpleYamapMarkerViewProps const>(props);
-  
+
   if(oldViewProps.id != newViewProps.id){
     _view.id = [NSString stringWithUTF8String:newViewProps.id.c_str()];
   }
@@ -70,32 +70,32 @@ using namespace facebook::react;
     pointDict[@"lon"] = @(point.lon);
     _view.point = pointDict;
   }
-    
+
   if (oldViewProps.text.text != newViewProps.text.text){
     _view.text = [NSString stringWithUTF8String:newViewProps.text.text.c_str()];
   }
-  
+
   if(oldViewProps.iconAnchor.x != newViewProps.iconAnchor.x || oldViewProps.iconAnchor.y != newViewProps.iconAnchor.y){
     CGFloat clampedX = fmax(0.0, fmin(1.0, newViewProps.iconAnchor.x));
     CGFloat clampedY = fmax(0.0, fmin(1.0, newViewProps.iconAnchor.y));
     CGPoint clampedAnchor = CGPointMake(clampedX, clampedY);
     _view.iconAnchor = [NSValue valueWithCGPoint:clampedAnchor];
   }
-  
-  
+
+
   if (oldViewProps.transitionDurationPosition != newViewProps.transitionDurationPosition){
     _view.transitionDurationPosition = newViewProps.transitionDurationPosition;
   }
-  
-  
+
+
   if (oldViewProps.iconRotated != newViewProps.iconRotated) {
     _view.iconRotated = newViewProps.iconRotated;
   }
-  
+
   if(oldViewProps.zIndexV != newViewProps.zIndexV) {
     _view.zIndexV = @(newViewProps.zIndexV);
   }
-  
+
   if(oldViewProps.icon.uri != newViewProps.icon.uri) {
     const auto &imageSource = newViewProps.icon;
     if(!imageSource.uri.empty()) {
@@ -104,7 +104,7 @@ using namespace facebook::react;
       _view.iconSource = nil;
     }
   }
-  
+
   if(oldViewProps.iconScale != newViewProps.iconScale){
     _view.iconScale = newViewProps.iconScale > 0 ? @(newViewProps.iconScale) : @(1.0);
   }

@@ -51,7 +51,7 @@ public class RNYMapPolygon: UIView {
     guard let mapView = parentMapView else {return}
     let mapObjects = mapView.getMapObjects()
     
-    if let existingObject = self.mapObject {
+    if let existingObject = self.mapObject, existingObject.isValid {
       mapObjects.remove(with: existingObject)
       self.mapObject = nil
     }

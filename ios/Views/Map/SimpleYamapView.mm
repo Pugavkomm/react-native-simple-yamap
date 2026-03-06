@@ -134,21 +134,23 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
   if ([childComponentView isKindOfClass:[SimpleYamapPolygonView class]]) {
     SimpleYamapPolygonView *polygonView = (SimpleYamapPolygonView *)childComponentView;
     RNYMapPolygon *polygon = [polygonView getView];
-    
     [_view addPolygonChild:polygon];
-    
+    return;
   } else if ([childComponentView isKindOfClass:[SimpleYamapMarkerView class]]) {
     SimpleYamapMarkerView *markerView = (SimpleYamapMarkerView *)childComponentView;
     RNYMapMarker *marker = [markerView getView];
     [_view addMarkerChild:marker];
+    return;
   } else if ([childComponentView isKindOfClass:[SimpleYamapCircleView class]]) {
     SimpleYamapCircleView *circleView = (SimpleYamapCircleView *)childComponentView;
     RNYMapCircle *circle = [circleView getView];
     [_view addCircleChild:circle];
+    return;
   } else if ([childComponentView isKindOfClass:[SimpleYamapPolyLineView class]]){
     SimpleYamapPolyLineView *polyLineView = (SimpleYamapPolyLineView *)childComponentView;
     RNYMapPolyLine *polyLine = [polyLineView getView];
     [_view addPolyLineChild:polyLine];
+    return;
   }
   
   [super mountChildComponentView:childComponentView index:index];
@@ -160,18 +162,22 @@ static NSObject* convertJsiValueToNSObject(Runtime& runtime,
     SimpleYamapPolygonView *polygonView = (SimpleYamapPolygonView *)childComponentView;
     RNYMapPolygon *polygon = [polygonView getView];
     [_view removePolygonChild:polygon];
+    return;
   } else if ([childComponentView isKindOfClass:[SimpleYamapMarkerView class]]) {
     SimpleYamapMarkerView *markerView = (SimpleYamapMarkerView *)childComponentView;
     RNYMapMarker *marker = [markerView getView];
     [_view removeMarkerChild:marker];
+    return;
   } else if ([childComponentView isKindOfClass:[SimpleYamapCircleView class]]) {
     SimpleYamapCircleView  *circleView = (SimpleYamapCircleView *)childComponentView;
     RNYMapCircle *circle = [circleView getView];
     [_view removeCircleChild:circle];
+    return;
   } else if ([childComponentView isKindOfClass:[SimpleYamapPolyLineView class]]) {
     SimpleYamapPolyLineView *polyLineView = (SimpleYamapPolyLineView *)childComponentView;
     RNYMapPolyLine *polyLine = [polyLineView getView];
     [_view removePolyLineChild:polyLine];
+    return;
   }
   
   [super unmountChildComponentView:childComponentView index:index];
